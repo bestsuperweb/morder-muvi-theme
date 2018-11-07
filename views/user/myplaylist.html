@@ -1,0 +1,73 @@
+{$user_id = Yii::app()->user->id}
+<div class="single-product-area">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$this->Language['my_playlist']}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="container content-area">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <form id="playlist-form" name="playlist-form" method="POST">
+                    <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+
+                    <div id="loading" class="loader"></div>
+                    <div id="errors" class="error center"></div>
+                    <section class="m-b-30">
+                        <div class="bottom20p hidden-xs"></div>
+                        <div class="row" id="play_list">
+                            <div class="col-md-7 col-lg-6">
+                                <div class="form-group bottom10p">
+                                    <input type="hidden" id="user_id" value="{$user_id}">
+                                    <input type="text" class="form-control" id="new_playlist" name="newplaylist" placeholder="{$this->Language['create_playlist']}">
+                                </div>
+
+                                <div class="loader" id="playlist_loading"></div>
+
+                            </div>
+                            <div class="col-md-5 col-lg-6"><button type="submit" class="btn as-btn-accent as-btn-md top10p save_playlist" id='save_playlist'>{$this->Language['save_playlist']}</button>
+                            </div>	
+                        </div>
+                    </section>
+                </form>
+                <section class="p-t-0 payment_form">
+                    <h4 class="bottom45p">
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 playList">
+
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <div class="loader loader_more" ></div>
+                            </div>
+                        </div>
+
+                        <div class="loader loader_list" ></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="row as-btn-more hide">
+
+            <div class="col-md-12">
+                <button type="submit" class="btn as-btn-accent as-btn-md" id="show_more">Show more</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="offset_value" value="0">
+<input type="hidden" id="total_value"  value="{$playlist_count}">
+
+{literal}
+<script type="text/javascript">
+    $('.wrapper').addClass('has-not-sidebar');
+    $(document).ready(function() {
+        var user_id = $('#playlist-form').find('#user_id').val();
+        var offset_value = $('#offset_value').val();
+        allPlaylist(user_id, offset_value);
+    });
+</script>
+{/literal}

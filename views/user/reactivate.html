@@ -1,0 +1,59 @@
+<div class="single-product-area">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$this->Language['reactivate']}</h3>
+            </div>
+        </div>        
+    </div>
+    <div class="container content-area">
+        <div class="row">
+            <div class="col-md-12">
+                <p>{$this->Language['thanks_for_coming_bank']}</p>
+                <p>{$this->Language['choose_plan_and_payment_info']}</p><br />            
+                <form id="membership_form" name="membership_form" method="POST" class="form-horizontal" action="javascript:void(0);">
+                    <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                    <div id="loading" class="loader"></div>
+                    <div id="errors" class="error center"></div>                                   
+                    <div class="top20"></div>                      
+                    <div class="row">
+                        {include file='../layouts/listplans.html'}           
+                    </div>
+                    <div>
+                        {$payment_form}
+                    </div>
+
+                    {$activate_btn_form}                
+
+                    <span class="error" id="plan_error"></span>     
+                </form>  
+            </div>
+        </div>          
+    </div>
+</div>
+</div>
+<div id="successPopup" class="modal fade" style="width: 660px;margin:auto;margin-top: 10px;">
+    <div class="modal-dialog" style="width: 660px;margin:auto;margin-top: 10px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title success-popup-payment">{$this->Language['account_reactivate_after_card_submit']}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loadingPopup" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border: none;">
+                <div class="modal-title auth-msg">{$this->Language['auth_your_card']}</div>
+                <div><img src="{$this->siteurl}/images/payment_loading.gif" alt="{$this->Language['loading']}" title="{$this->Language['loading']}" style="padding:5px;"/></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var action = 'reactivate';
+    var btn = 'Reactivate';
+</script>
+<script type="text/javascript" src="{$this->siteurl}/common/js/action.js"></script>

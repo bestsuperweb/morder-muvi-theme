@@ -1,0 +1,101 @@
+
+<div class="product-big-title-area">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$this->Language['my_library']}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="single-product-area content-area listPage">
+    <div class="container">
+	  <div class="row">
+	   {assign var="total_purchase" value=$library|@count}
+	   {foreach from=$library item=purchase}
+	  <div class="col-md-3 col-sm-6 c-margin-b-20">
+                    <div class="c-content-product-2 c-bg-white list-box">
+                        <div class="c-content-overlay">
+                            <div class="c-overlay-wrapper">
+                                <div class="c-overlay-content">
+									{if $purchase['is_play'] == 1}<a href="{$purchase['baseurl']}" class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercase">{$this->Language['play_now']}</a>{/if}
+									{if $purchase['is_play'] == 0}<a class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$purchase['baseurl']}">{$this->Language['explore']}</a>{/if}
+                                   </div>
+                             </div>
+                            <div class="c-bg-img-top-center c-overlay-object text-center"><img class="list-poster" src="{$purchase['poster']}" alt="{$purchase['movie_name']}" title="{$purchase['movie_name']}" /></div>
+                        </div>
+                        <div class="c-info">
+                            <p class="c-title c-font-18 c-font-slim">
+                                <a href="{$purchase['baseurl']}">{$purchase['movie_name']}</a>
+                            </p>
+							{$genre_count = $purchase['genres']|count}
+                            {if $genre_count|@count > 0}
+                            <p class="caption_genre c-font-16">
+                                {$j=0}
+                                {foreach from=$purchase['genres'] item=genre}
+                                {$genre}{$j = $j+1}{if $j != $genre_count}, {/if}{/foreach}
+                            </p>
+                            {/if}                        
+                        </div>                     
+                    </div>
+                </div>
+				{/foreach}
+       {foreach from=$pplibrary item=purchase}
+	  <div class="col-md-3 col-sm-6 c-margin-b-20">
+                    <div class="c-content-product-2 c-bg-white list-box">
+                        <div class="c-content-overlay">
+                            <div class="c-overlay-wrapper">
+                                <div class="c-overlay-content">
+                                    {if $purchase['is_play'] == 1}<a href="{$purchase['baseurl']}" class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercase">{$this->Language['play_now']}</a>{/if}
+									{if $purchase['is_play'] == 0}<a class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$purchase['baseurl']}">{$this->Language['explore']}</a>{/if}
+                                   </div>
+                             </div>
+                            <div class="c-bg-img-top-center c-overlay-object text-center"><img class="list-poster" src="{$purchase['poster']}" alt="{$purchase['movie_name']}" title="{$purchase['movie_name']}" /></div>
+                        </div>
+                        <div class="c-info">
+                            <p class="c-title c-font-18 c-font-slim">
+                                <a href="{$purchase['baseurl']}">{$purchase['movie_name']}</a>
+                            </p>
+							{$genre_count = $purchase['genres']|count}
+                            {if $genre_count|@count > 0}
+                            <p class="caption_genre c-font-16">
+                                {$j=0}
+                                {foreach from=$purchase['genres'] item=genre}
+                                {$genre}{$j = $j+1}{if $j != $genre_count}, {/if}{/foreach}
+                            </p>
+                            {/if}                        
+                        </div>                     
+                    </div>
+                </div>
+				{/foreach}
+{foreach from=$freecontent item=purchase}
+	  <div class="col-md-3 col-sm-6 c-margin-b-20">
+                    <div class="c-content-product-2 c-bg-white list-box">
+                        <div class="c-content-overlay">
+                            <div class="c-overlay-wrapper">
+                                <div class="c-overlay-content">
+                                   {if $purchase['is_play'] == 1}<a href="{$purchase['baseurl']}" class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercase">{$this->Language['play_now']}</a>{/if}
+									{if $purchase['is_play'] == 0}<a class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$purchase['baseurl']}">{$this->Language['explore']}</a>{/if}
+                                   </div>
+                             </div>
+                            <div class="c-bg-img-top-center c-overlay-object text-center"><img class="list-poster" src="{$purchase['poster']}" alt="{$purchase['movie_name']}" title="{$purchase['movie_name']}" /></div>
+                        </div>
+                        <div class="c-info">
+                            <p class="c-title c-font-18 c-font-slim">
+                                <a href="{$purchase['baseurl']}">{$purchase['movie_name']}</a>
+                            </p>
+							{$genre_count = $purchase['genres']|count}
+                            {if $genre_count|@count > 0}
+                            <p class="caption_genre c-font-16">
+                                {$j=0}
+                                {foreach from=$purchase['genres'] item=genre}
+                                {$genre}{$j = $j+1}{if $j != $genre_count}, {/if}{/foreach}
+                            </p>
+                            {/if}                        
+                        </div>                     
+                    </div>
+                </div>
+				{/foreach}
+		</div>
+	</div>
+	</div>

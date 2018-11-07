@@ -1,0 +1,87 @@
+<div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+    <div class="container">
+        <div class="c-page-title c-pull-left">
+            <h3 class="c-font-uppercase c-font-sbold">{$this->Language['reset_your_password']}</h3>
+        </div>
+    </div>
+</div>
+<div class="container content-area">
+    <form name="frmRT" id="frmRT" method="post" action="javascript:void(0);">
+        <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+        <div id="reset-loading" class="loader" style="display: none;"></div>
+        <input type="hidden" name="reset_password_token" value="{$token}" readonly />
+        <input type="hidden" name="email" value="{$email}" readonly />
+        <input type="hidden" name="user_id" value="{$user_id}" readonly /> 
+
+        <div class="form-group ">
+            <div class="row">
+
+                <div class="form-group">
+                    <label class="control-label required col-sm-12" for="password">{$this->Language['text_new_password']}</label>
+                    <div class="col-sm-6">
+                        <input type="password" name="password" id="password" placeholder="{$this->Language['text_password_placeholder']}" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+
+            </div>
+        </div>     
+
+        <div class="clear"></div>
+        <div class="form-group ">
+            <div class="controls">
+                <button type="submit" class="btn c-btn btn-lg c-theme-btn c-btn-square c-font-white c-font-bold c-font-uppercase c-cart-float-r" name="login_submit" id="login-btn"> {$this->Language['btn_reset']}</button>
+            </div>
+        </div>
+        <div id="reset-errors" class="error center"></div>
+    </form> 
+</div>
+<div class="modal fade custom-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content planWrapper-Content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="icon-close" style="color:white;"></i></span></button>
+                <h1 class="modal-title text-center" id="myModalLabel">{$this->Language['reset_password']}</h1>
+            </div>
+            <div class="modal-body result-message">
+                {$this->Language['password_changed']}.
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+     // Window load event used just in case window height is dependant upon images
+    $(window).bind("load", function () {
+
+        var footerHeight = 0,
+                footerTop = 0,
+                $footer = $(".c-layout-footer");
+
+        positionFooter();
+
+        function positionFooter() {
+
+            footerHeight = $footer.height();
+            footerTop = ($(window).scrollTop() + $(window).height() - footerHeight) + "px";
+
+            if (($(document.body).height() + footerHeight) < $(window).height()) {
+                $footer.css({
+                    position: "absolute",
+                    width: "100%"
+                }).animate({
+                    top: footerTop
+                })
+            } else {
+                $footer.css({
+                    position: "static"
+                })
+            }
+
+        }
+
+        $(window)
+                .scroll(positionFooter)
+                .resize(positionFooter)
+
+    });
+</script>

@@ -1,0 +1,140 @@
+<section>
+    <div class="buy_movies_login" style="background: url({$this->siteurl}{$Yii->theme->baseUrl}/images/buy_movie.png) left top no-repeat; background-size: cover;">
+        <div class="container">
+            <div class="buy_movies_login_details">
+                <div class="login_social_account">
+                    <h2>{$this->Language['login_with_social_account']}</h2>
+                    <p>Connect with your social accounts<span>Loren ipsum dolor sit amet</span></p>
+                    {if $this->studio->social_logins}
+                        {if isset($smarty.session.social) }
+                            {assign var=socialAuth value=$smarty.session.social}
+                        {else}
+                            {assign var=socialAuth value=$this->getSocialUrls()}
+                        {/if}
+                        {if $socialAuth}
+                            {if ($this->studio->social_logins & 1) && $socialAuth['fb_url'] }
+                                <a href="javascript:void(0);" data-url="{$socialAuth['fb_url']}" data-login="0" class="facebook_login facebook social_login" class="btn facebook"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/facebook_icon.png" /><span>{$this->Language['login_facebook']}</span></a>
+                            {/if}
+                            {if ($this->studio->social_logins & 2) && $socialAuth['gplus_url'] }
+                                <a href="{$socialAuth['gplus_url']}" class="btn google"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/gmail_plus.png" /><span>{$this->Language['google_signin']}</span></a>
+                            {/if}
+                        {/if}
+                    {/if}
+                </div>
+                <div class="login_your_e-mail active" style="min-height:750px;">
+                    <h2>{$this->Language['login_by_your_email']}</h2>
+                    <form class="login_your_e-mail_form" id="membership_form" name="membership_form" method="POST"
+                        class="form-horizontal" action="javascript:void(0);">
+                        <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                        <div id="errors" class="error center"></div>
+                        {if (!$this->chkStudioForCustomProfile)}
+
+                        <div class="form-group">
+                            <label for="name" class="control-label">{$this->Language['text_name']}</label>
+                            <input type="text" class="form-control" autocomplete="off" placeholder="{$this->Language['text_name_placeholder']}" title="{$this->Language['fill_out_this_field']}" id="name" name="data[name]" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="control-label">{$this->Language['email']}</label>
+                            <input type="email" class="form-control" autocomplete="off" placeholder="{$this->Language['text_email_placeholder']}" title="{$this->Language['fill_out_this_field']}" id="email_address" name="data[email]" required />
+                        </div>
+                        <nav class="dropdown-content">
+                            <a href="#">
+                                <input id="box4" type="checkbox">
+                                <label for="box4">
+                                </label>
+                                <h6>{$this->Language['I_am_a_student,this_is_my_school_e-mail']}</h6>
+                            </a>
+                        </nav>
+                        <div class="loader" id="membership_loading"></div>
+                        <div class="form-group">
+                            <label for="join_password" class="control-label">{$this->Language['text_password_placeholder']}</label>
+                            <input type="password" class="form-control" autocomplete="off" placeholder="{$this->Language['text_password_placeholder']}" title="{$this->Language['fill_out_this_field']}" id="join_password" name="data[password]" required />
+                        </div>
+                        <div class="form-group hide">
+                            <label for="confirm_password" class="control-label">{$this->Language['confirm_password']}</label>
+                            <input type="password" class="form-control" autocomplete="off" placeholder="{$this->Language['confirm_password']}" title="{$this->Language['fill_out_this_field']}" id="confirm_password" name="data[confirm_password]" required />
+                        </div>
+
+                        
+                        {/if}
+                        <div class="top20"></div>
+                        <!-- <div class="form-group ">
+                            <div class="col-sm-12">
+                                <input name="data[subscribe_newsletter]" value="1" checked="checked" type="checkbox">
+                                &nbsp;{$this->Language['subscribe_to_announcement']}
+                            </div>
+                        </div> 
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <div class="c-checkbox c-toggle-hide" data-object-selector="c-account"
+                                    data-animation-speed="600">
+                                    <input type="checkbox" id="checkbox1-77" class="c-check">
+                                    {$this->Language['chk_over_18']} <a class="link linkcol" href="{$this->base_url}/page/terms-privacy-policy"
+                                        target="_blank">{$this->Language['terms']}</a>
+                                </div>
+                            </div>
+                            <label id="data[over_18]-error" class="error" for="data[over_18]" style="display: none;"></label>
+                        </div>-->
+                        
+                        <div class="form-group ">
+                            <button id="register_membership" class="btn btn-default login_button" onclick="validateSignupStep1Form();">{$this->Language['btn_register']}</button>
+                        </div>
+
+                        <span class="error" id="plan_error"></span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="moovibo-nav_bottom_slide-down">
+        <div class="headerWrap headerInside">
+            <nav class="navbar navbar-inverse">
+                <div class="customNav">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li > 
+                                <a href="{$this->siteurl}/user/login">SIGN IN
+                                    
+                                </a>
+                            </li>
+                            <li>
+                                    <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li>
+                            <li class="active">
+                                <a href="{$this->siteurl}/user/register">SIGN UP
+                                </a>
+                            </li>
+                            <li>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li>
+                            <li>
+                                <a href="{$this->siteurl}/faqs">FAQ</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $("#join_password").keypress(function(){
+        //document.getElementById('confirm_password').value = document.getElementById('join_password').value
+        $('#confirm_password').val($(this).val());
+    });
+    var action = 'saveuser';
+    var btn = 'Register';
+    $('#main').addClass('c-layout-page');
+</script>
+<script type="text/javascript" src="{$this->siteurl}{$Yii->theme->baseUrl}/js/action.js"></script>

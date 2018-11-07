@@ -1,0 +1,242 @@
+<link rel="stylesheet" href="{$this->siteurl}/css/cropper.min.css" type="text/css" />
+<link rel="stylesheet" href="{$this->siteurl}/css/crop-avatar.css" type="text/css" />
+<script type="text/javascript" src="{$this->siteurl}/common/js/cropper.min.js"></script>
+<script type="text/javascript" src="{$this->siteurl}/common/js/crop-avatar.js"></script>
+<script>
+     
+        var user_id = "{$Yii->user->id}";
+</script>
+<!-- id="crop-avatar" must have on this page to let croping feature work -->
+{include file='../layouts/profile_banner.html'}
+
+
+{literal}
+
+<div ng-app="homePageApp" ng-controller="purchaseHistoryPageController"> 
+    <div class="moovibo-nav">
+        <div class="headerWrap headerInside">
+            <nav class="navbar navbar-inverse">
+                <div class="customNav">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed"  aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li > 
+                                <a href="javascript:void(0)" ng-class="{'active': tab == 'Info', ' ':tab != 'Info'}" ng-click="tabNavigation('Info')">{/literal}{$this->Language['info']}{literal}
+    
+                                </a>
+                            </li>
+                            <li>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li>
+                            <!-- <li >
+                                <a href="javascript:void(0)" ng-class="{'active': tab == 'Library', ' ':tab != 'Library'}" ng-click="tabNavigation('Library')">MY LIBRARAY
+    
+                                </a>
+                            </li>
+                            <li>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li> -->
+                            <li >
+                                <a href="javascript:void(0)" ng-class="{'active': tab == 'purchaseHistory', ' ':tab != 'purchaseHistory'}" ng-click="tabNavigation('purchaseHistory')">{/literal}{$this->Language['purchase_history']}{literal}
+    
+                                </a>
+                            </li>
+                            <li>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li>
+                            <li class="profile_signout">
+                                <a href="javascript:void(0)">{/literal}{$this->Language['sign_out']}{literal}</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    
+    <div ng-show = "tab =='purchaseHistory'" ng-show="!loader">
+        <div class="purchase_history" >
+            <div class="purchase_history_header">
+                <h3>{/literal}{$this->Language['purchase_history']}{literal}<span>{/literal}{$this->Language['see_all']}{literal}</span></h3>
+            </div>
+            <div class="purchase_history_section">
+            <table class="table" ng-show="purchaseHistory.section.length>0">
+                <tbody class="custom_table">
+                <tr style="background-color: #000;" ng-repeat="pur in purchaseHistory.section">
+                    <td style="width:15%;">{{pur.ppv_subscription_id}}</td>
+                    <td style="width:2%;">.</td>
+                    <td style="width:22%;">{{pur.transaction_date}}</td>
+                    <td style="width:2%;">.</td>
+                    <td style="width:36%;">{{pur.transaction_for}}</td>
+                    <td style="width:20%;">{{pur.order_type}}{{pur.currency_symbol}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <h3 ng-show="purchaseHistory.section.length == 0 && purchaseHistory.status" class="no_movie">  No movie you didn't purchase </h3>
+            </div>
+        </div>
+        
+      
+    </div>
+    <div ng-show = "tab =='Library'" ng-show="!loader">
+        <div class="product-big-title-area">
+                <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+                    <div class="container">
+                        <div class="c-page-title c-pull-left">
+                            <h3 class="c-font-uppercase c-font-sbold">My LIBRARAY</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-product-area content-area">
+                <div class="container">                
+                    <div class="content-area">
+                        <div class="row cust-row">
+                            <div class="col-md-2 col-sm-6 c-margin-b-20" ng-repeat="i in [1,2,3,4]">
+                                <div class="c-content-product-2 c-bg-white list-box">
+                                    <div class="c-content-overlay">
+                                        <div class="c-bg-img-top-center c-overlay-object text-center"><img class="list-poster" src="https://d2wk81qbuk09ji.cloudfront.net/11047/public/public/system/posters/165976/standard/rangoon_1525462805.png" /></div>
+                                    </div>
+                                    <div class="c-info">
+                                        <p class="c-title c-font-18 c-font-slim">
+                                            <a href="javascript:void(0)">Dummy</a>
+                                        </p>
+                                    </div>                     
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="loader-new" ng-show="loader">
+        <img src="{/literal}{$this->siteurl}{$Yii->theme->baseUrl}{literal}/images/loading.gif">
+    </div>
+</div>
+<script>
+var app = angular.module('homePageApp', ["ngAnimate"]);
+app.controller('purchaseHistoryPageController', function($scope,$q, $http,$rootScope , $timeout) {
+    $scope.tab = "Info"
+    $scope.limit = 5;
+    $scope.offset = 5;
+    $scope.loader = true;
+    var nav = new URLSearchParams(location.search).get('tab')
+    $scope.purchaseHistory = [];
+    $scope.getPurchaseHistory = function (){
+        $scope.purchaseHistory = [];
+        $http.get(HTTP_ROOT+"/rest/PurchaseHistory?authToken="+STORE_AUTH_TOKEN+"&user_id="+user_id+"&dataoffset="+$scope.offset+"&viewlimit="+$scope.limit+"&lang_code="+ lang_code).then(function(response) {
+            console.log(response.data)
+            $scope.loader = false;
+            if(response.data.section){
+                $scope.purchaseHistory = response.data;
+            };
+        }); 
+    }
+    $scope.getLibrary = function (){
+        $http.get(HTTP_ROOT+"/rest/getMyLibrary?authToken="+STORE_AUTH_TOKEN+"&user_id="+user_id+"&lang_code="+ lang_code).then(function(response) {
+            console.log(response.data);
+            $scope.loader = false;
+        }); 
+    }
+    $scope.tabNavigation = function(navi){
+        $scope.loader = true;
+        nav = navi;
+        if(nav == 'Info' || nav == undefined){
+            $scope.tab = "Info";
+            $scope.loader = false;
+        }else if(nav == 'Library'){
+            $scope.loader = false;
+            $scope.getLibrary();
+            $scope.tab = "Library"
+        }else{
+            $scope.getPurchaseHistory(); 
+            $scope.tab = "purchaseHistory"
+        }
+    }
+    $scope.tabNavigation(nav)
+    
+
+});
+</script>
+<style>
+        .loader-new{
+            float:left;
+            width:100%;
+            text-align:center;
+            min-height:50px;
+            background-color: #111111;
+        }
+        .row-flex {
+            display: flex;
+            flex-wrap: wrap;
+          }
+          
+          
+          /* vertical spacing between columns */
+          
+          [class*="col-"] {
+            margin-bottom: 30px;
+          }
+          
+          .content {
+            height: 100%;
+            padding: 20px 20px 10px;
+            color: #fff;
+          }
+          
+          
+          /* Demo backgrounds and styling*/
+          
+          .colour-1 {
+            background: #483C46;
+            color: #fff;
+          }
+          
+          .colour-2 {
+            background: #3C6E71;
+          }
+          
+          .colour-3 {
+            background: #70AE6E;
+          }
+          
+          .colour-4 {
+            background: #82204A;
+          }
+          
+          .colour-5 {
+            background: #558C8C;
+          }
+          
+          .colour-6 {
+            background: #917C78;
+          }
+        
+          
+          .content h3 {
+            margin-top: 0px;
+            font-weight: 300;
+          }
+          
+          h1 {
+            font-weight: 300;
+            margin-bottom: 40px;
+          }
+          .no_movie{
+            margin-top: 10%;
+            text-align: center;
+            margin-bottom: 10%;
+            color: #333;
+            font-size: 30px;
+            font-weight: bold
+        }
+</style>
+{/literal}

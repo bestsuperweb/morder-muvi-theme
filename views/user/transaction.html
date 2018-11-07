@@ -1,0 +1,43 @@
+{if $is_voucher==0}
+{$transaction=$transaction|json_decode}
+<div class="single-product-area">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold" style="margin-left: -15px !important;">{$this->Language['transaction_detail']}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="container content-area">
+        <div class="row">  
+            <p>{$this->Language['transaction_date']} : {$transaction->transaction_date}</p>
+            <p>{$this->Language['order']} : {$transaction->order_number}</p>
+            <p>{$this->Language['amount']} : {$transaction->amount}</p>
+            <p>{$this->Language['invoice']} : {$transaction->invoice_id}</p>
+            <p>{$this->Language['transaction_status']} : {$transaction->transaction_status}</p>
+            <p><span class="light-green-color ">{if $transaction->transaction_type neq 8 and $transaction->transaction_type neq 2 and $transaction->transaction_type neq 3 and $transaction->transaction_type neq 5}{$this->Language['plan_name']} : {/if}</span>{$transaction->plan_name}</p>
+            <div><a href="#" onclick="javascript: history.back();" class="btn btn-primary btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold back">{$this->Language['back']}</a></div>
+        </div>
+    </div>
+</div>
+{/if}
+{if $is_voucher==1}
+<div class="single-product-area">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold" style="margin-left: -15px !important;">{$this->Language['voucher_detail']}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="container content-area">
+        <div class="row">  
+            <p>{$this->Language['voucher_date']} : {$vcreated_date}</p>
+            <p>{$this->Language['order']} : {$unique_id}</p>
+            <p>{$this->Language['voucher_name']} : {$voucher_code}</p>
+            <p>{$this->Language['voucher_applyon']} : {$vmovie_names}</p>
+            <div><a href="#" onclick="javascript: history.back();" class="btn btn-primary btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold back">{$this->Language['back']}</a></div>
+        </div>
+    </div>
+</div>
+{/if}

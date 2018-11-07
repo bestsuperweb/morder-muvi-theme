@@ -1,0 +1,61 @@
+<div class="single-product-area transaction_details">
+    <div class="c-layout-page">
+        <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+            <div class="container">
+                <div class="c-page-title c-pull-left">
+                    <h3 class="c-font-uppercase c-font-sbold">{$this->Language['transaction_history']}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container content-area">
+        <div class="row">  
+            <table cellspacing="0" class="shop_table cart">
+                <thead>
+                    <tr>
+                        <th class="product-name">{$this->Language["date"]}</th>
+                        <th class="product-name">{$this->Language["order"]}#</th>
+                        <th class="product-price">{$this->Language["amount"]}</th>
+                        <th class="product-quantity">{$this->Language['plan_name']}</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$transactions|json_decode item=transaction}
+                    <tr class="cart_item">
+                        <td class="product-remove">
+                            {$transaction->transaction_date}
+                        </td>
+
+                        <td class="product-thumbnail">
+                            {$transaction->order_number}
+                        </td>
+
+                        <td class="product-name">
+                            {$transaction->amount}
+                        </td>
+
+                        <td class="product-price">
+                            {$transaction->plan->plan_name}
+                        </td>
+
+                        <td class="product-quantity">
+                            <a href="{$transaction->permalink}">{$this->Language["transaction_detail"]}</a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>            
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-pagination text-center">
+                    <nav>
+                        {$pagination}
+                    </nav>                        
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>

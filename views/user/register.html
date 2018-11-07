@@ -1,0 +1,314 @@
+<section>
+        <div class="buy_movies_login" style="background: url({$this->siteurl}{$Yii->theme->baseUrl}/images/buy_movie.png) left top no-repeat; background-size: cover;">
+            <form class="login_your_e-mail_form" id="membership_form" name="membership_form" method="POST"
+                class="form-horizontal" action="javascript:void(0);">
+                <div class="container" id="register">
+                        <div class="buy_movies_login_details">
+                            <div class="login_social_account">
+                                <h2>{$this->Language['login_with_social_account']}</h2>
+                                <p>Connect with your social accounts
+                                    <span>Loren ipsum dolor sit amet</span>
+                                </p>
+                                {if $this->studio->social_logins}
+                                    {if isset($smarty.session.social) }
+                                        {assign var=socialAuth value=$smarty.session.social}
+                                    {else}
+                                        {assign var=socialAuth value=$this->getSocialUrls()}
+                                    {/if}
+                                    {if $socialAuth}
+                                        {if ($this->studio->social_logins & 1) && $socialAuth['fb_url'] }
+                                            <a href="javascript:void(0);" data-url="{$socialAuth['fb_url']}" data-login="0" class="facebook_login facebook social_login" class="btn facebook"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/facebook_icon.png" /><span>{$this->Language['login_facebook']}</span></a>
+                                        {/if}
+                                        {if ($this->studio->social_logins & 2) && $socialAuth['gplus_url'] }
+                                            <a href="{$socialAuth['gplus_url']}" class="btn google"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/gmail_plus.png" /><span>{$this->Language['google_signin']}</span></a>
+                                        {/if}
+                                    {/if}
+                                {/if}
+                            </div>
+                            <div class="login_your_e-mail active" >
+                                <h2>{$this->Language['login_by_your_email']}</h2>
+                                        <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                                        <div id="errors" class="error center"></div>
+                                        {if (!$this->chkStudioForCustomProfile)}
+
+                                        <div class="form-group">
+                                            <label for="name" class="control-label">{$this->Language['text_name']}</label>
+                                            <input type="text" class="form-control" autocomplete="off" placeholder="{$this->Language['text_name_placeholder']}" title="{$this->Language['fill_out_this_field']}" id="name" name="data[name]" required />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="email" class="control-label">{$this->Language['email']}</label>
+                                            <input type="text" class="form-control" autocomplete="off" placeholder="{$this->Language['text_email_placeholder']}" title="{$this->Language['fill_out_this_field']}" id="email_address" name="data[email]" required />
+                                        </div>
+                                        <nav class="dropdown-content">
+                                            <a href="#">
+                                                <input id="box4" type="checkbox">
+                                                <label for="box4">
+                                                </label>
+                                                <h6>{$this->Language['I_am_a_student,this_is_my_school_e-mail']}</h6>
+                                            </a>
+                                        </nav>
+                                        <div class="loader" id="membership_loading"></div>
+                                        <div class="form-group">
+                                            <label for="join_password" class="control-label">{$this->Language['text_password_placeholder']}</label>
+                                            <input type="password" class="form-control" autocomplete="off" placeholder="{$this->Language['text_password_placeholder']}" title="{$this->Language['fill_out_this_field']}" id="join_password" name="data[password]" required />
+                                        </div>
+                                        <div class="form-group hide">
+                                            <label for="confirm_password" class="control-label">{$this->Language['confirm_password']}</label>
+                                            <input type="password" class="form-control" autocomplete="off" placeholder="{$this->Language['confirm_password']}" title="{$this->Language['fill_out_this_field']}" id="confirm_password" name="data[confirm_password]" required />
+                                        </div>
+                                            {$counter = 0} 
+                                            {if (count($custom_fields) > 0)}
+                                            <div class="form-group">
+                                            {foreach from=$custom_fields item=fields}
+                                            {if ($counter%2 == 0)}
+                                                </div>
+                                                <div class="form-group">
+                                            {/if}
+                                            <label for="" class="col-sm-2 control-label">{$fields['label']}</label>
+                                                <div class="col-sm-4">
+                                            {$fields['field']}
+                                                </div>
+                                            {$counter = $counter+1}   
+                                            {/foreach}
+                                            </div>
+                                            {/if}
+                                        {else}
+                            
+                                        {$counter = 0} 
+                                            {if (count($custom_fields) > 0)}
+                                            <div class="form-group">
+                                            {foreach from=$custom_fields item=fields}
+                                            {if ($counter%2 == 0)}
+                                                </div>
+                                                <div class="form-group">
+                                            {/if}
+                                            <label for="" class="col-sm-2 control-label">{$fields['label']}</label>
+                                                <div class="col-sm-4">
+                                            {$fields['field']}
+                                                </div>
+                                            {$counter = $counter+1}   
+                                            {/foreach}
+                                            </div>
+                                            {/if}
+                                            {/if}
+                                            <div class="form-group ">
+                                                    <button id="register_membership" class="btn btn-default login_button" onclick="nextStep(1);">{$this->Language['btn_next']}</button>
+                                            </div>
+                                        <span class="error" id="plan_error"></span> 
+                            </div>
+                        </div>
+                </div>
+                <div class="container" id="plan" >
+                        <div class="buy_movies_login_details">
+                                <div class="top20"></div>
+                                <div class="row" >
+                                {include file='../layouts/listplans.html'} 
+                                </div>   
+                                <div class="clearfix"></div>        
+                                <div class="loader" id="membership_loading"></div>
+                                <span class="error" id="plan_error"></span> 
+                        </div>
+                        <div class="form-group ">
+                                <button id="register_membership" class="btn btn-default login_button" onclick="nextStep(2);">{$this->Language['btn_next']}</button>
+                        </div>
+                </div>
+                <div class="container" id="voucher" >
+                        <div class="buy_movies_transition">
+                                <div class="transitions_purchase">
+                                    <h2>PURCHASE</h2>
+                                    <h3>You'll be charged</h3>
+                                    <h4>49.
+                                        <span>99</span>
+                                        <strong>TL</strong>
+                                    </h4>
+                                    <h5>FOR 3 PASS IN 1 MONTH</h5>
+                                    <h6>Expires on
+                                        <span>July 7th 2018</span>
+                                    </h6>
+                                    <a href="#">I HAVE A VOUCHER/COUPON</a>
+                                </div>
+                                <div class="transitions_purchase_voucher active">
+                                    <h2>VOUCHER</h2>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non tincidunt enim. In vitae ligula
+                                        aliquam, iaculis nunc a, sodales lacus. Donec lacinia nisl vel tristique consequat.</p>
+                                    <div class="form-group">
+                                        <label class="enter_code" for="usr">Enter your code</label>
+                                        <input type="text" class="form-control custom_input" placeholder="Jonny@gmail.com" id="usr">
+                                    </div>
+                                    <a href="#">SUBMIT</a>
+                                </div>
+                                <div class="transitions_purchase_voucher">
+                                    <h2>COUPON</h2>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non tincidunt enim.</p>
+                                    <div class="form-group">
+                                        <label class="enter_code" for="usr">Enter your code</label>
+                                        <input type="text" class="form-control custom_input" placeholder="Jonny@gmail.com" id="usr">
+                                    </div>
+                                    <a href="#">SUBMIT</a>
+                                </div>
+                        </div>
+                        <div class="form-group ">
+                                <button id="register_membership" class="btn btn-default login_button" onclick="nextStep(3);">{$this->Language['btn_next']}</button>
+                        </div>
+                          
+                </div>
+                <div class="container" id="payment" >
+                        <div class="buy_movies_transition">
+                            <div class="transitions_purchase">
+                                    <h2>PURCHASE</h2>
+                                    <h3>You'll be charged</h3>
+                                    <h4>49.
+                                        <span>99</span>
+                                        <strong>TL</strong>
+                                    </h4>
+                                    <h5>FOR 3 PASS IN 1 MONTH</h5>
+                                    <h6>Expires on
+                                        <span>July 7th 2018</span>
+                                    </h6>
+                                    <a href="#">I HAVE A VOUCHER/COUPON</a>
+                            </div>
+                            <div class="credit_card_details">
+                                <div class="payment-gateway">
+                                        <div class="col-md-1 col-xs-2">
+                                            <label class="containerrr">
+                                                <input type="radio" name="payment_option" value="card" checked="" autocomplete="false">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-11 col-xs-10">
+                                            <div class="payment-card">
+                                                <ul>
+                                                    <li>
+                                                        <img src="https://www.pickbox.tv/themes/pb/images/card.png">
+                                                    </li>
+                                                    <li>
+                                                        <img src="https://www.pickbox.tv/themes/pb/images/card2.png">
+                                                    </li>
+                                                    <li>
+                                                        <img src="https://www.pickbox.tv/themes/pb/images/card3.png">
+                                                    </li>
+                                                    <li>
+                                                        <img src="https://www.pickbox.tv/themes/pb/images/visa.png">
+                                                    </li>
+                                                    <li>
+                                                        <img src="https://www.pickbox.tv/themes/pb/images/card4.png">
+                                                    </li> 
+                                                    <li>
+                                                        <img src="https://www.pickbox.tv/themes/pb/images/card5.png">
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="payment-form hide">  
+                                            <input type="hidden" id="payment_gateway_str" value="corvus,paypalpro" autocomplete="false">
+                                            <div class="form-group">   
+                                                    <div class="col-sm-4">        
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" id="have_paypal_pro" name="have_paypal" autocomplete="false"> Have PayPal Account ?</label>
+                                                        </div>    
+                                                    </div>
+                                            </div>
+                                            <div class="clearfix"></div><span class="error" id="plan_error"></span>
+                                            <div id="card_div"></div>
+                                            <script type="text/javascript" src="https://www.pickbox.tv/common/js/paypalpro.js"></script>
+                                            <input type="hidden" id="payment_gateway" value="corvus" name="payment_gateway" autocomplete="false">
+                                            <input id="payment_gateway_str" value="corvus" autocomplete="false" type="hidden" name="payment_gateway_str">
+                                            <div class="clear"></div><br>
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <div class="col-md-12">
+                                                        <button id="register_membership" class="btn btn-primary" onclick="validatePaymentForm();">Proceed to payment</button>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                </div> 
+                                <div class="payment-gateway2">
+                                        <div class="col-md-1 col-xs-2">
+                                            <label class="containerrr">
+                                                <input type="radio" name="payment_option" value="paypal" autocomplete="false">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-11 col-xs-10">
+                                            <div class="payment-card2">
+                                                <img src="https://www.pickbox.tv/themes/pb/images/paypal.png">
+                                            </div>
+                                        </div>
+                                </div>             
+                            </div>
+                        </div>
+                </div>
+            </form>
+        </div>
+        <div class="moovibo-nav_bottom">
+            <div class="headerWrap headerInside">
+                <nav class="navbar navbar-inverse">
+                    <div class="customNav">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                                aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="#">OFFER
+                                        <i class="fa fa-circle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">SEE ALL PRICING
+                                        <i class="fa fa-circle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">HOW MOOVIBO WORKS?</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+</section>
+<div id="successPopup" class="modal fade" style="width: 660px;margin:auto;margin-top: 10px;">
+    <div class="modal-dialog" style="width: 660px;margin:auto;margin-top: 10px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title success-popup-payment">{$this->Language['thanks_card_auth_sucess']}.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loadingPopup" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border: none;">
+                <div class="modal-title auth-msg">{$this->Language['auth_your_card']}</div>
+                <div><img src="{$this->siteurl}/images/payment_loading.gif" alt="{$this->Language['loading']}" title="{$this->Language['loading']}" style="padding:5px;"/></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var action = 'saveuser';
+    var btn = 'Register';
+</script>
+<script type="text/javascript" src="{$this->siteurl}/common/js/action.js"></script>
+ <script src="{$this->siteurl}/js/jquery.matchHeight.js" type="text/javascript" ></script>
+<script type="text/javascript" >
+ $(document).ready(function(){
+   $('.plan-box').matchHeight(); 
+   $('#main').addClass('c-layout-page');
+
+});
+
+</script>

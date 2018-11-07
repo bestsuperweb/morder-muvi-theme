@@ -1,0 +1,38 @@
+<div class="single-product-area">
+    <div class="container">
+        <div class="row top20">
+        <form id="membership_form" name="membership_form" method="POST" class="form-horizontal">
+            <div id="loading" class="loader"></div>
+            <div id="errors" class="error center"></div>                                   
+            <div class="top20"></div>                        
+            {include file='../layouts/listsubscriptionbundleplans.html'}                                                   
+            <span class="error" id="plan_error"></span>     
+        </form>            
+        </div>
+    </div>
+</div>
+<div id="successPopup" class="modal fade" style="width: 660px;">
+    <div class="modal-dialog" style="width: 660px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title success-popup-payment">{$this->Language['account_activate_after_card_submit']}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loadingPopup" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border: none;">
+                <div class="modal-title auth-msg">{$this->Language['auth_your_card']}</div>
+                <div><img src="{$this->siteurl}/images/payment_loading.gif" alt="{$this->Language['loading']}" title="{$this->Language['loading']}" style="padding:5px;"/></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var action = 'activate';
+    var btn = 'Activate';    
+</script>
+<script type="text/javascript" src="{$this->siteurl}/common/js/action.js"></script>
