@@ -1,0 +1,156 @@
+<link rel="stylesheet" type="text/css" href="{$this->siteurl}{$Yii->theme->baseUrl}/css/live-tv.css"/>
+<link rel="stylesheet" type="text/css" href="{$this->siteurl}{$Yii->theme->baseUrl}/css/responsive-live-tv.css"/>
+<link rel="stylesheet" type="text/css" href="{$this->siteurl}{$Yii->theme->baseUrl}/css/livetv-carousel.css"/>
+{$nowtime = date('Y-m-d H')}
+<div class="c-layout-page">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$this->Language['playout']}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="container content-area">
+        <div class="row">
+            <div class="col-md-12 top200">
+                <h1 class="center white">{$this->Language['live_tv']}</h1>
+                <div class="wrapper bottom-padding50">
+                    <div class="row top50">
+                        <div class="col-md-9 relative top40">
+                            <div class="loader" id="player-loading" style="margin-top:150px;"></div>
+                            <div class="oldtvdiv">                
+                                <div id="video_player"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 top40 bg-white relative mobile-margin">
+                            <div class="loader" id="poster-loading"></div>
+                            <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/livetv-thumb.jpg" class="img-responsive" id="content_poster"/>
+                            <h4 class="gray" id="content_title"></h4>
+                            <h4 class="gray"></h4>
+                            <div class="gray" id="content_story"></div>
+                        </div>
+                    </div>
+                    <div class="row top40">
+                        <div class="col-sm-2 col-xs-3">
+                            <div class="green_bg day-date" id="day-date">{date('m/d H:i')} </div>
+                        </div>
+                        <div class="col-sm-10 col-xs-9 date-bg"> 
+                            <!-- Carousel -->
+                            <div id="carousel-example-generic" class="carousel slide top18-" data-ride="carousel"> 
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <div class="header-text" id='timeguide'>
+                                            <div class="col-xs-3 text-center">{date('H')}:30</div>
+                                            <div class="col-xs-3 text-center">{date('H', strtotime("+ 1 hours"))}:30</div>
+                                            <div class="col-xs-3 text-center">{date('H', strtotime("+ 2 hours"))}:30</div>
+                                            <div class="col-xs-3 text-center">{date('H', strtotime("+ 3 hours"))}:30</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Controls --> 
+                                <a class="left time_slide carousel-control" data-id="before_{date('Y-m-d H:i:s')}" style="cursor:pointer;" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span> </a> 
+                                <a class="right time_slide carousel-control" data-id="after_{date('Y-m-d H:i:s')}" style="cursor:pointer;" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span> </a> 
+                            </div>
+                            <!-- /carousel --> 
+                        </div>
+                    </div>
+                    <input type="hidden" id="current_program" name="current_program" value="">
+                    <input type="hidden" id="programs_to_start" name="programs_to_start" value="">
+                    <input type="hidden" id="current_channel" name="current_channel" value="{$id}">
+                    <div class="row top20 relative">
+                        <div class="loader" id="program-loading"></div>
+                        <div class="div-responsive  content mCustomScrollbar" id = "program-lists">
+                            {$tvguide}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{$this->siteurl}{$Yii->theme->baseUrl}/js/jquery.mCustomScrollbar.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".vjs-tvguide-button").css("display","none");
+        $("#program-lists").mCustomScrollbar({
+            scrollButtons:{
+                enable:true
+            }
+        });
+        $('#player-loading').show();
+        $('#poster-loading').show();
+        $('#program-loading').show();
+        var id={$id};
+        var action_url = HTTP_ROOT + '/tvguide/getData';
+        var dataString = "channel="+id;
+        $.ajax({
+            url: action_url,
+            type: "POST",
+            dataType: 'json',
+            data:dataString,
+            success: function (data) {
+                $('#program-loading').hide();
+                if(data.response != ''){
+                    $("#program-lists .mCSB_container").html(data.response);
+                    $("#program-lists").mCustomScrollbar("update"); 
+                    $('.noprogram:first-child').trigger('click');
+                    $('.cursor_pointer:first').trigger('click');
+                }else{
+                    $('#player-loading').hide();
+                    $('#poster-loading').hide();
+                }
+            }
+        });
+        setInterval(function(){
+            if($("#video_player img").hasClass('default_image')){
+                loadtimeguide(); // this will run after every 1 minute
+            }
+        }, 60000);
+        setInterval(function(){
+            var action_url = HTTP_ROOT + '/tvguide/getCurrentTime';
+            $.ajax({
+                url: action_url,
+                type: "POST",
+                success: function (data) {
+                    $("#day-date").html(data);
+                }
+            }); 
+        }, 30000);
+        $('#program-lists').on("click",".cursor_pointer",function(){
+            $('.cursor_pointer').removeClass('green_bg');
+            $(this).addClass('green_bg');
+            var current_movie = $(this).attr('id');
+            $("#current_program").val(current_movie);
+        });
+        $('#program-lists').on("click",".cursor_pointer_program_tostart",function(){
+            $('.cursor_pointer_program_tostart').removeClass('light-bg');
+            $(this).addClass('light-bg');
+            var movie_to_start = $(this).attr('id');
+            $("#programs_to_start").val(movie_to_start);
+        });
+    });
+    function loadtimeguide(){
+        if($("#video_player img").hasClass('default_image')){
+             var id={$id};
+            var action_url = HTTP_ROOT + '/tvguide/getData';
+            var dataString = "channel="+id;
+            $.ajax({
+                url: action_url,
+                type: "POST",
+                dataType: 'json',
+                 data:dataString,
+                success: function (data) {
+                    $("#timeguide").html(data.time_slide); 
+                    $(".left").attr('data-id','before_'+data.left_right);
+                    $(".right").attr('data-id','after_'+data.left_right);
+                    $("#program-lists .mCSB_container").html(data.response);
+                    $('.noprogram:first-child').trigger('click');
+                    $('.cursor_pointer:first').trigger('click');
+                }
+            }); 
+        }
+    }    
+</script>
+

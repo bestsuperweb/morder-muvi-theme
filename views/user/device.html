@@ -1,0 +1,87 @@
+<div class="single-product-area transaction_details">
+    <div class="c-layout-page">
+        <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+            <div class="container">
+                <div class="c-page-title c-pull-left">
+                    <h3 class="c-font-uppercase c-font-sbold">{$this->Language['manage_device']}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container content-area">
+        <div class="row">  
+            <table cellspacing="0" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="device-name">{$this->Language['sl_no']}#</th>
+                        <th class="device-name">{$this->Language['device_name']}</th>
+                        <th data-hide="phone" class="device-name">{$this->Language['action']}</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    {if $devicedata|count > 0}
+                    {foreach from=$devicedata item=device_item}
+                    {assign var=ccc value=$ccc+1}
+                    <tr>
+                        <td class="device-name">{$ccc}</td>
+                        <td class="device-name">{$device_item['device_info']}</td>
+                        <td  class="device-name">
+                            {if ($device_item['flag'] == 0)} 
+                            <button class="btn btn-danger" data-id="{$device_item['id']}" onclick="openDeleteDevicePopup(this);">
+                                <em class="icon-trash"></em>&nbsp;&nbsp;{$this->Language['delete_btn']}
+                            </button>
+                            {else}
+                            <button class="btn btn-danger" disabled="">
+                                <em class="icon-trash"></em>&nbsp;&nbsp;{$this->Language['delete_btn']}
+                            </button>                      
+                            {/if}
+                        </td>
+                    </tr>
+                    {/foreach}
+                    {else}
+                    <tr><td colspan="3" class="text-center">{$this->Language['no_device']}</td></tr>
+                {/if}
+                    
+
+                </tbody>
+            </table>            
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="DeviceModal" role="dialog" data-backdrop="static" data-keyboard="false" style="overflow-y:hidden !important;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="font-size:22px;text-transform: none;" ><span id="headermodal"></span></h4>
+                <h4 class="modal-title">{$this->Language['are_you_sure_delete_device']} ?</h4>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" id="devicebtn" class="btn btn-default">{$this->Language['yes']}</a>
+                <button class="btn btn-primary" data-dismiss="modal" type="button" style="text-transform: capitalize;">{$this->Language['btn_cancel']}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{literal}
+<script type="text/javascript">
+    function openDeleteDevicePopup(obj) {
+        $("#DeviceModal").modal('show');
+        var id = $(obj).attr('data-id');
+        var url = HTTP_ROOT + '/user/DeleteDevice';
+        $('#devicebtn').click(function () {
+			$('.loader').show();
+			$.post(url,{id: id}, function (res) {				
+                if (res) {
+                        $(obj).removeAttr('data-id');
+					 $(obj).attr('disabled', true);
+                        $(obj).removeAttr('onClick');
+                    $('#DeviceModal').modal('hide');
+                }
+                $('.loader').hide();
+			});
+        });
+    }
+</script>
+{/literal}

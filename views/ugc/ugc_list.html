@@ -1,0 +1,114 @@
+<style><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></style>
+  
+  <div class="container">
+      <h1><b>View Content</b></h1>
+    <table class="table table-hover" >
+    <thead>
+        <tr>
+        <th class="text-center">Content Name</th>
+        <th class="text-center">No of views</th>
+        <th class="text-center">Action</th>
+        </tr>  
+    </thead>
+    <tbody id="body_alert" class="has__message--block">
+<!--        Getting data from user controller and displaying it here.-->
+        {foreach from=$x item=key}
+        <tr class="text-center">
+            <td>{$key['name']}</td>
+            <td>{$key['ppv_plan_id']}</td>
+            <td>
+                <a href="#"><em class="icon-pencil">&nbsp;&nbsp;Edit Content</em></a><br>
+                <a href="#"><em class="icon-trash">&nbsp;&nbsp; Delete Content</em></a><br>
+               <h5><a href="javascript:void(0);"  onclick="openEmbedBox('embedbox_{$stream_id}')" class="embed-box"><em class="fa fa-chain">&nbsp;&nbsp; Embed Content</em></a></h5>
+                <div class="modal fade" id="embedbox_{$stream_id}" tabindex="-1" role="dialog" >
+                    <div class="modal-dialog" role="document" >
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Embed  url</h4>
+                            </div>
+                            <div class="modal-body">                               
+                                <div class="form-group">
+                                    <label for="iframeEmbed_{$stream_id}" class="col-sm-2 control-label">Embed</label>
+                                    <div class="col-sm-8">
+                                        <div class="fg-line">
+                                          <input type="text" class="form-control input-sm" id="iframeEmbed_{$stream_id}" placeholder="Embed Code..." value='<iframe width = "100%" height = "315" style="background-color:#000" id = "myIframe_48" src = "http://devstudio.kailash.com/embed/062a107bc5936cff010e24f1a6d4322e" frameborder = "0" allowfullscreen > </iframe><script>var viewPortTag=document.createElement('meta');viewPortTag.name='viewport';viewPortTag.content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;';window.parent.document.getElementsByTagName('head')[0].appendChild(viewPortTag);</script>'>                                          
+                                        </div>                                        
+                                    </div>
+                                   
+                    <span class="input-group-btn">
+                                         <div  class="animate-div " style="display:none;z-index:10;" id="embed_{$stream_id}">Copied!</div>
+<button class="btn btn-default btn-blue copyToClipboard" id="iframeEmbedButton_{$stream_id}" data-clipboard-text='' type="button" onclick="CopytoClipeboard('embed_{$stream_id}')">Copy!</button>
+                    </span>                    
+                                </div>
+<!--                               {if (isset($data_enable) && ($data_enable['menu'] & 8) && ($isFreeContent== 1))}
+                                <div class="form-group">
+                                    <label for="inputShare{$stream_id}" class="col-sm-2 control-label">Share</label>
+                                    <div class="col-sm-8">
+                                        <div class="fg-line">
+                                          <input type="text" class="form-control input-sm" id="inputShare{$stream_id}" placeholder="Share Code..." value="{$sharedUrl}">                                          
+                                        </div>                                                                                                                      
+                                    </div>                                    
+                                    <span class="input-group-btn">
+                                        <div  class="animate-div " style="display:none;z-index:10;" id="share_{$stream_id}">Copied!</div> 
+<button class="btn btn-default btn-blue copyToClipboard" id="iframeShareButton_{$stream_id}" data-clipboard-text='{$sharedUrl}' type="button" onclick="CopytoClipeboard('share_{$stream_id}')">Copy!</button>
+</span> 
+                                </div>
+                                {/if}-->
+                            </div>
+                            <div class="modal-footer">                    
+                                <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {/foreach}
+    
+    </tbody>
+
+</table> 
+      
+     
+      <div class="row" style="margin-right:0px !important;">
+            <div class="col-md-12">
+                <div class="product-pagination text-center">
+                    <nav>
+                        {$pagination}
+                    </nav>                        
+                </div>
+            </div>
+</div>
+     </div> 
+<script>
+                    var myjscode = '<iframe width = "100%" height = "315" style="background-color:#000" id = "myIframe_{$stream_id}" src = "{$embedUrl}" frameborder = "0" allowfullscreen > </iframe>';
+                    myjscode += '<script>';
+                    myjscode += "var viewPortTag=document.createElement('meta');viewPortTag.name='viewport';viewPortTag.content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;';window.parent.document.getElementsByTagName('head')[0].appendChild(viewPortTag);";                    
+                    {if $embedWaterMArkEnable}                       
+                    myjscode += "var muviIframeDivId = '{$stream_id}' function checkIfCookieIsSetForEmbedMuvi(){var e=\"\";if(document.cookie.indexOf(\"MUVI_WATERMARK\")>=0){var m=document.cookie.match(new RegExp(\"MUVI_WATERMARK=([^;]+)\"));m&&(e=m[1])}return e=encodeURIComponent(e.trim())}function checkMuviIframeSrc(){if(\"undefined\"!=typeof muviIframeSrc){var e=document.getElementById(\"myIframe_\"+muviIframeDivId).src;muviIframeSrc!==e&&(document.getElementById(\"myIframe_\"+muviIframeDivId).src=muviIframeSrc)}}var muviIframeSrc=document.getElementById(\"myIframe_\"+muviIframeDivId).src+\"?waterMarkOnPlayer=\"+checkIfCookieIsSetForEmbedMuvi();document.getElementById(\"myIframe_\"+muviIframeDivId).src=muviIframeSrc,window.setInterval(function(){checkMuviIframeSrc()},500);";                                           
+                    {/if}                    
+                    myjscode += '<\/script>';                       
+                    $("#iframeEmbed_{$stream_id}").val(myjscode);
+                    $("#iframeEmbedButton_{$stream_id").attr("data-clipboard-text",myjscode);
+</script> 
+
+<script type="text/javascript">
+    
+function openEmbedBox(embedid) 
+                        {
+                           $('#'+embedid).modal('show');
+                       }
+function CopytoClipeboard(id) {
+                            $('#' + id).css('display', 'block');
+                            $('#' + id).animate({
+                                opacity: 0,
+                                top: '-=75',
+                            }, {
+                                easing: 'swing',
+                                duration: 500,
+                               
+                            });
+                      
+    }
+</script>

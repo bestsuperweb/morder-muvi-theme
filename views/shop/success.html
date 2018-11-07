@@ -1,0 +1,55 @@
+<div class="c-layout-page">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$this->Language['shopping_cart']}</h3>
+            </div>
+            <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                <li>
+                    <a href="{$this->siteurl}">{$this->Language['shop']}</a>
+                </li>
+                <li>/</li>
+                <li>
+                    <a href="{$this->siteurl}/shop">{$this->Language['product_list']}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container" style="padding: 20px;">
+        <h1>{$this->Language['order_placed']}</h1>
+        <p>{$this->Language['order_processed']}</p>
+        <div class="pull-right"><a class="btn c-btn btn-lg c-theme-btn c-btn-square c-font-white c-font-bold c-font-uppercase c-cart-float-r" href="{Yii::app()->getBaseUrl(true)}/shop">{$this->Language['continue_shopping']}</a></div>
+    </div>
+</div>
+<script>
+    // Window load event used just in case window height is dependant upon images
+$(window).bind("load", function() { 
+       
+    var footerHeight = 0,
+        footerTop = 0,
+        $footer = $(".c-layout-footer");           
+    positionFooter();       
+    function positionFooter() {
+        footerHeight = $footer.height();
+        footerTop = ($(window).scrollTop()+$(window).height()-footerHeight)+"px";
+
+        if ( ($(document.body).height()+footerHeight) < $(window).height()) {
+           $footer.css({
+                position: "absolute",
+                width:"100%"
+           }).animate({
+                top: footerTop
+           })
+        } else {
+           $footer.css({
+                position: "static"
+           })
+        }
+    }
+    $(window)
+            .scroll(positionFooter)
+            .resize(positionFooter)               
+});
+
+
+</script>

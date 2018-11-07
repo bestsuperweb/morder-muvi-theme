@@ -1,0 +1,84 @@
+<div class="product-big-title-area">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$this->Language['my_favourite']}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="single-product-area content-area">
+    <div class="container">                
+        <div class="content-area">
+            <div class="row cust-row">
+                {if $item_count > 0}
+                {foreach from=$contents|json_decode item=content}
+
+                <div class="col-md-2 col-sm-6 c-margin-b-20">
+                    <div class="c-content-product-2 c-bg-white list-box">
+                        <div class="c-content-overlay">
+                            <div class="c-overlay-wrapper">
+                                <div class="c-overlay-content">
+                                    {if $content->content_types_id == 5}
+                                    {if $content->full_movie != ''}
+                                    <div class="play-btn-wrap">
+                                        <a href="javascript:void(0);" onclick="playAudio(this)" data-content_type="{$content->is_episode}" id="{$content->movie_id}"  class="playaudio" data-ctype="{$content->content_types_id}">
+                                            {$this->Language['play_now']}</a>
+                                    </div>
+                                    {else}
+                                    <a class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$this->siteurl}/{$content->permalink}">{$this->Language['explore']}</a>
+                                    {/if}
+                                    {elseif $content->content_types_id == 3}
+                                    <a  class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$this->siteurl}/{$content->permalink}">{$this->Language['explore']}</a>
+                                    {elseif $content->content_types_id == 6}
+                                    <a  class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$this->siteurl}/{$content->permalink}">{$this->Language['explore']}</a>
+                                    {else}
+                                    {if $content->content_types_id!= 3}
+                                    {if $content->is_downloadable == 1}
+                                    {if $content->download_btn != '' }<div class="play-btn-wrap">{$content->download_btn}</div> {else}<a class="c-overlay-wrapper" href="{$this->siteurl}/{$content->permalink}"></a>{/if}
+                                    {elseif $content->is_downloadable == 2}
+                                    {if $content->play_btn != '' }<div class="play-btn-wrap">{$content->play_btn}</div> {else}<a class="c-overlay-wrapper" href="{$this->siteurl}/{$content->permalink}"></a>{/if}
+                                    {if $content->download_btn != '' }<br><div class="play-btn-wrap">{$content->download_btn}</div> {else}<a class="c-overlay-wrapper" href="{$this->siteurl}/{$content->permalink}"></a>{/if}
+                                    {else}
+                                    {if $content->play_btn != '' }<div class="play-btn-wrap">{$content->play_btn}</div> {else}<a class="c-overlay-wrapper" href="{$this->siteurl}/{$content->permalink}"></a>{/if}
+                                    {/if}
+                                    {/if}
+                                    {/if}
+                                </div>
+                            </div>
+                            <div class="c-bg-img-top-center c-overlay-object text-center"><img class="list-poster" src="{$content->poster}" /></div>
+                        </div>
+                        <div class="c-info">
+                            <p class="c-title c-font-18 c-font-slim">
+                                <a href="{$this->siteurl}/{$content->permalink}">{$content->title|utf8_decode}</a>
+                            </p>
+                                                 
+                        </div>                     
+                    </div>
+                    <a href="javascript:void(0);" class="delete-fab-section" onclick="ConfirmFavPopup(this);" data-header="{$this->Language['confirm_delete_message']}" data-button="deleteFavContent" data-user_id="{$this->user_id}" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                </div> 
+                {/foreach}
+                {else}
+                <div class="col-sm-12 top10">
+                    <div class="nocontent">
+                        {$this->Language['no_content_added_yet']}
+                    </div>
+                </div>
+                {/if}
+                <div class="loader" id="loader"></div>    
+            </div>
+            {if $item_count > $page_size}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="product-pagination text-center">
+                        <nav>
+                            {$pagination}
+                        </nav>                        
+                    </div>
+                </div>
+            </div> 
+            {/if}
+        </div>
+    </div>
+</div>

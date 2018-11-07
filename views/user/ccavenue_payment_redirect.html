@@ -1,0 +1,25 @@
+    <div class="container content-area" >
+        <div class="row">
+            <div class="col-md-12 top200" style="height:500px !important;">
+                {$payment_form}
+            </div>
+        </div>
+    </div>
+<div id="loadingPopup" class="modal fade in" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border: none;">
+                <div class="modal-title auth-msg">{$this->Language['redirect_ccavenue_payment']}</div>
+                <div><img src="{$this->siteurl}/images/payment_loading.gif" alt="Loading" title="Loading" style="padding:5px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $( document ).ready(function() {
+    $('#loadingPopup').modal('toggle');
+    $('#loadingPopup').modal('show');
+    $("#redirect_ccavenue").submit();
+    });
+    
+</script>

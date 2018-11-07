@@ -1,0 +1,55 @@
+<div class="col-md-3 col-sm-6 c-margin-b-20">
+    <div class="c-content-product-2 c-bg-white">
+        <div class="c-content-overlay">
+            <div class="c-overlay-wrapper">
+                <div class="c-overlay-content">
+                    <a href="{$content->permalink}" class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square">{$this->Language['explore']}</a>
+                </div>
+            </div>
+            <div class="c-bg-img-top-center c-overlay-object" data-height="height" style="height: {$cropDimesion['height']}px; background-image: url('{$content->poster}');background-size: {$cropDimesion['width']}px {$cropDimesion['height']}px;""></div>
+        </div>
+        <div class="c-info">
+            <p class="c-title c-font-14 c-font-slim">
+                <a href="{$content->permalink}">
+                    {if $content->title|utf8_decode|count_characters > 30}
+                    {$content->title|utf8_decode|substr:0:30}
+                    {else}
+                    {$content->title|utf8_decode}
+                    {/if}
+                </a>
+            </p>
+            {if $content->is_preorder == 0}
+            <p class="c-price c-font-14 c-font-slim">
+                {$currency_id=$content->currency_id}
+                {$sale_price=$content->price}
+                {Yii::app()->common->formatPrice($sale_price,$currency_id)}
+            </p>
+            {else}
+            <p class="c-price c-font-14 c-font-slim">
+                &nbsp;
+            </p>
+            {/if}
+
+        </div>
+        {if $content->status == 1}
+        <div class="btn-group btn-group-justified" role="group">
+            {if $content->is_preorder == 0}
+            <div class="btn-group c-border-top" role="group">
+                <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="addtocart({$content - > id}, 1);">{$this->Language['add-to-cart']}</a>
+            </div>
+            <div class="btn-group c-border-left c-border-top" role="group">
+                <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="addtocart({$content - > id}, 2);">{$this->Language['ordernow']}</a>
+            </div>
+            {else}
+            <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="window.location = '{$content->permalink}'">{$this->Language['preorder_now']}</a>
+            {/if}
+        </div>
+        {elseif $content->status == 3}
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group c-border-top" role="group">
+                <div class="stockout">{$this->Language['stock_out']}</div>
+            </div>
+        </div>
+        {/if}                        
+    </div>
+</div>

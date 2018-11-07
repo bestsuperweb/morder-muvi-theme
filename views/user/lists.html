@@ -1,0 +1,73 @@
+{$content = $contents|json_decode}
+{$playlist = $content->playlist}
+{$val = $prev_offset+1}
+{assign var=num value=$val}
+{foreach from=$playlist item=listitem}
+{$user_id=Yii::app()->user->id}
+{$itemCount = $listitem->counts}
+
+
+<div class="row play-list list_{$num}" data-id="{$num}">
+    <div class="loader" id="playlist_loading"></div>
+    <div class="col-md-1 col-xs-2 c-black">{$num++}</div>
+    <div class="col-md-3 col-xs-6"><span class="wrap">{$listitem->list_name}</div>
+    <div class="col-md-2 col-xs-4 c-black">{if $itemCount > 0}{if $itemCount > 1}{$itemCount} {$this->Language['tracks']}{else}{$itemCount} {$this->Language['track']}{/if}{else} {$this->Language['no_track']}{/if}</div>
+    <div class="col-md-6 col-xs-12 icon-menu">
+        <a href="javascript:void(0);"><span class="editPlaylist" data-playlist_id="{$listitem->list_id}" data-id="{$num}"  data-user_id="{$user_id}" data-playlist_name="{$listitem->list_name}"><i class="fa fa-pencil img-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="javascript:void(0);" class="delete_playlist" data-playlist_id="{$listitem->list_id}" data-playlist_name="{$listitem->list_name}" data-user_id="{$user_id}" data-id="{$num}"   data-header="{$this->Language['are_you_sure_to_delete_playlist']}" data-button="deletePlaylist" onclick="showConfirmPopup(this);"><i class="fa fa-trash-o img-del" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="javascript:void(0);" class="text-uppercase openColl" data-toggle="collapse" data-target="#collapseExample_{$num}" aria-expanded="false" data-id="{$num}" aria-controls="collapseExample"><i class="fa fa-plus img-add" aria-hidden="true"></i><i class="fa fa-minus img-min current" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+        {if $itemCount > 0}<a href="javascript:void(0);" class="playPlaylist" data-playlist_id="{$listitem->list_id}" data-playlist_name="{$listitem->list_name}" data-user_id="{$user_id}" data-index="0"><i class="fa fa-play img-play" aria-hidden="true"></i></a>{else}<span class='left20'></span>{/if}
+    </div>
+
+    <div class="collapse collapse_list" id="collapseExample_{$num}">
+        <div class="row m-t-5 playList">
+            <div class="col-md-12 m-t-10">
+                {if $itemCount > 0}
+                {$dataItem = $listitem->lists}
+                {assign var=numb value=1}
+                {foreach from=$dataItem item=result}
+                {$casts=$result->casts}
+
+                <div class="track-list playlist {$val}">
+                    <div class="track-item playlist-track row" data-id="{$result->movie_stream_id}">
+                        <div class="col-xs-2 col-md-2 text-center">
+                            <p class="title c-black">{$numb++}</p>
+                        </div>
+
+                        <div class="col-xs-10 col-md-8 playslist_user">
+                            <span class="title left5">&nbsp;{$result->content_title}&nbsp;&nbsp;</span></br>
+                            <span class="meta-info c-white">{foreach from=$casts key=counter item=cast}{$cast_count=$cast|@count}{$j=0}{foreach from=$cast key=counter item=castitem}{$castitem->celeb_name}{$j = $j+1}{if $j != $cast_count}, {/if}{/foreach}{/foreach}</span>
+                            <span class="title pull-right top-22">&nbsp;&nbsp;{$result->video_duration}</span>
+                        </div>
+                        <div class="col-xs-12 col-md-2 text-right">
+                            <a href="javascript:void(0);" data-content_id="{$result->movie_stream_id}"  data-playlist_id="{$listitem->list_id}" data-user_id="{$user_id}" data-header="{$this->Language['are_you_sure_to_delete_content']}" data-button="deleteContent" onclick="showConfirmPopup(this);">
+                                <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/Icons/delete.png" class="img-del" alt="{$this->Language['delete']}" title="{$this->Language['delete']}"></a>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                {/foreach}
+                {else}
+                <h6>{$this->Language['no_content_added_yet']}</h6>
+                {/if}
+            </div>
+        </div>
+
+    </div>
+</div>
+{/foreach}
+<input type="hidden" id="latest_offset" value="{$offset}">
+
+<script type="text/javascript">
+	$('.openColl').on('click', function () {
+		var id = $(this).attr('data-id');
+		$('.editPlaylist[data-id=' + id + ']').toggleClass('hide');
+		$('.delete_playlist[data-id=' + id + ']').toggleClass('hide');
+		$(this).find('.img-add').toggleClass('current');
+		$(this).find('.img-min').toggleClass('current');
+	});
+	
+</script>
+

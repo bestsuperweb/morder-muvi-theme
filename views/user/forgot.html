@@ -1,0 +1,64 @@
+<section>
+        <div class="buy_movies_login" style="background: url({$this->siteurl}{$Yii->theme->baseUrl}/images/banner2.png) left top no-repeat; background-size: cover;">
+            <div class="container">
+                <div class="login_your_e-mail active" style="margin: 0 auto; float: inherit;background: rgba(0, 0, 0, 0.5);">
+                    <h2>RECOVER YOUR PASSWORD</h2>
+                    <h3></h3>
+                    <form class="login_your_e-mail_form" name="frmRP" id="frmRP" method="post" action="javascript:void(0);">
+                        <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                        <div class="form-group">
+                            <label class="control-label" for="usr">Email</label>
+                            <input type="text" class="form-control" name="email" id="reset_email" placeholder="{$this->Language['text_email_placeholder']}">
+                        </div>
+                        <div class="dont_charge">
+                                <p> We don't charge you
+                                    <span> Until you decide to watch
+                                    </span>
+                                </p>
+                            </div>
+                        <div class="loader" id="loader"></div>
+                        <div class="clear"></div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default login_button" name="login_submit" id="login-btn">SEND ME A RESET LINK</button>
+                        </div>
+                        <div id="reset-errors" class="error center"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="moovibo-nav_bottom">
+            <div class="headerWrap headerInside">
+                <nav class="navbar navbar-inverse">
+                    <div class="customNav">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                                aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="/tr/user/login">SIGN IN
+                                        <i class="fa fa-circle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/tr/user/register">SIGN UP
+                                        <i class="fa fa-circle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">FAQ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </section>

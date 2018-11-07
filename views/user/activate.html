@@ -1,0 +1,180 @@
+<section>
+        <div class="buy_movies_login" style="background: url({$this->siteurl}{$Yii->theme->baseUrl}/images/buy_movie.png) left top no-repeat; background-size: cover;">
+            <form id="membership_form" name="membership_form" method="POST" class="form-horizontal" action="javascript:void(0);">
+                <div class="container" id="signup_1">
+                    <div class="buy_movies_login_details">
+                        <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                        <div id="loading" class="loader"></div>
+                        <div id="errors" class="error center"></div>
+                        <div class="top20"></div>
+                        <div class='row'>
+                            {if $plans|@count == 1 && $singlePlanCoupon['singlePlanCoupon'] == 1}
+                                {include file='../layouts/singleplan_coupon.html'}
+                            {else}
+                                {include file='../layouts/listplans.html'}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="container hide" id="signup_2">
+                    <div class="buy_movies_transition">
+                        <div class="transitions_purchase">
+                            <h2>PURCHASE</h2>
+                            <h3>{$this->Language['you_ll_be_charged']}</h3>
+                            <h4>49.
+                                <span>99</span>
+                                <strong>TL</strong>
+                            </h4>
+                            <h5>FOR 3 PASS IN 1 MONTH</h5>
+                            <h6>Expires on
+                                <span>July 7th 2018</span>
+                            </h6>
+                           
+                           
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <a href="javascript:void(0)" onclick="navigateSignup(this, 2, false)">{$this->Language['back']}</a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="javascript:void(0)" onclick="navigateSignup(this, 3, true)">{$this->Language['btn_next']}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transitions_purchase_voucher active">
+                            <h2>VOUCHER</h2>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non tincidunt enim. In
+                                vitae ligula
+                                aliquam, iaculis nunc a, sodales lacus. Donec lacinia nisl vel tristique consequat.</p>
+                            <div class="form-group">
+                                <label class="enter_code" for="usr">Enter your code</label>
+                                <input type="text" class="form-control custom_input" placeholder="Jonny@gmail.com" id="usr">
+                            </div>
+                            <a href="javascript:void(0)"  onclick="navigateSignup(this, 3, false)">{$this->Language['btn_submit']}</a>
+                        </div>
+                        <div class="transitions_purchase_voucher">
+                            <h2>COUPON</h2>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non tincidunt enim.</p>
+                            {if $isCouponExists}
+                                {include file='../layouts/general_coupon.html'}
+                            
+                            {else}
+                                {$this->Language["no_record_found"]}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="container hide" id="signup_3">
+                    <div class="buy_movies_transition">
+                        <div class="transitions_purchase">
+                            <h2>PURCHASE</h2>
+                            <h3>{$this->Language['you_ll_be_charged']}</h3>
+                            <h4>49.
+                                <span>99</span>
+                                <strong>TL</strong>
+                            </h4>
+                            <h5>FOR 3 PASS IN 1 MONTH</h5>
+                            <h6>Expires on
+                                <span>July 7th 2018</span>
+                            </h6> 
+                            <div class="row">
+                                    <div class="col-sm-12">
+                                        <a href="javascript:void(0)" onclick="navigateSignup(this, 3, false)">{$this->Language['back']}</a>
+                                    </div>
+                            </div>                       
+                        </div>
+                        <div class="credit_card_details">
+                            {if $gateways[0]->short_code == "ippayment"}
+                            {$activate_btn_form}
+                            {else}
+                            {if $is_hosted neq 1}
+                            <div>
+                                {$payment_form}
+                            </div>
+                            {/if}
+    
+                            {$activate_btn_form}
+                            {/if}
+    
+                            <span class="error" id="plan_error"></span>
+    
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <div id="successPopup" class="modal fade" style="width: 660px;margin:auto;margin-top: 10px;">
+        <div class="modal-dialog" style="width: 660px;margin:auto;margin-top: 10px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title success-popup-payment">{$this->Language['account_activate_after_card_submit']}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="loadingPopup" class="modal fade in">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="border: none;">
+                    <div class="modal-title auth-msg">{$this->Language['auth_your_card']}</div>
+                    <div><img src="{$this->siteurl}/images/payment_loading.gif" alt="{$this->Language['loading']}" title="{$this->Language['loading']}"
+                            style="padding:5px;" /></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var action = 'activate';
+        var btn = 'Activate';
+        
+        var plan_name, price, currency_symbol, duration, discount, discount_percentage, final_price, flag_for_registration;
+        var discount_flat, discount_sysmbol,frequent,month_no,planId,currencyId;
+        function navigateSignup(t, box, direction) {
+            if(box == 2){
+                plan_name = $(t).parent().find('h3').text();
+                price = $(t).parent().find('h5').text();
+                frequent = $(t).parent().find('h4').text();
+                month_no = $(t).parent().find('h4').text().split(" ")[1];
+                planId = t.dataset.planid;
+                currencyId = t.dataset.currencyid;
+                $("#signup_"+box).find('h2').text(plan_name);
+                $("#signup_"+box).find('h4').html( price.split(".")[0] + ". <span>"+price.split(".")[1]+"</span>");
+                $("#signup_"+box).find('h5').text(frequent);
+                var month = new Date().getMonth();
+                var day = new Date().getDate();
+                var year = new Date().getFullYear();
+                var jan312009 = new Date(year, month, day);
+                var eightMonthsFromJan312009  = jan312009.setMonth(jan312009.getMonth() + parseInt(month_no));
+                $("#signup_"+box).find('h6').children('span').text( formatDate(jan312009));
+               
+            }
+            else if(box == 3){
+                $("#signup_"+box).find('h2').text(plan_name);
+                $("#signup_"+box).find('h4').html( price.split(".")[0] + ". <span>"+price.split(".")[1]+"</span>");
+                $("#signup_"+box).find('h5').text(frequent);
+                var month = new Date().getMonth();
+                var day = new Date().getDate();
+                var year = new Date().getFullYear();
+                var dt = new Date(year,month,day);
+                var jan312009 = new Date(year, month, day);
+                var eightMonthsFromJan312009  = jan312009.setMonth(jan312009.getMonth() + parseInt(month_no));
+                $("#signup_"+box).find('h6').children('span').text( formatDate(jan312009));
+            }
+            if(direction != false){
+                $("#signup_"+box).removeClass('hide');
+                $("#signup_"+Number(box-1)).addClass('hide');
+            }
+            else{
+                $("#signup_"+box).addClass('hide');
+                $("#signup_"+Number(box-1)).removeClass('hide');
+            }
+        }
+        function formatDate(date) {
+            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            var day = date.getDate(), monthIndex = date.getMonth(), year = date.getFullYear();
+            return monthNames[monthIndex]+' '+ day + ' ' + year;
+        }
+        
+    </script>
+    <script type="text/javascript" src="{$this->siteurl}{$Yii->theme->baseUrl}/js/action.js"></script>

@@ -1,0 +1,61 @@
+<!-- BEGIN: PAGE CONTAINER -->
+{$content = $item|json_decode}
+<div class="c-layout-page">
+    <!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-2 -->
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-sbold c-font-uppercase">{$content->name}</h3>
+            </div>
+        </div>
+    </div>
+    <!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-2 -->
+    <!-- BEGIN: PAGE CONTENT -->
+    <!-- BEGIN: CONTENT/SHOPS/SHOP-PRODUCT-DETAILS-2 -->
+    <div class="container">
+        <div class="c-shop-product-details-2 content-area">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="c-product-gallery">
+                        <div class="c-zoom1"><img src="{$celebrity_image}" alt="{$content->name|utf8_decode}" /></div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="c-product-meta">
+                        <div class="c-content-title-1" style="float:none;">
+                            <h3 class="c-font-uppercase c-font-bold" style="word-wrap: break-word;">
+                                {$content->name}
+                            </h3>
+                            <div class="c-line-left"></div>
+                        </div>                           
+                        <div class="clearfix"></div>
+                        <p class="c-product-short-desc">{$content->summary|utf8_decode}</p>
+                        {if $content->custom_data|count > 0}
+                            {foreach from=$content->custom_data key=ckey item=cval}
+                            <p>
+                                <span class="c-font-bold c-font-uppercase">{$cval->field_name} : </span>
+                                <span class="c-font-none"> 
+                                {if is_array($cval->value)}
+                                    {', '|implode:$cval->value}
+                                {else}
+                                    {$cval->value}
+                                {/if}
+                                </span>
+                            </p>
+                            {/foreach}
+                        {/if}
+                    </div>
+                    <div class="row cust-row">
+                        {include file='../layouts/listitem.html'}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+</div>
+<!-- END: CONTENT/SHOPS/SHOP-PRODUCT-DETAILS-2 -->
+<!-- END: PAGE CONTENT -->
+
+

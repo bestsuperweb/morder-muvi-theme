@@ -1,0 +1,189 @@
+{literal}
+<style>
+    th, td{color:#5c6873 !important;}
+    .product-remove{padding-top: 17px !important; padding-bottom: 17px !important;padding-left: 10px!important; padding-right: 10px!important;}
+    #itemdetails{width: 25% !important;}
+    th{border: 1px solid #e9e4e4 !important;padding-left: 10px!important; padding-right: 10px!important;}
+    th{border-top: 0 !important;padding-left: 10px!important; padding-right: 10px!important;}
+    td{border: 1px solid #e9e4e4 !important;padding-left: 10px!important; padding-right: 10px!important;}
+    .product-name{padding-top: 17px !important; padding-bottom: 17px !important;padding-left: 10px!important; padding-right: 10px!important;}
+</style>
+{/literal}
+{assign var="total_count" value=$credit_count}
+{assign var="debit_count" value=$debit_count}
+<div class="single-product-area">
+    <div class="container">
+        <div class="row top20" style="margin-right:0px !important;">
+            <div class="col-sm-12">
+                <h1 class="center white">{$this->Language["my_credit"]}</h1>
+            </div>
+            <div class="col-sm-12">
+                <div class="center white">{$this->Language["available_credits"]}</div>
+            </div>
+            <div class="col-sm-12">
+                <div class="center white" style="font-size: 25px;">{intval($user_total_credit)}</div>
+            </div>
+            <div class="col-md-12 p-l-0" style="margin-top:5px;margin-bottom:5px;">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a  href="#1" data-toggle="tab" onclick="getCreditList()">{$this->Language["credits"]}</a></li>
+                    <li><a href="#2" data-toggle="tab" onclick="getDebitList()">{$this->Language["debits"]}</a></li>
+                </ul>
+                <div class="tab-content ">
+                    <div class="tab-pane active" id="1">
+                        <table cellspacing="0" class="shop_table top20" style='width:100%;'>
+                            <thead>
+                                <tr>
+                                    <th class="product-name">{$this->Language["date"]}</th>
+                                    <th class="product-name">{$this->Language["transaction_type"]}</th>
+                                    <th class="product-name">{$this->Language["credits"]}</th>
+                                    <th class="product-name">{$this->Language["used_credits"]}</th>
+                                    <th class="product-name">{$this->Language["expiry"]}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="creditlist"></tbody> 
+                        </table>
+                        <div class="row" style="margin-right:0px !important;">
+                            <div class="col-md-12">
+                                <div class="product-pagination text-center">
+                                    <nav>
+                                        <div class="page-selection-div" style="display: none;">
+                                            <div id="page-selection" class="pull-right"></div>
+                                        </div>
+                                    </nav>                        
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="tab-pane" id="2">
+                        <table cellspacing="0" class="shop_table top20" style='width:100%;'>
+                            <thead>
+                                <tr>
+                                    <th class="product-name">{$this->Language["date"]}</th>
+                                    <th class="product-name">{$this->Language["debit_content"]}</th>
+                                    <th class="product-name">{$this->Language["debits"]}</th>
+                                </tr>
+                            </thead>                   
+                            <tbody id="debitlist"></tbody>                   
+                        </table>
+                        <div class="row" style="margin-right:0px !important;">
+                            <div class="col-md-12">
+                                <div class="product-pagination text-center">
+                                    <nav>
+                                        <div class="page-selection-div" style="display: none;">
+                                            <div id="page-selection-debit" class="pull-right"></div>
+                                        </div>
+                                    </nav>                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="loader" id="loader_debit"> </div>
+<div class="loader" id="loader_credit"> </div>
+{literal}
+<script type="text/javascript" src="{/literal}{$assets_url}{literal}js/jquery.bootpag.min.js"></script>
+<script type="text/javascript">
+    $('#loader_credit').show();
+    var url = '{/literal}{$this->siteurl}{literal}/user/creditlist';
+    var debit_url = '{/literal}{$this->siteurl}{literal}/user/debitlist';
+    var count = '{/literal}{$total_count}{literal}';
+    var debit_count = '{/literal}{$debit_count}{literal}';
+    var page_size = 5;
+
+    var total = parseInt(count) / parseInt(page_size);
+    var maxVisible = total / 2;
+    if (maxVisible >= 5) {
+        maxVisible = 5;
+    } else {
+        maxVisible = total;
+    }
+    
+    var debit_total = parseInt(debit_count) / parseInt(page_size);
+    var debit_maxVisible = debit_total / 2;
+    if (debit_maxVisible >= 5) {
+        debit_maxVisible = 5;
+    } else {
+        debit_maxVisible = debit_total;
+    }
+    
+    function getCreditList(){
+        $('#loader_credit').show();
+        $.post(url, {}, function (res) {                             
+            $('#creditlist').html(res);
+            $('#loader_credit').hide();
+             if (parseInt(count) <= parseInt(page_size)) {
+                $('#page-selection').parent().hide();
+            } else {
+                $('#page-selection').parent().show();
+            }
+        });
+
+        $('#page-selection').bootpag({
+            total: Math.ceil(total),
+            page: 1,
+            maxVisible: Math.round(maxVisible)
+        }).on('page', function (event, num) {
+            $('#loader_credit').show();
+            $.post(url, {'page': num}, function (res) {
+                $('#creditlist').html(res);
+                $('#loader_credit').hide();
+            });
+        });
+    }
+    
+    $('#page-selection').bootpag({
+            total: Math.ceil(total),
+            page: 1,
+            maxVisible: Math.round(maxVisible)
+        }).on('page', function (event, num) {
+            $('#loader_credit').show();
+            $.post(url, {'page': num}, function (res) {
+                $('#creditlist').html(res);
+                $('#loader_credit').hide();
+            });
+        });
+
+    
+    function getDebitList() {
+        $('#loader_debit').show();
+        $.post(debit_url, {}, function (res) {                             
+            $('#debitlist').html(res);
+            $('#loader_debit').hide();
+            if (parseInt(debit_count) <= parseInt(page_size)) {
+                $('#page-selection-debit').parent().hide();
+            } else {
+                $('#page-selection-debit').parent().show();
+            }
+        });
+
+        $('#page-selection-debit').bootpag({
+            total: Math.ceil(debit_total),
+            page: 1,
+            maxVisible: Math.round(debit_maxVisible)
+        }).on('page', function (event, num) {
+            $('#loader_debit').show();
+            $.post(debit_url, {'page': num}, function (res) {
+                $('#debitlist').html(res);
+                $('#loader_debit').hide();
+            });
+        });
+    }
+    
+    $('#page-selection-debit').bootpag({
+        total: Math.ceil(debit_total),
+        page: 1,
+        maxVisible: Math.round(debit_maxVisible)
+    }).on('page', function (event, num) {
+        $('#loader_debit').show();
+        $.post(debit_url, {'page': num}, function (res) {
+            $('#debitlist').html(res);
+            $('#loader_debit').hide();
+        });
+    });
+    getCreditList();    
+</script>
+{/literal}

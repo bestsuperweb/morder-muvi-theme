@@ -1,0 +1,675 @@
+<link rel="stylesheet" href="{$this->siteurl}/css/jquery.Jcrop.css" type="text/css" >
+<link href="{$this->siteurl}/css/bootstrap-tagsinput.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{$this->siteurl}/css/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.css">
+
+
+{if isset($_SESSION['internetSpeed'])} {$inernetSpeed=$_SESSION['internetSpeed']} {else} {$inernetSpeed=1} {/if}
+<script>
+    var userinternetSpeed =  {$inernetSpeed}
+    {if (!$_SESSION['internetSpeed'] && $_SESSION['internetSpeed']=="")}
+    {$bucketInfoDetails = Yii::app()->S3FolderPath->getBucketInfo('', $studio_id)}
+    {$internetSpeedImage = CDN_HTTP + $bucketInfoDetails['bucket_name'] + '.' + $bucketInfoDetails['s3url'] + '/check-download-speed.jpg'}
+    var imageAddr = [], downloadSize = [], desc = [];
+    imageAddr[0] = "{$internetSpeedImage}";
+    downloadSize[0] = 1036053;
+    desc[0] = "Singapore S3 Bucket";
+    var startTime, endTime;
+    var speedMbps;
+    function showResults(index) {ldelim}  
+        var duration = (endTime - startTime) / 1000;
+        var bitsLoaded = downloadSize[index] * 8;
+        var speedBps = (bitsLoaded / duration).toFixed(2);
+        var speedKbps = (speedBps / 1000).toFixed(2);
+        speedMbps = (speedKbps / 1000).toFixed(2);
+        userinternetSpeed = speedMbps;
+        $.post(HTTP_ROOT + "/user/setUserInterNetSpeed", {ldelim}speedMbps: speedMbps{rdelim}, function (res) {ldelim}
+            
+        {rdelim}); 
+    {rdelim}
+    {/if}
+</script>
+
+{literal}
+<style>
+    .mart40{
+        margin-top: 50px;
+    }
+    .border-dotted {
+        border: 1px dotted #d7d7d7;
+        padding: 20px;
+    }
+    .ugc_image
+    {
+        height:280px;
+        width:400px;
+    }
+    .modal.fade .modal-dialog {
+        -webkit-transform: translate(0, -25%);
+        -ms-transform: translate(0, -25%);
+        -o-transform: translate(0, -25%);
+        transform: translate(0, -25%);
+        -webkit-transition: -webkit-transform 0.3s ease-out;
+        -o-transition: -o-transform 0.3s ease-out;
+        transition: transform 0.3s ease-out;
+        top: 25%;
+    }
+    .addmore-content{
+        display: none;
+    }
+    .upload-Image {
+        height: 60px;
+        width: 60px;
+        background-color: #fff;
+        border-color: #fff;
+        display: inline-flex;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }      
+    .upload-Image em{
+        font-size: 1.5em;
+        top: 62%;
+        position: absolute;
+        margin-top: -17px;
+        left: 60%;
+        margin-left: -17px;
+        color:#2cb7f6;
+    }
+    .upload-Image:hover{ 
+        background-color: #edf1f2;
+    }
+    .upload-Image:hover em{
+        color: #0aa1e5;
+    }
+    .btn.upload-Image.relative {
+        margin-top: 2px;
+        float: left;
+    }
+
+    .loading_div{display: none;}      
+    .jcrop-keymgr{display:none !important;}    
+    .addmore-content{display:none;}
+    .fixedWidth--Preview img {max-width: none !important;}
+    @-moz-document url-prefix() { 
+        .castcrew {
+            margin-top: -20px;
+        }
+    }
+    .actioncolor{
+        color: #F1F1F1;
+    }
+    .actioncolor:hover{color: #EE0000}
+    a:hover{padding:0;}
+
+</style>
+{/literal}
+{$studio_id = Yii::app()->user->studio_id}
+{$is_episode = $is_episode}
+
+{if ($is_episode)}
+{$addEpisode = 1}
+{/if}
+
+{if isset($movieStream) && $movieStream->id}
+{$disable="disabled"}
+{if (($movieStream->film->parent_id==0) && ($movieStream->film->language_id == $this->language_id))}
+{$disable=""}
+{/if}
+{if $is_episode}
+{$posterImg = $this->getPoster($movieStream->id, 'moviestream')}
+{$obj_type = 1}
+{else}
+{$posterImg = $this->getPoster($movieStream->film->id, 'films')}
+{$obj_type = 0}
+{/if}
+{/if}
+<div id="ugc-add-container-js"></div>
+<form id="upload_ugc_content" method="POST" action="javascript:;" novalidate="" enctype="multipart/form-data">
+    <div class="single-product-area ">
+        <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+            <div class="container">
+                <div class="c-page-title c-pull-left">
+                    <h3 class="c-font-uppercase c-font-sbold">{$this->Language['settings']}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="container content-area">
+            <div class="row">
+                <div id="crop-avatar">
+                    <div id="myflashwrapper" style="display: none"></div>
+
+                    <div class="row-fluid">
+                        <div class="col-md-8">
+                            <div class="alert-msg in  fade alert-success profile-success" id="success_message" style="display: none;"></div>
+
+                            <div class="form-signin">
+                                <input type="hidden" name="stream_uniq_id" value="{$movieStream->embed_id}" />
+                                <h3 class="c-font-uppercase c-font-sbold">{if $movieStream->id}{$this->Language['edit_content']}{else}{$this->Language['add_content']}{/if}</h3>                                 
+                                {$custom_form_html}                               
+                            </div>
+                            
+                            <!-- video part start -->
+                            <div id="callout-navs-tabs-plugin" class="row m-b-40 bs-callout bs-callout-info{if (!$movieStream->id)} addmore-content{/if}" >
+                                {$video_html}
+                            </div>
+                           <!-- videopart end -->
+                            
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-signin">
+                                <h3>&nbsp;</h3>
+
+                                <div class="form-group">
+                                    <div class="controls">
+                                        <div class="border-dotted m-b-40">
+
+                                            <div class="text-center">
+                                                <button data-toggle="modal" data-target="#ugc_poster" type="button" class="btn btn-default-with-bg btn-file"> {$this->Language['browse']} </button>
+                                                <h5 class="grey m-t-10 m-b-20">Upload image size of <span class="reqimgsize" id="reqimgsize"> {$width}X{$height} </span></h5>
+                                            </div>
+                                            <div class="text-center">
+                                                <div class="m-b-10 displayInline fixedWidth--Preview"> 
+                                                    <!-- UGC poster popup start -->
+                                                    <div class="modal fade bs-example-modal-lg" id="ugc_poster"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="false" style="display:none; top:40px;">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">{$this->Language['upload_poster']}<button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></h5>
+
+
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div  id="Upload-Video">
+                                                                        <div class="">
+                                                                            <div class="clearfix m-b-20 form-group"></div>
+                                                                            <div class="text-center">
+                                                                                <input type="button" class="btn btn-default-with-bg btn-sm" value="{$this->Language['upload_poster']}" onclick="click_browse('celeb_pic')">
+                                                                                <input id="celeb_pic" name="Filedata" type="file" onchange="fileSelectHandler()" style="display:none;" />
+                                                                                <p class="help-block">Upload image size of <span class="reqimgsize" id="reqimgsize"> {$width}X{$height} </p>
+                                                                            </div>
+                                                                            <input type="hidden" id="reqwidth" name="reqwidth" value="{$width}" />
+                                                                            <input type="hidden" id="reqheight" name="reqheight" value="{$height}" />
+                                                                            <input type="hidden" id="x1" name="fileimage[x1]" />
+                                                                            <input type="hidden" id="y1" name="fileimage[y1]" />
+                                                                            <input type="hidden" id="x2" name="fileimage[x2]" />
+                                                                            <input type="hidden" id="y2" name="fileimage[y2]" />
+                                                                            <input type="hidden" id="w" name="fileimage[w]"/>
+                                                                            <input type="hidden" id="h" name="fileimage[h]"/>
+                                                                            <div class="col-xs-12">
+                                                                                <div class="Preview-Block">
+                                                                                    <center>
+                                                                                        <div class="m-b-0">
+                                                                                            <div id="celeb_preview" class="col-md-12 margin-topdiv">
+                                                                                                <img id="preview" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        {if ($celeb['poster']['poster_file_name'])}
+                                                                                        <div class="thumbnail m-b-0" id="editceleb_preview">
+                                                                                            <div class="relative m-b-10">
+                                                                                                {$postUrl = Yii::app()->common->getPosterCloudFrontPath(Yii::app()->user->studio_id)}
+                                                                                                <img src="{$postUrl + '/system/posters/' + $celeb['poster']['id'] + '/medium/' + $celeb['poster']['poster_file_name']}" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        {/if}
+                                                                                    </center>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-primary" onclick="seepreview(this);">{$this->Language['btn_next']}</button>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>   
+                                            <div class="text-center">
+                                                <div class="m-b-10 displayInline fixedWidth--Preview">
+                                                    {$no_image_array = '/img/No-Image-Vertical.png'}
+                                                    {if (!in_array($posterImg, $no_image_array))}
+                                                    <div class="poster-cls  avatar-view jcrop-thumb">
+                                                        <div id="avatar_preview_div">
+                                                            {if ((strpos($posterImg, 'No-Image') > -1) || (strpos($posterImg, 'no-image') > -1) || $posterImg=='')}
+                                                                <img data-src="holder.js/{$width}x{$height}" alt="{$width}x{$height}" style="max-width: 100% !important;"/>        
+                                                            {else}
+                                                                <img title="poster-img" rel="tooltip" id="preview_content_img" src="{$posterImg}" style="max-width: 100% !important;">
+                                                            {/if}
+                                                        </div>
+                                                    </div>
+                                                    {else}
+                                                    <div class="poster-cls  avatar-view jcrop-thumb">
+                                                        <div id="avatar_preview_div">
+                                                            <img title="poster-img" rel="tooltip" id="preview_content_img" src="{$posterImg}" style="max-width: 100% !important;">
+                                                        </div>
+                                                    </div>
+                                                    {/if}
+
+                                                </div>
+                                                <canvas id="previewcanvas" style="overflow:hidden;display: none;margin-left: 10px;"></canvas>
+                                                {if ($movieStream->film->id && !(strpos($posterImg, 'No-Image') > -1) )}
+                                                {if ($disable == "")}
+                                                <div class="caption">
+                                                    <a id="remove-poster-text" class="btn remove_btn" href="javascript:void(0);" onclick="return removeposter('{$movieStream->film->id}', '{$obj_type}', '{$movieStream->id}');" data-managepayment_id="{$movieStream->film->id}"   data-header="{$this->Language['make_primary']}" ><em class="icon-close small-icon"></em>&nbsp;&nbsp;Remove Poster</a>
+                                                </div>
+                                                {/if}
+                                                {/if}
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                
+                    </div>
+
+                </div>            
+            </div>
+        </div>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</form>
+
+<!-- UGC video upload popup start  -->
+{$base_cloud_url = Yii::app()->S3FolderPath->getVideoGalleryCloudFrontPath($studio_id)}
+<div class="modal fade bs-example-modal-lg" id="addvideo_popup"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="false">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{$this->Language['upload_video']} - <span class="" id="pop_movie_name"></span></h4>
+        </div>
+        <div class="modal-body">
+            <div role="tabpanel">
+                <div class="tab-content"> 
+                    <div role="tabpanel" class="tab-pane active" id="profile">
+                        <!-- ------------Upload Video------------ -->
+                        
+                        <div id="scroll_container" class="is-Scrollable" style="min-height:150px;overflow-x:hidden;">
+                            <div class="_data">
+                                <div class="col-xs-12 m-t-40 m-b-20">
+                                    <div class="form-horizontal">	
+                                        <div class="form-group">
+                                            <input type="hidden" value="?" name="utf8">
+                                            <input type="hidden" name="movie_stream_id" id="movie_stream_id" value=""/>
+                                            <input type="hidden" name="movie_id" id="movie_id" value=""/>
+                                            <input type="hidden" name="movie_name" id="movie_name" value=""/>
+                                            <input type="hidden" name="content_type" id="content_type" value=""/>
+                                            <div class="clearfix m-b-20 form-group"></div>
+                                            <div class="savefile" id="browes_div">
+                                                <!--<div class="col-md-2">&nbsp;</div>-->
+                                                <div class="col-md-12 text-center">
+                                                    <input type="button" value="{$this->Language['upload_video']}" onclick="click_browse('videofile')" class="btn btn-default-with-bg btn-sm" >
+                                                    <input type="file" name="file" style="display:none;" id="videofile" required onchange="checkfileSize(event);" >
+                                                </div>
+                                            </div>
+                                            <div class="clear-fix"></div>                                           
+                                        </div>
+                                    </div>		
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="text-center m-b-20 loaderDiv"  style="display: none;">
+                                        <div class="preloader pls-blue text-center " >
+                                            <svg class="pl-circular" viewBox="25 25 50 50">
+                                            <circle class="plc-path" cx="50" cy="50" r="20"></circle>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!------Embed from 3rd Party------->
+                    <div role="tabpanel" class="tab-pane" id="home">
+                        <div class="row is-Scrollable m-b-20 m-t-20">
+                            <div class="col-sm-12 m-t-40 m-b-20">
+                                <div class="form-horizontal">
+
+                                    <div class="form-group">
+                                        <label for="uploadVideo" class="control-label col-md-3">Video from 3rd Party Platform &nbsp;</label>
+                                        <div class="col-md-4">
+                                            <input type="hidden" name="movie_stream_id" id="movie_stream_id" value=""/>
+                                            <input type="hidden" name="movie_id" id="movie_id" value=""/>
+                                            <input type="hidden" name="movie_name" id="movie_name" value=""/>
+                                            <div class="fg-line">
+                                                <!--
+                                                <input type="text" id="embed_url" class="form-control  input-sm" placeholder="Link from YouTube, Vimeo or another OVP" onkeyup="embedThirdPartyPlatform();">
+                                                -->
+                                                <input type="text" id="embed_url" class="form-control  input-sm" name="embedurl" required="" placeholder="Link from YouTube, Vimeo or another OVP"  onkeyup="embedThirdPartyPlatform();">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-10">
+                                            <input type="button" value="{$this->Language['save']}" id="save-btn" onclick="embedFromThirdPartyPlatform();" class="btn btn-primary btn-sm" >
+                                        </div>
+                                    </div>
+                                    <span class="error red help-block" id="embed_url_error"></span>
+                                </div> 
+                            </div>
+                        </div> 
+                    </div>
+                    <!-------End of Embed from 3rd party------>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{$this->Language['btn_cancel']}</button>
+        </div>
+    </div>
+</div>
+</div>
+<!-- UGC Video upload end -->
+
+<!-- Upload Popup  start -->
+<div style="position: fixed;background: rgb(255, 255, 255) none repeat scroll 0% 0%;left: initial;top: initial;bottom: 20px;right: 20px;border-radius: 0px;border: 1px solid rgb(230, 230, 230);width: 400px !important;height:auto !important;display: none;z-index:999999;" id="dprogress_bar">
+  <div style="height: 40px;padding: 10px;border-radius: 0px;color: rgb(255, 255, 255);width: 100% !important;background-color: rgb(77, 77, 77);" id="status_header">
+	<div style="float:left;font-weight:bold;">File Upload Status</div>
+	<div onclick="manage_progressbar();" class="pull-right" style="cursor:pointer;"><i class="fa fa-minus"></i> &nbsp;&nbsp;&nbsp;</div>
+  </div>
+  <div style="padding:10px 20px 20px;background-color: rgb(255, 255, 255);border: 1px solid rgb(230, 230, 230);" id="all_progress_bar"></div>
+</div>
+<!-- Upload Popup  end -->
+
+<div class="modal fade" id="alertModal" role="dialog" data-backdrop="static" data-keyboard="false" style="overflow-y:hidden !important;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                <h4 class="modal-title" style="font-size:22px;text-transform: none;" >
+                    <span id="headerAlertModal">Alert</span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-sm-12" id="bodyAlertModal">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" type="button" style="text-transform: capitalize;">{$this->Language['btn_ok']}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false" style="overflow-y:hidden !important;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="font-size:22px;text-transform: none;" >
+                    <span id="headerConfirmModal">Confirm</span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-sm-12" id="bodyConfirmModal">Are you sure?</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirmUGCYes">{$this->Language['yes']}</button>
+                <button type="button" data-dismiss="modal" class="btn">{$this->Language['no']}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{$this->siteurl}/themes/admin/js/plugins/input-mask/jquery.inputmask.js"></script>
+<script type="text/javascript" src="{$this->siteurl}/themes/admin/js/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script type="text/javascript" src="{$this->siteurl}/js/bootstrap-tagsinput.min.js"></script>
+<script type="text/javascript" src="{$this->siteurl}/js/typeahead.bundle.js"></script>
+<script type="text/javascript" src="{$this->siteurl}/js/jquery.Jcrop.js"></script>
+
+<script type="text/javascript" src="{$this->siteurl}/common/js/placeholder/holder.js"></script>
+	
+<script src="{$this->siteurl}/js/flatpickr.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.js"></script>
+
+<script type="text/javascript" src="{$this->siteurl}/js/s3_multi.js?v=1"></script>
+
+<script type="text/javascript">
+    var browserreloadflag = 0;
+    var celebxhr;
+    var STUDIO_ID = '{$studio_id}';
+    var HOR_POSTER_STUDIO = '{$hor_poster_studio}';
+    var gmtDate = '{gmdate('d')}';
+    var gmtMonth = '{gmdate('m')}';
+    var gmtYear = '{gmdate('Y')}';
+    var jcrop_api;
+    var bounds, boundx, boundy;
+    var settout = "", s3upload = null, s3obj = new Array, bootboxConfirm = 0;
+</script>
+
+<script type="text/javascript" src="{$this->siteurl}/js/add-ugccontent.js"></script>
+<script type="text/javascript" src="{$this->siteurl}/themes/admin/js/tinymce/tinymce.min.js"></script>
+{literal}                    
+<script type="text/javascript">
+    $(document).ready(function(){
+        tinymce.init({
+        selector: ".RichText",
+        formats: {
+            bold: {inline: 'b'},  
+        },
+         valid_elements : '*[*]',
+         force_br_newlines : true,
+         force_p_newlines : false,
+         forced_root_block : false,
+         menubar: false,
+         element_format : 'html',
+         extended_valid_elements : 'div[*], style[*]',
+         valid_children : "+body[style]", 
+         height: 200,
+         plugins: [
+         'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
+         'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+         'save table contextmenu directionality emoticons template paste textcolor'
+         ],
+        setup: function (editor) {
+        editor.addButton('newmedia', {
+         text: 'Add Image',
+         title: 'Add image',
+         icon: 'image',
+         onclick: function() {
+            $("#MediaModal").modal("show");
+            $('#glry_preview').removeAttr('src width height');
+            $('#imgtolib').removeAttr('src width height');
+            $('#choose_img_name').val("");
+            $("#InsertPhoto").text("Insert Image");
+            $("#InsertPhoto").removeAttr("disabled");
+            $("#cancelPhoto").removeAttr("disabled");
+            $('.overlay').removeAttr('style');
+            $("#browsefiledetails").text("No file selected");
+            $("#tinygallery").load("<?php echo Yii::app()->getBaseUrl(true)?>/template/tinyGallery");
+        } });
+         },
+        content_css: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link newmedia | code",
+        });
+    });
+</script>                  
+<script>          
+    $(function () {
+        $('#update-btn').removeAttr('disabled');
+    });
+    
+    window.addEventListener("beforeunload", function (e) {
+        if (browserreloadflag) {
+            var confirmationMessage = JSLANGUAGE.no_action_while_payment;
+            //console.log(confirmationMessage);
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage;                            //Webkit, Safari, Chrome
+        }
+    });
+    
+    // clear info by cropping (onRelease event handler)
+    function clearInfo() {
+        $('#x1').val('');
+        $('#y1').val('');
+        $('#x2').val('');
+        $('#y2').val('');
+        $('#w').val('');
+        $('#h').val('');
+        $('button[type="submit"]').removeAttr('disabled');
+    };
+    function updateInfo(e) {
+        var x = (e.x <= 0) ? 0 : e.x;
+        var y = (e.y <= 0) ? 0 : e.y;
+        var x2 = (e.x2 <= 0) ? 0 : e.x2;
+        var y2 = (e.y2 <= 0) ? 0 : e.y2;
+        $('#x1').val(x);
+        $('#y1').val(y);
+        $('#x2').val(x2);
+        $('#y2').val(y2);
+        $('#w').val(e.w);
+        $('#h').val(e.h);
+    }
+    $('#update-btn').on('click', function(){
+    //function saveUGCData(obj) {
+        $("#upload_ugc_content").validate({
+            rules: {
+                "movie[name]": {
+                    required: true,
+                },
+                "movie[content_category_value][]": {
+                    required: true,
+                },
+                "movie[permalink]": {
+                    required: true,
+                }
+            },
+            messages: {
+                "movie[name]": {
+                    required: JSLANGUAGE.field_required,
+                },
+                "movie[content_category_value][]": {
+                    required: JSLANGUAGE.field_required,
+                },
+                "movie[permalink]": {
+                    required: JSLANGUAGE.field_required,
+                }
+            },
+            submitHandler: function (form) {
+                var formObj = document.getElementById('upload_ugc_content');
+                var formData = new FormData(formObj);
+                formData.append('isAjax', 1);
+                $('#update-btn').html(JSLANGUAGE.wait);
+                $('#update-btn').attr('disabled', true);
+                $('.loader').show();
+                var submitBtn = JSLANGUAGE.btn_submit;
+                $.ajax({
+                    method: 'post',
+                    url: HTTP_ROOT + '/ugc/saveUserContent',
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.requestType == 'add') {
+                                $('input[name = "stream_uniq_id"]').val(response.stream_uniq_id);
+                                /*location.href = HTTP_ROOT + "/ugc/editContent/stream_uniq_id/"+response.stream_uniq_id;*/
+                                history.pushState(null,"Edit Content",HTTP_ROOT+'/ugc/editContent/stream_uniq_id/'+response.stream_uniq_id)
+                                showUGCAlert('Success','Content successfully added. Please upload video')
+                                $('.addmore-content').html(response.video_html);
+                                $('.addmore-content').show();
+                                $('#update-btn').html(submitBtn);
+                                $('#update-btn').removeAttr('disabled');
+                            } else {
+                                location.href = HTTP_ROOT + "/ugc/Showdetails";
+                            }
+                        $('.loader').hide();
+                    }
+                }});
+                return false;
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+ function checkperma(val)
+ {
+     if(val != '')
+     {
+        var newperm = name_to_url(val);
+        if (newperm=='')
+        {
+            $('#plink').html("<input style='margin-top:5px;' type='text' name='movie[permalink]' id='permalink' class='form-control input-sm checkInput' required placeholder='Please enter english equivalent name' onblur='checkperma(this.value)'>Please provide the english equivalent name which will be used for permalink purpose only.&nbsp;<em class='icon-info'></em>");               
+        }         
+    }
+ }
+ function name_to_url(name) {
+    name = name.toLowerCase(); // lowercase
+    name = name.replace(/^\s+|\s+$/g, ''); // remove leading and trailing whitespaces
+    name = name.replace(/\s+/g, ''); // convert (continuous) whitespaces to one -
+    name = name.replace(/[^a-z-]/g, ''); // remove everything that is not [a-z] or -
+    return name;
+}
+
+function showType(id,name){
+    $('#showtype').hide();
+    $('#showtypeadd').show();
+    $('#typenew').val(name);
+    $('#typenew_id').val(id);
+}
+function removeshowType(){
+    $('#showtype').show();
+    $('#showtypeadd').hide();
+}
+$(document).ready(function(){
+    ajaxshowType();
+});
+function ajaxshowType(){
+    var url = HTTP_ROOT + "/ugc/ajaxshowtype";
+    $.post(url,function(postresult){    
+    $("#ajaxshowtype").html(postresult);    
+    });
+}
+ </script>
+<script>
+    $(document).ready(function(){
+        $('#release_date').datepicker({minDate: '0'});
+        $('#publish_date').datepicker({minDate: '0'}),
+
+        $('#publish_time').flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            enableSeconds: false, // disabled by default
+            time_24hr: true, // AM/PM time picker is used by default
+            // default format
+            dateFormat: "H:i",
+            // initial values for time. don't use these to preload a date
+            defaultHour: 12,
+            defaultMinute: 0
+        });
+    })
+</script>
+{/literal}

@@ -1,0 +1,46 @@
+{foreach  from=$channel_details  key=k item=allchannel}
+                <div class="col-lg-12 text-center" >
+                    <!--- For channelNAme : dynamic for a studio-->
+                    <div class="channel1">
+                        <div class="channel-number hidden-sm hidden-xs">{$k+1}</div>                
+                        <div class="channel-list" id="{$allchannel.id}">
+                            
+                            {if $allchannel.channel_logo !=''}
+                            <img height="35px;" src="{$allchannel.base_cloud_url}{$allchannel.channel_logo}" alt="{$allchannel.channel_name}" />
+                            {else}
+                               {$allchannel.channel_name} 
+                           {/if}
+                        </div>
+                    
+                         <div class="channel1 div83">
+                        {if $allchannel.channel_schedule|is_array and count($allchannel.channel_schedule) > 0}
+                        {foreach  from=$allchannel.channel_schedule  key=ke item=indchanneldetail}
+
+                      
+                        {$start_time=$indchanneldetail.start_time}
+                        {$end_time=$indchanneldetail.end_time}
+                        {$movie_id=$indchanneldetail.movie_id}
+                        {$div_percent=$indchanneldetail.div_percent}
+                        {$div_before_percent=$indchanneldetail.div_before_percent}
+                        
+                        {$schedule_id=$indchanneldetail.schedule_id}
+                        
+                        {$event_name=$indchanneldetail.event_name}    
+                        
+                        {foreach from=$indchanneldetail.event_details  key=ke1 item=eventstyle} 
+                       
+                        <div class="channeldata {$eventstyle.class}" id="{$eventstyle.class}" style="width:{$eventstyle.width}%" data-movie_id="{$movie_id}" data-start_time="{$start_time}" data-end_time="{$end_time}" onclick="{$eventstyle.onclick}" title="{$event_name}" data-toggle="tooltip" data-placement="top">
+                          {if $eventstyle.class !='noprogram'}  
+                            {$event_name}
+                        {/if}
+                        </div>	
+                        {/foreach}
+                        {/foreach}
+                        {/if}
+                        </div>
+                        
+                 
+                </div>
+                </div>
+                {/foreach}   
+            

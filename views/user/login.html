@@ -1,0 +1,92 @@
+<section>
+    <div class="buy_movies_login" style="background: url({$this->siteurl}{$Yii->theme->baseUrl}/images/banner2.png) left top no-repeat; background-size: cover;">
+        <div class="container">
+            <div class="buy_movies_login_details">
+                <div class="login_your_e-mail active">
+                    <h2>{$this->Language['login_by_your_email']}</h2>
+                    <h3></h3>                    
+                    <form name="login_form" id="login_form" method="post" action="javascript:void(0);" class="login_your_e-mail_form">
+                        <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                        <div id="login_errors" class="error center"></div>
+                        <div id="login_loading" class="loader" style="display: none;"></div>
+                        <div class="form-group">
+                            <label class="control-label" for="username">{$this->Language['text_email']}</label>                            
+                            <input type="email" required name="LoginForm[email]" id="username" autocomplete="off"  class="form-control" value="" />
+                        </div>
+                        <div class="form-group">
+                            <label  class="control-label" for="password">{$this->Language['text_password']}</label>
+                            <input type="password" required name="LoginForm[password]" id="password" autocomplete="off" class="form-control"/>
+                        </div>
+                        <div class="form-group">                            
+                            <button type="submit" class="btn btn-default login_button" name="login_submit" id="login-btn">{$this->Language['btn_login']}</button>
+                            <a class="btn btn-default forgot_password" href="{$this->siteurl}/user/forgot">{$this->Language['forgot_password']}</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="login_social_account">
+                    <h2>{$this->Language['login_with_social_account']}</h2>
+                    <p>Connect with your social accounts
+                        <span>Loren ipsum dolor sit amet</span>
+                    </p>
+                    {if $this->studio->social_logins}
+                        {if isset($smarty.session.social) } 
+                            {assign var=socialAuth value=$smarty.session.social}
+                        {else}
+                            {assign var=socialAuth value=$this->getSocialUrls()}
+                        {/if}
+                        {if $socialAuth}
+                            {if ($this->studio->social_logins & 1) && $socialAuth['fb_url'] }
+                                <a href="javascript:void(0);" data-url="{$socialAuth['fb_url']}" data-login="0" class="facebook_login facebook social_login" class="btn facebook"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/facebook_icon.png" /><span>{$this->Language['login_facebook']}</span></a>
+                            {/if}
+                            {if ($this->studio->social_logins & 2) && $socialAuth['gplus_url'] }
+                                <a href="{$socialAuth['gplus_url']}" class="btn google"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/gmail_plus.png" /><span>{$this->Language['google_signin']}</span></a>
+                            {/if}
+                        {/if}
+                    {/if}                    
+                    <button type="button" class="btn sign_email">
+                        <h3><a href="/tr/user/register" style="color:white">{$this->Language['sign_up_by_email']} </a></h3>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="moovibo-nav_bottom_slide-down">
+            <div class="headerWrap headerInside">
+                <nav class="navbar navbar-inverse">
+                    <div class="customNav">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li class="active"> 
+                                    <a href="{$this->siteurl}/user/login">SIGN IN
+                                        
+                                    </a>
+                                </li>
+                                <li>
+                                        <i class="fa fa-circle" aria-hidden="true"></i>
+                                </li>
+                                <li>
+                                    <a href="{$this->siteurl}/user/register">SIGN UP
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-circle" aria-hidden="true"></i>
+                                </li>
+                                <li>
+                                    <a href="{$this->siteurl}/faqs">FAQ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+</section>

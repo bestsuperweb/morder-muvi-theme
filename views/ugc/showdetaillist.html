@@ -1,0 +1,526 @@
+{if isset($_SESSION['internetSpeed'])} {$inernetSpeed=$_SESSION['internetSpeed']} {else} {$inernetSpeed=1} {/if}
+<script>
+    var userinternetSpeed =  {$inernetSpeed}
+    {if (!$_SESSION['internetSpeed'] && $_SESSION['internetSpeed']=="")}
+    {$bucketInfoDetails = Yii::app()->S3FolderPath->getBucketInfo('', $studio_id)}
+    {$internetSpeedImage = CDN_HTTP + $bucketInfoDetails['bucket_name'] + '.' + $bucketInfoDetails['s3url'] + '/check-download-speed.jpg'}
+    var imageAddr = [], downloadSize = [], desc = [];
+    imageAddr[0] = "{$internetSpeedImage}";
+    downloadSize[0] = 1036053;
+    desc[0] = "Singapore S3 Bucket";
+    var startTime, endTime;
+    var speedMbps;
+    function showResults(index) {ldelim}  
+        var duration = (endTime - startTime) / 1000;
+        var bitsLoaded = downloadSize[index] * 8;
+        var speedBps = (bitsLoaded / duration).toFixed(2);
+        var speedKbps = (speedBps / 1000).toFixed(2);
+        speedMbps = (speedKbps / 1000).toFixed(2);
+        userinternetSpeed = speedMbps;
+        $.post(HTTP_ROOT + "/user/setUserInterNetSpeed", {ldelim}speedMbps: speedMbps{rdelim}, function (res) {ldelim}
+            
+        {rdelim}); 
+    {rdelim}
+    {/if}
+</script>
+{literal}
+<style>
+    a:hover{padding:0;}
+</style>
+{/literal}
+<script type="text/javascript" src="{$this->siteurl}/js/s3_multi.js?v=1"></script>
+<script type="text/javascript" src="{$this->siteurl}/js/add-ugccontent.js"></script>
+<script src="{$this->siteurl}/js/zeroclipboard/ZeroClipboard.js"></script>
+<div id="ugc-main-container" class="container" style="margin-top:80px;">
+    <h1><b>{$this->Language['my_uploads']}</b></h1>
+    <a class="add-content-btn" href="{$this->siteurl}/ugc/createContent"><button class="btn btn-sm c-theme-btn c-btn-square c-btn-uppercase c-btn-bold" type="button">{$this->Language['add_content']}</button></a>
+      <table class="table table-hover mob-compress" id="movie_list_tbl">
+    <thead>
+        <tr>
+        <th>{$this->Language['content_name']}</th>
+        <th>{$this->Language['file']}</th>
+        <th>{$this->Language['action']}</th>
+        </tr>  
+        
+    </thead>
+    <tbody id="body_alert" class="has__message--block">
+<!--Getting data from user controller and displaying it here.-->
+            {$studio_id = Yii::app()->user->studio_id}
+            {$template_name=''}
+            {if $data}
+           
+                {if $template_name =='modern-byod'}
+                    {$default_img = '/img/No-Image-Default-Traditional.jpg'}
+                    {$default_episode_img = '/img/No-Image-Default-Traditional.jpg'}
+                {else}
+                    {$default_img = '/img/No-Image-Vertical-Thumb.png'}
+                    {$default_episode_img = '/img/No-Image-Horizontal.png'}
+               {/if}
+               
+               {$postUrl = Yii::app()->S3FolderPath->getPosterCloudFrontPath($studio_id)}
+                {foreach from=$data item=key}
+                    {$movie_id = $key['id']}
+                    {$stream_id = $key['stream_id']}
+                    {$content_types_id = $key['content_types_id']}
+                    {$is_episode = $key['is_episode']}
+                    {$cont_id = $movie_id}
+                    {if $is_episode == 1}
+                    {$cont_id = $stream_id}
+                    {/if}
+                    {$language_id =$this->language_id}
+                    {$langcontent = Yii::app()->custom->getTranslatedContent($cont_id,$is_episode,$language_id)}
+                   
+                    {if array_key_exists($stream_id, $langcontent['episode'])}
+                        {$key['episode_title'] = $langcontent['episode'][$stream_id]->episode_title}
+                    {/if}
+                    {if array_key_exists($movie_id, $langcontent['film'])}
+                        {$key['name'] = $langcontent['film'][$movie_id]->name}
+                    {/if}
+                
+<!--                    //View Count -->
+                    {$views = 0}
+                        {if $key['is_episode']}
+                       {if $episodeViewcount[$stream_id]}
+                        {$views=$episodeViewcount[$stream_id]}
+                        {else}
+                        {$views=0}
+                       {/if}
+                       {if (isset($episodePosters[$stream_id]) && $episodePosters[$stream_id]['poster_file_name'] != '')} 
+                       {$tempepisode_id=$episodePosters[$stream_id]['id']}
+                       {$tempepisodeFilename=$episodePosters[$stream_id]['poster_file_name']}
+                        {$img_path = "$postUrl/system/posters/$tempepisode_id/episode/$tempepisodeFilename"}
+                       {else} 
+                        {$img_path = $default_episode_img}
+                       {/if}
+                        {$contentName = "$key['name'] . ' - ' . $key['episode_title']"}
+                        {else} 
+                       {if $viewcount[$movie_id]}
+                        {$views=$viewcount[$movie_id]}
+                        {else}
+                        {$views=0}
+                       {/if}
+                     {if $key['content_types_id'] == 2 || $key['content_types_id'] == 4} 
+                        {$size = 'episode'}
+                        {else} 
+                        {$size = 'thumb'}
+                     {/if}
+                        {if (isset($posters[$movie_id]) && $posters[$movie_id]['poster_file_name'] != '')}
+                        {$tempmovie_id = $posters[$movie_id]['id']}
+                        {$tempfilename = $posters[$movie_id]['poster_file_name']}
+                        {$img_path = "$postUrl/system/posters/$tempmovie_id/$size/$tempfilename"}                       
+                        {else} 
+                        {$img_path = $default_img}
+                    {/if} 
+                        {$contentName = $key['name']}
+                    {/if}
+                     {$plink = (isset($key['permalink']) && $key['permalink']) ? $key['permalink'] : str_replace(' ', "-", strtolower($key['name']))}
+                    {if (false === file_get_contents($img_path))}   
+                        {if ($key['is_episode'] || $key['content_types_id'] == 2 || $key['content_types_id'] == 4  ) }
+                               {$img_path = $default_episode_img}
+                        {else}
+                             {$img_path = $default_img}
+                        {/if}
+                      {/if}
+                      
+                      <tr>
+                      <td>
+                      <span class="footable-toggle"></span>
+                      {$url=$this->siteurl}
+                      {$link=$plink}
+                      
+                      
+                    <a href="{$url}/{$link}" target='_blank' >
+                            <img src="{$img_path}" alt="{$key['name']}" style="width:120px;">  
+			<div class="caption" style="max-width: 255px;">
+                            {$key['name']}
+                        </div>
+                    </a>
+                </td>
+        
+            <td>
+                <span id="{$key['stream_id']}">
+                    {if (!$key['full_movie'] && !$key['thirdparty_url'] && ($key['content_types_id']==1 || $key['content_types_id']==2 || ( $key['content_types_id']==3 && $key['is_episode']==1 )))}
+                        {if ($key['is_converted'] == 2)}
+                        <h5><a href="javascript:void(0);" style="text-decoration: none !important; color: inherit; font-weight: normal" data-toggle="tooltip" title="{$this->Language['check_file_upload_status']}">{$this->Language['encoding']} : {$this->Language['failed']} &nbsp;&nbsp;<em class="fa fa-warning" style="color:#C62828;"></em></a></h5>
+                        {/if}
+                        <span id="video_upload_{$key['stream_id']}" data-movie_name="{$key['name']}"><h5><a href="javascript:void(0);" onclick="openUploadpopup('{$movie_id}', '{$key['stream_id']}','{$key['openUploadpopup']}');" class="upload-video"><em class="fa fa-upload"></em>&nbsp;&nbsp; {$this->Language['upload_video']}</a></h5></span>
+                    {else}
+                    {if ($key['content_types_id']==5 || ( $key['content_types_id']==6 && $key['is_episode']==1 ))}{$is_audio = 1}{else}{$is_audio = 0}{/if}
+                        {if (($key['content_types_id']==1 || $key['content_types_id']==2 || ( $key['content_types_id']==3 && $key['is_episode']==1 ) || $is_audio))}
+                            {if ($key['is_converted']==1)}
+                                {if ($is_audio)}
+                                    {$contentgalleryname = $movieaudiogalleryName[$stream_id]}
+                                {else}
+                                    {$contentgalleryname = $movievideogalleryName[$stream_id]}
+                                {/if}
+                                {if ($contentgalleryname != '')}
+                                    <b>{$this->Language['file_name']}</b><br/>{$contentgalleryname}
+                                {else}
+                                    {if (!$key['thirdparty_url'])}
+                                        <b>{$this->Language['file_name']}</b><br/>{$key['full_movie']}
+                                    {/if}
+                                {/if}
+                                {if ($is_audio)}
+                                    <h5><a href="javascript:void(0);" id="video_upload_{$key['stream_id']}" onclick="openUploadpopup('{$movie_id}', '{$key['stream_id']}','{$key['content_types_id']}');" data-movie_name="{$key['name']}" class="upload-video"><em class="fa fa-upload"></em>&nbsp;&nbsp; {$this->Language['change_audio']}</a></h5>
+                                {else}
+                                    <h5><a href="javascript:void(0);" id="video_upload_{$key['stream_id']}" onclick="openUploadpopup('{$movie_id}', '{$key['stream_id']}','{$key['content_types_id']}');" data-movie_name="{$key['name']}" class="upload-video"><em class="fa fa-upload"></em>&nbsp;&nbsp; {$this->Language['change_video']}</a></h5>
+                                {/if}
+                            {else if ($key['is_converted']==3)}
+                            <h5><a href="javascript:void(0);" data-toggle="tooltip" title="{$this->Language['video_mapping_in_progress']}"><em class="fa fa-refresh fa-spin"></em>&nbsp;&nbsp; {$this->Language['mapping_in_progress']}</a></h5>
+                            {else}
+                                {if ($encodingData[$key['stream_id']] != '')}
+                                <h5>{$this->Language['encoding']} : {$this->Language['in_progress']} &nbsp;&nbsp;<em class="fa fa-refresh fa-spin" style="color:#2E7D32;"></em></br><span class="encodingTimeRemaning">{$this->Language['time_remaining']}: {$encodingData[$key['stream_id']]}</span></h5>
+                                {else}
+                                    <h5>{$this->Language['encoding']} : {$this->Language['queued']} &nbsp;&nbsp;<em class="fa fa-refresh " style="color:#EF6C00;"></em></br><span class="encodingTimeRemaning">{$this->Language['time_remaining']}: NA</span></h5>
+                                {/if}
+                            {/if}
+                        {/if}
+                    {/if}
+                </span>
+            </td>
+            <td>
+                <h5><a class="edit-ugc-content" href="{$this->siteurl}/ugc/editContent/stream_uniq_id/{$key['embed_id']}"><em class="fa fa-pencil"></em>&nbsp;&nbsp; {$this->Language['edit_content']}</a></h5>
+                <!--<a href=href="#"><em class="icon-trash">&nbsp;&nbsp; Delete Content</em></a><br>-->
+                <h5><a href="javascript:void(0);"  onclick="openEmbedBox('embedbox_{$key['id']}')" class="embed-box"><em class="fa fa-chain"></em>&nbsp;&nbsp; {$this->Language['embed_content']}</a></h5>
+                <div class="modal fade" id="embedbox_{$key['id']}" tabindex="-1" role="dialog" >
+                   <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">{$this->Language['embed_url']}</h4>
+                            </div>
+                                <div class="modal-body">                               
+                                <div class="form-group">
+                                    <label for="iframeEmbed_{$key['id']}" class="col-sm-2 control-label">{$this->Language['embed']}</label>
+                                    <div class="col-sm-8">
+                                        <div class="fg-line">
+                                            <input type="text" class="form-control input-sm" id="iframeEmbed_{$key['id']}" placeholder="{$this->Language['embed']}" value=''>
+                                        </div>                                        
+                                    </div>
+                                    <span class="input-group-btn">
+                                    <div  class="animate-div " style="display:none;z-index:10;" id="embed_{$key['id']}">{$this->Language['copied']}</div>
+                                    <button class="btn btn-default btn-blue copyToClipboard" id="iframeEmbedButton_{$key['id']}" data-clipboard-text='' type="button" onclick="CopytoClipeboard('embed_{$key['id']}')">{$this->Language['copy']}</button>
+                                   </span>                    
+                                </div>
+                               </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        <script>
+                        var myjscode = '<iframe width = "100%" height = "315" style="background-color:#000" id = "myIframe_{$key['id']}" src = "{$embedUrl}" frameborder = "0" allowfullscreen > </iframe>';
+                        myjscode += "<script>";
+                        myjscode += "var viewPortTag=document.createElement('meta');viewPortTag.name='viewport';viewPortTag.content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;';window.parent.document.getElementsByTagName('head')[0].appendChild(viewPortTag);";                    
+                        myjscode += "<\/script>";                       
+                        $("#iframeEmbed_{$key['id']}").val(myjscode);
+                        $("#iframeEmbedButton_{$key['id']}").attr("data-clipboard-text",myjscode);
+    </script>
+        {/foreach}
+        {else}
+        <tr><td colspan="5">{$this->Language['no_content_added_yet']}</td></tr>
+        {/if}
+    </tbody>
+</table> 
+  </div> 
+<div class="row" style="margin-right:0px !important;">
+    <div class="col-md-12">
+        <div class="product-pagination text-right">
+            <nav>
+                {$pagination}
+           
+            </nav>                        
+        </div>
+    </div>
+</div>
+<!-- UGC video -->
+{$base_cloud_url = Yii::app()->S3FolderPath->getVideoGalleryCloudFrontPath($studio_id)}
+<div class="modal fade bs-example-modal-lg" id="addvideo_popup"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="false">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{$this->Language['upload_video']} - <span class="" id="pop_movie_name"></span></h4>
+        </div>
+        <div class="modal-body">
+            <div role="tabpanel">
+                <!-- Nav tabs -->
+                <!--<ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a id="profile-tab"  href="#profile" aria-controls="Choose-From-Library" role="tab" data-toggle="tab">{$this->Language['choose_from_gallery']}</a>
+                    </li>
+                    <li role="presentation">
+                        <a id="home-tab" href="#home"  aria-controls="Upload-Video" role="tab" data-toggle="tab">{$this->Language['embed_from_3rd_party']}</a>
+                    </li>
+                </ul>-->
+                <!-- Tab panes -->
+                <div class="tab-content"> 
+                    <div role="tabpanel" class="tab-pane active" id="profile">
+                        <!-- ------------Upload Video------------ -->
+                        
+                        <div id="scroll_container" class="is-Scrollable" style="min-height:150px;overflow-x:hidden;">
+                            <div class="_data">
+                                <div class="col-xs-12 m-t-40 m-b-20">
+                                    <div class="form-horizontal">	
+                                        <div class="form-group">
+                                            <input type="hidden" value="?" name="utf8">
+                                            <input type="hidden" name="movie_stream_id" id="movie_stream_id" value=""/>
+                                            <input type="hidden" name="movie_id" id="movie_id" value=""/>
+                                            <input type="hidden" name="movie_name" id="movie_name" value=""/>
+                                            <input type="hidden" name="content_type" id="content_type" value=""/>
+                                            <!--<div class="col-md-2">
+                                                <label for="uploadVideo" class="control-label">{$this->Language['upload_method']} &nbsp;</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="fg-line">
+                                                    <div class="select">
+                                                        <select name="upload_type" class="filter_dropdown form-control" id="filetype">
+                                                            <option value="browes">{$this->Language['from_computer']}</option>
+                                                            <option value="server">{$this->Language['server_to_server']}</option>
+                                                            <option value="dropbox">{$this->Language['from_dropbox']}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>-->
+                                            <div class="clearfix m-b-20 form-group"></div>
+                                            <div class="savefile" id="browes_div">
+                                                <!--<div class="col-md-2">&nbsp;</div>-->
+                                                <div class="col-md-12 text-center">
+                                                    <input type="button" value="{$this->Language['upload_video']}" onclick="click_browse('videofile')" class="btn btn-default-with-bg btn-sm" >
+                                                    <input type="file" name="file" style="display:none;" id="videofile" required onchange="checkfileSize();" >
+                                                </div>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                            <div class="savefile" id="server_div" style="display: none;">
+                                                <div class="col-md-2">&nbsp;</div>
+                                                <div class="col-md-4">
+                                                    <div class="fg-line">
+                                                        <input type="url" pattern="" value="" class="form-control input-sm" name="server_url" id="server_url" placeholder="{$this->Language['path_to_file_on_server']}" required>
+                                                    </div>
+                                                    <span class="error red help-block" id="server_url_error"></span>
+                                                    <div style="width: 48%;float: left;">
+                                                        <input type="text" name="username"  id="ftpusername" class="form-control input-sm" placeholder="{$this->Language['username_if_any']}">
+                                                        <label id="ftpusername-error" class="error" for="ftpusername" style="display: inline-block;"></label>
+                                                    </div>
+                                                    <div style="width: 48%;float: right;">
+                                                        <input type="password" name="password" id="ftppassword" class="form-control input-sm" placeholder="{$this->Language['password_if_any']}">
+                                                        <label id="ftppassword-error" class="error" for="ftppassword"></label>
+                                                    </div>
+                                                    <button class="btn btn-primary btn-sm" type="button" onclick="validateURL('');">{$this->Language['submit']}</button>
+                                                </div>
+                                            </div>
+                                            <div class="savefile" id="dropbox_div" style="display: none;">
+                                                <div class="col-md-2">&nbsp;</div>
+                                                <div class="col-md-4">
+                                                    <div class="fg-line">
+                                                        <input type="text" name="dropbox" id="dropbox" class="form-control" placeholder="{$this->Language['path_to_dropbox']}">
+                                                    </div>
+                                                    <span class="error red help-block" id="dropbox_url_error"></span>
+                                                    <button class="btn btn-primary btn-sm" type="button" onclick="validateURL('dropbox_url_error');">{$this->Language['submit']}</button>
+                                                </div>
+                                            </div>
+                                            <div class="clear-fix"></div>                                            
+                                        </div>
+                                           <!--<div class="form-group m-t-20">
+                                            <div class="col-md-12">
+                                                <div class="red">We recommends S3 Sync and FTP for faster upload</div>
+                                                <ul style="padding-left: 12px;">
+                                                    <li>
+                                                        <span style="font-weight: bold;">S3 Sync : </span>
+                                                        Install a tool we provide in your server. Videos in the server will be automatically synced with Muvi's Video Library
+                                                    </li>
+                                                    <li>
+                                                        <span style="font-weight: bold;">FTP : </span>
+                                                        Use a traditional FTP client to upload to Muvi's Video Library
+                                                    </li>
+                                                </ul>
+                                                    See <a target="_blank" href="https://www.muvi.com/help/uploading-videos#Muvi_Recommended">help article</a> for more details. {if (isset(Yii::app()->user->is_partner) && (Yii::app()->user->is_partner==1))} {else} Please add a <a href="{Yii::app()->getbaseUrl(true) + '/ticket/ticketList'}">support ticket</a> to use one of the above tools. {/if}
+                                            </div>
+                                        </div>-->
+                                    </div>		
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="text-center m-b-20 loaderDiv"  style="display: none;">
+                                        <div class="preloader pls-blue text-center " >
+                                            <svg class="pl-circular" viewBox="25 25 50 50">
+                                            <circle class="plc-path" cx="50" cy="50" r="20"></circle>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!------Embed from 3rd Party------->
+                    <div role="tabpanel" class="tab-pane" id="home">
+                        <div class="row is-Scrollable m-b-20 m-t-20">
+                            <div class="col-sm-12 m-t-40 m-b-20">
+                                <div class="form-horizontal">
+
+                                    <div class="form-group">
+                                        <label for="uploadVideo" class="control-label col-md-3">{$this->Language['video_from_3rdparty']} &nbsp;</label>
+                                        <div class="col-md-4">
+                                            <input type="hidden" name="movie_stream_id" id="movie_stream_id" value=""/>
+                                            <input type="hidden" name="movie_id" id="movie_id" value=""/>
+                                            <input type="hidden" name="movie_name" id="movie_name" value=""/>
+                                            <div class="fg-line">
+                                                <!--
+                                                <input type="text" id="embed_url" class="form-control  input-sm" placeholder="Link from YouTube, Vimeo or another OVP" onkeyup="embedThirdPartyPlatform();">
+                                                -->
+                                                <input type="text" id="embed_url" class="form-control  input-sm" name="embedurl" required="" placeholder="Link from YouTube, Vimeo or another OVP"  onkeyup="embedThirdPartyPlatform();">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-10">
+                                            <!--
+                                            <input type="button" value="Save" onclick="embedFromThirdPartyPlatform();" class="btn btn-primary btn-sm">
+                                            -->
+                                            <input type="button" value="{$this->Language['save']}" id="save-btn" onclick="embedFromThirdPartyPlatform();" class="btn btn-primary btn-sm" >
+                                        </div>
+                                    </div>
+                                    <span class="error red help-block" id="embed_url_error"></span>
+                                </div> 
+                            </div>
+                        </div> 
+                    </div>
+                    <!-------End of Embed from 3rd party------>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{$this->Language['cancel']}</button>
+        </div>
+    </div>
+</div>
+</div>
+<!-- UGC VIDEo end -->
+
+<!-- Upload Popup  start -->
+<div style="position: fixed;background: rgb(255, 255, 255) none repeat scroll 0% 0%;left: initial;top: initial;bottom: 20px;right: 20px;border-radius: 0px;border: 1px solid rgb(230, 230, 230);width: 400px !important;height:auto !important;display: none;z-index:999999;" id="dprogress_bar">
+  <div style="height: 40px;padding: 10px;border-radius: 0px;color: rgb(255, 255, 255);width: 100% !important;background-color: rgb(77, 77, 77);" id="status_header">
+	<div style="float:left;font-weight:bold;">File Upload Status</div>
+	<div onclick="manage_progressbar();" class="pull-right" style="cursor:pointer;"><i class="fa fa-minus"></i> &nbsp;&nbsp;&nbsp;</div>
+  </div>
+  <div style="padding:10px 20px 20px;background-color: rgb(255, 255, 255);border: 1px solid rgb(230, 230, 230);" id="all_progress_bar"></div>
+</div>
+<!-- Upload Popup  end -->
+
+<div class="modal fade" id="alertModal" role="dialog" data-backdrop="static" data-keyboard="false" style="overflow-y:hidden !important;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                <h4 class="modal-title" style="font-size:22px;text-transform: none;" >
+                    <span id="headerAlertModal">{$this->Language['alert']}</span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-sm-12" id="bodyAlertModal">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" type="button" style="text-transform: capitalize;">{$this->Language['btn_ok']}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false" style="overflow-y:hidden !important;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="font-size:22px;text-transform: none;" >
+                    <span id="headerConfirmModal">{$this->Language['confirm']}</span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-sm-12" id="bodyConfirmModal">{$this->Language['are_you_sure']}</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirmUGCYes">{$this->Language['yes']}</button>
+                <button type="button" data-dismiss="modal" class="btn">{$this->Language['no']}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var video_duration =$("#video_duration").val();
+    var file_size =$("#file_size").val();
+    var is_encoded =$("#is_encoded").val();
+    var uploaded_in =$("#uploaded_in").val();
+    var processing=false;;
+    var count=1;
+    var maxscrollcount=16;
+    var tempScrollTop, currentScrollTop = 0;
+    $("#filetype").change(function () {
+        $('.error').html('')
+        $('.savefile').hide();
+        $('#' + $(this).val() + '_div').show();
+    });
+</script>
+<script type="text/javascript">
+function manage_progressbar() {
+    $("#all_progress_bar").toggle('slow');
+}
+clientTarget = new ZeroClipboard($('.copyToClipboard'), {
+    moviePath: HTTP_ROOT + "/js/zeroclipboard/ZeroClipboard.swf",
+    debug: false
+});
+function CopytoClipeboard(id) {
+    $('#' + id).css('display', 'block');
+    $('#' + id).animate({
+        opacity: 0,
+        top: '-=75',
+    }, {
+        easing: 'swing',
+        duration: 500,             
+    });
+}
+function openEmbedBox(embedid){
+    $('#'+embedid).modal('show');
+}
+
+</script>
+{literal}
+<script type="text/javascript">
+function embedThirdPartyPlatformForTrailer() {
+       var str =$("#embed_url").val();
+        var videoUrl1 = "youtube.com";
+        var videoUrl2 = "vimeo.com"; 
+        var videoUrl3 = 'm3u8';
+        var videoUrl4 = 'iframe';
+        var videoUrl5 = "dailymotion.com";
+      if(str.length ==0){
+        $('#save-btn').attr('disabled', 'disabled');
+        return false;
+       }else if(str.length){
+                if ((str.indexOf(videoUrl3) != -1) || 
+                   (str.indexOf(videoUrl4) != -1 && str.indexOf(videoUrl1) != -1)  || 
+                   (str.indexOf(videoUrl4) != -1 && str.indexOf(videoUrl2) != -1) ||
+                   (str.indexOf(videoUrl4) != -1 && str.indexOf(videoUrl5) != -1))
+                {                         
+                    showLoader();
+                    var embed_text =$("#embed_url").val();
+                    var action_url = HTTP_ROOT + '/admin/embedThirdPartyPlatformForTrailer';
+                    $('#embed_url_error').html('');
+                    var movie_id = $('#movie_id').val();
+                    var movie_stream_id = $('#movie_stream_id').val();
+                    $.post(action_url, {'third_party_url': embed_text,'movie_id': movie_id, 'movie_stream_id': movie_stream_id}, function (res) {
+                        showLoader(1);
+                        window.location.href = window.location.href;
+                    });
+                }else{
+                    showUGCAlert('Error',JSLANGUAGE.provide_valid_iframe);
+                    return false;
+            }
+        }
+}
+
+</script>
+{/literal}

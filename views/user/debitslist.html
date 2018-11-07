@@ -1,0 +1,18 @@
+{assign var="user_id" value=Yii::app()->user->id}
+{assign var="debit_count" value=$user_all_debits|@count}
+{if $user_id > 0}
+    {if ($debit_count > 0)}
+        {foreach from=$user_all_debits item=debit}
+            <tr class="cart_item">
+                <td class="product-remove">{Date('Y-m-d', strtotime($debit['created_date']))}</td>
+                <td class="product-remove">{$debit['content_name']}</td>
+                <td class="product-remove">{intval($debit['debit_value'])}</td>
+            </tr>
+        {/foreach}
+    {else}
+        <tr>
+            <td colspan="5">{$this->Language["no_record_found"]}</td>
+        </tr>
+    {/if}
+{/if}
+<input type="hidden" id="total_credit" value="{$debit_count}" />

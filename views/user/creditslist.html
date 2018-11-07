@@ -1,0 +1,26 @@
+{assign var="user_id" value=Yii::app()->user->id}
+{assign var="total_credit" value=$user_all_credits|@count}
+{if $user_id > 0}
+    {if ($total_credit > 0)}
+        {foreach from=$user_all_credits item=credit}
+            <tr class="cart_item">
+                <td class="product-remove">{Date('Y-m-d', strtotime($credit['created_date']))}</td>
+                <td class="product-remove">{$credit['action_type']}</td>
+                <td class="product-remove">{$credit['credit_value']}</td>
+                <td class="product-remove">{$credit['credit_value'] - $credit['outstanding_credit_value']}</td>
+                <td class="product-remove">
+                    {if Date('Y-m-d', strtotime($credit['expiry_date'])) >= Date('Y-m-d')}
+                    {Date('Y-m-d', strtotime($credit['expiry_date']))}
+                    {else}
+                    {$this->Language["expired"]}
+                </td>
+                {/if}
+            </tr>
+        {/foreach}
+    {else}
+        <tr>
+            <td colspan="5">{$this->Language["no_record_found"]}</td>
+        </tr>
+    {/if}
+{/if}
+<input type="hidden" id="total_credit" value="{$total_credit}" />
