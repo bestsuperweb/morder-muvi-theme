@@ -551,7 +551,7 @@ a.right.carousel-control span.fa.fa-angle-right{
   padding: 46px 10px 0 10px;
 }
 .moovibo-nav .navbar-inverse .navbar-nav>li>a {
-  color: #ffffff;
+  color: #00aeef;
   font-size: 16px;
   padding: 18px 9px 14px 9px;
   font-weight: bold;
@@ -559,13 +559,13 @@ a.right.carousel-control span.fa.fa-angle-right{
   border-bottom: #2b0d2a solid 6px;
 }
 .moovibo-nav .navbar-inverse .navbar-nav>li>a.active {
-  border-bottom: #00aeef solid 6px;
-  color: #fff;
+  border-bottom: #2b0d2a solid 6px;
+  color: #ffffff;
   background-color: transparent;
 }
 .moovibo-nav .navbar-inverse .navbar-nav>li>a:hover {
   border-bottom: #2b0d2a solid 6px;
-  color: #00aeef !important;
+  color: #ffffff !important;
   background-color: transparent;
 }
 .moovibo-nav .navbar-inverse .navbar-nav>li>a .fa {
