@@ -1,0 +1,15 @@
+{$content = $content|json_decode}
+<div class="c-layout-page">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$content->title|utf8_decode}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="single-product-area content">
+        <div class="container content-area">
+            <div>{$content->content|utf8_decode}</div>
+        </div>
+    </div>
+</div>
