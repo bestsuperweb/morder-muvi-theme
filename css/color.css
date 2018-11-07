@@ -1,0 +1,33 @@
+.progress__bar:after{
+    top:-1px;
+
+}
+.progress__bar::after {
+    background: #32c5d2;
+}
+
+.progress__bar {
+    background: #32c5d2;
+}
+.play-section .ap__controls--toggle.is-playing{
+    background: rgba(255, 255, 255, 0.1);
+}
+.volume {
+    background: #303031;
+    border: 0 solid #ccc;
+    border-color: #1a1f2b transparent transparent;
+}
+
+.volume::before,
+.volume::after {
+    border-color: #303031 transparent transparent;
+}
+
+.volume__bar {
+    background: #32c5d2;
+}
+
+.volume__track {
+    background: #7e7c8a;
+    width: 2px;
+}

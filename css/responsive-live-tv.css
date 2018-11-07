@@ -1,0 +1,131 @@
+@media screen and (max-width: 1366px) {
+.carousel-caption {
+    padding-bottom: 12%;
+}
+.title48 {
+    font-size: 38px !important;
+}
+.demo-inner-content2 h1 { font-size: 38px;}
+.demo-inner-content2a h1 { font-size: 38px;}
+.font24 {font-size: 20px !important;}
+.title30 {font-size: 22px;}
+}
+@media screen and (max-width: 1200px) {
+.bg-white {
+    min-height: 360px;
+}
+}
+@media screen and (max-width: 1024px) {
+.channel-list {
+    width: 115px;
+}
+}
+@media screen and (max-width: 1023px) {
+.channel-number{display: none !important}
+}
+
+@media screen and (max-width: 767px) {
+.carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev {
+    width: 40px;
+}
+}
+@media screen and (max-width: 767px) {
+.demo-inner-content {
+    margin: 100px auto;
+    padding: 40px 0;
+}
+.title48 {font-size: 28px !important;margin-top: 10px;}
+.font18 {
+    font-size: 14px !important;
+}
+.font24 {font-size: 14px !important;}
+.title30 {font-size: 15px;}
+.demo-inner-content2 h1 { font-size: 28px;}
+.demo-inner-content2a h1 { font-size: 28px;}
+.banner-bottom {
+    margin-top: -276px;
+}
+.navbar-top-new .nav > li {
+    display: inline-block;
+    position: relative;
+}
+.navbar-inverse {
+    background-color: rgba(0, 0, 0, 0.9);
+    border-color: transparent;
+}
+.top40 {
+    padding-top: 15px !important;
+}
+.navbar-nav > li > a {
+    padding:6px 15px;
+}
+.border-title-left{border-left:3px solid #e20813; height:70px; position:absolute; margin-left:-15px;}
+.icon-addon {margin-bottom: 10px;}
+.btn-primary{margin-bottom: 10px;}
+
+.carousel-control.left span, .carousel-control.right span {
+    background-color: transparent !important;
+}
+.carousel-control .glyphicon-chevron-right {
+    background-color: #e20813;
+    margin-right: -30px;
+}
+.carousel-control .glyphicon-chevron-left {
+    background-color: #e20813;
+    margin-left: -30px;
+}
+}
+
+@media screen and (max-width: 600px) {
+.inner-content-top {
+    margin-top: -460px;
+}
+/*.right-menu ul li a{ font-size: 18px; float: left; margin-top: -45px; display: inline-block}*/
+.inner-content-top { margin-top: -325px;}
+}
+@media screen and (max-width: 375px) {
+.banner-bottom {
+    margin-top: -310px;
+}
+.demo-inner-content2 h1 { font-size: 20px;} .title48 {font-size: 20px !important;}
+.thumb-border {  margin: 10px auto auto; }
+.channel-list{
+    width: 60px;
+}
+.carousel-inner > .item > a > img, .carousel-inner > .item > img, .img-responsive, .thumbnail a > img, .thumbnail > img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+.date-bg{margin-bottom:20px;}
+.channel1 div {
+    background: #111 none repeat scroll 0 0;
+    display: inline-block;
+    float: left;
+    font-size: 10px;
+    vertical-align: middle;
+}
+
+.carousel-inner {margin-left:-10px;}
+.date-bg {font-size: 14px;}
+.day-date {
+    font-size: 11px;}
+.div83{width:78%}
+.date-bg {
+    margin-left: -13px;
+}
+.channel1 div {border: 1px solid #000;
+}
+.mobile-margin {
+    margin: 16px;
+}
+.title36 {
+    font-size: 20px !important;
+}
+.width80 a img {width: 100px; margin: 10px 15px 10px;}
+.video-js {padding-top: 70% !important;}
+}
+@media screen and (max-width: 320px) {
+.feature-title {font-size: 24px;}
+
+}

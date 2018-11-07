@@ -1,0 +1,25 @@
+/* --------------------------------------------------------
+RTL CSS for Jaleesi website
+
+Version: 0.2.0
+Template Name: Modern
+Last modified: 2018-01-24 by Mohammad Jaqmaqji
+Author: Mohammad Jaqmaqji <mohjak@gmail.com>
+Website: http://jaleesi.com
+----------------------------------------------------------*/
+
+html {
+    direction: rtl;
+}
+
+#card-section .col-sm-2 {
+    float: right;
+}
+
+.tick-icon {
+    left: -19px !important;
+    right: auto;
+}
+.col-md-5ths{
+	float : right;
+}
