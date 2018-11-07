@@ -99,6 +99,20 @@
                     </div>
                 </div>
                 <div id="navbar" class="navbar-sign_up">
+                	{$totallang = $this->enable_laguages|count} 
+                    {if $totallang > 1} 
+                        {$studio_languages = $this->enable_laguages}
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" >
+                                <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/chat_global.png" data-toggle="dropdown" aria-expanded="false">
+                            </a>                                
+                            <ul class="dropdown-content">
+                                {foreach from=$studio_languages key=key item=value} 
+                                    <li><a href="javascript:void(0)" class="profile {if $language_code == $value['code']}active{/if}" onclick="changeLang('{$value['code']}')">{$value['name']}</a></li>
+                                {/foreach}
+                            </ul>
+                        </li>
+                    {/if}
                     <span> {$this->user_menu[0]['display_name']}</span>
                    
                     <div class="dropdown">

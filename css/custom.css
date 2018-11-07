@@ -3516,7 +3516,7 @@ button#register_membership {
   color: #fff;
 }
 .after_login .navbar-collapse.collapse {
-    margin: inherit;
+    margin: 0 auto;
 }
 .after_login_banner .carousel-caption{
 	width: 100%;
