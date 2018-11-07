@@ -136,6 +136,7 @@ p {
 }
 .after_login .navbar-sign_up img {
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .moovibo-main .navbar-sign_up a {
@@ -539,7 +540,9 @@ a.right.carousel-control span.fa.fa-angle-right{
   margin-left: 75px;
 }
 .after_login .moovibo-nav .navbar-nav>li a img{
-  width: 21px;
+  vertical-align: middle;
+  vertical-align: -webkit-baseline-middle;
+  margin:  0 20px;
 }
 .moovibo-nav .navbar-nav>li .fa {
   color: #ffffff;
@@ -564,7 +567,7 @@ a.right.carousel-control span.fa.fa-angle-right{
   background-color: transparent;
 }
 .moovibo-nav .navbar-inverse .navbar-nav>li>a:hover {
-  border-bottom: #2b0d2a solid 6px;
+  border-bottom: transparent solid 6px;
   color: #ffffff !important;
   background-color: transparent;
 }
@@ -3476,7 +3479,7 @@ button#register_membership {
 	margin-top: 93px;
 }
 .after_login .navbar {
-	background-color: #2b0d2a;
+	background-color: rgba(0,0,0, .9);
 }
 .after_login .moovibo-nav {
     width: 74%;
@@ -3487,9 +3490,9 @@ button#register_membership {
 }
 .after_login .search-container a {
     padding: 18px 2px 18px 8px;
-	  border-radius: 50%;
-   	background-color: #1a0819;
-  	border: #432942 solid 1px;
+	border-radius: 50%;
+   	background-color: transparent;
+  	border: #000000 solid 1px;
     margin-left: 26px;
     width: auto;
     float: none;
@@ -3502,7 +3505,7 @@ button#register_membership {
 .after_login .navbar-inverse .navbar-nav>li>a {
 	font-weight: bold;
 	padding: 40px 9px 28px 9px;
-	border-bottom: #2b0d2a solid 6px;
+	border-bottom: transparent solid 6px;
 }
 
 .after_login .navbar-inverse .navbar-nav>li>a:hover, .after_login .navbar-inverse .navbar-nav>li>a.active, .after_login .navbar-inverse .navbar-nav>li>a:active {
