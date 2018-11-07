@@ -1,0 +1,42 @@
+<div class="col-md-3 col-sm-6 c-margin-b-20">
+	<div class="c-content-product-2 c-bg-white list-box">
+		<div class="c-content-overlay">
+			<div class="c-overlay-wrapper">
+				<div class="c-overlay-content">
+					<a class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$this->siteurl}/{$physical->permalink}">{$this->Language['explore']}</a>
+				</div>
+			</div>
+			<div class="c-bg-img-top-center c-overlay-object text-center">
+				<img class="list-poster" src="{$physical->poster}"/>
+			</div>
+		</div>
+		<div class="c-info">
+			<p class="caption_genre c-title c-font-16 c-font-slim">
+				<a href="{$this->siteurl}/{$physical->permalink}"> {$physical->name}</a></p>
+			<p class="caption_genre c-font-16">
+				{$physical->price}
+			</p>
+		</div>
+		{if $physical->status ==1}
+		<div class="btn-group btn-group-justified" role="group">
+			{if $physical->is_preorder == 0}
+			<div class="btn-group c-border-top" role="group">
+				<a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="showcart({$physical->id}, 1);">{$this->Language['add-to-cart']}</a>
+			</div>
+			<div class="btn-group c-border-left c-border-top" role="group">
+				<a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="showcart({$physical->id}, 2);">{$this->Language['ordernow']}</a>
+			</div>
+			{else}
+			<a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="window.location = '{$this->siteurl}/{$physical->permalink}'">{$this->Language['pre_order']}</a>
+			{/if}
+		</div>
+		{elseif $physical->status ==3}
+		<div class="btn-group btn-group-justified" role="group">
+			<div class="btn-group c-border-top" role="group">
+				<div class="stockout">{$this->Language['stock_out']}</div>
+			</div>
+		</div>
+		{/if}
+	</div>
+		
+</div>

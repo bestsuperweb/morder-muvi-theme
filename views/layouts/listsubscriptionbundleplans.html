@@ -1,0 +1,56 @@
+{if $plans|@count > 0}
+                <h2>{$this->Language['cancel_subscription_bundle_plan']}</h2>
+                {foreach from=$plans key=counter item=plan}
+                 {$month_original =  $this->Original['select_month']|trim}
+                    {$year_original =  $this->Original['select_year']|trim}
+                    {$day_original =  $this->Original['day']|trim}
+                    {$plan_recurrence = $plan['recurrence']|trim}
+                    {$recurrence_trial = $plan['trial_recurrence']|trim}
+                    {if $month_original == $plan_recurrence}
+                        {$recurrence = $this->Language['select_month']}
+                    {elseif $year_original == $plan_recurrence}
+                        {$recurrence = $this->Language['select_year']}
+                    {else}
+                        {$recurrence = $plan_recurrence}
+                    {/if}
+                    
+                    {if $month_original == $recurrence_trial}
+                        {$trial_recurrence = $this->Language['select_month']}
+                    {elseif $day_original == $recurrence_trial}
+                        {$trial_recurrence = $this->Language['day']}
+                    {else}
+                        {$trial_recurrence = $recurrence_trial}
+                    {/if}
+                    {if $counter == 0}
+                     <input name="data[plan_id]" type="hidden" id="plan_id" value="{$plan['id']}" required />
+                    <input name="data[currency_id]" type="hidden" id="currency_id" value="{$plan['currency_id']}" required />
+                    {/if}
+                     {$price = $plan['price']}
+                    {$currency_id = $plan['currency_id']}
+                    <div class="col-md-3 top20" data-cancel="cancel_subscriptions_bundles_{$plan['id']}" > 
+                        <div class="billed-box planbox plan-box" id="membership-plan_{$plan['id']}" data-id="{$plan[id]}" data-currency_id="{$currency_id}">
+                           <!-- <div class="tick-icon"></div>-->
+                            <h3>{$plan['name']}</h3>
+                            <p>{$plan[short_desc]|utf8_decode}</p>
+                            <hr />
+                            <h4>{$this->Language['only']} <span class="bold-green">{Yii::app()->common->formatPrice($price,$currency_id)}</span> {$this->Language['per']} {$plan['frequency']} {$recurrence} {if $plan['frequency'] > 1}(s){/if}</h4>
+                            <p class="bold-green">&nbsp;
+                                {if $plan['trial_period'] > 0}
+                                {$plan['trial_period']} {$trial_recurrence} {$this->Language['free']}     
+                                {/if}
+                            </p>
+                            <p><div class="clear"></div><br><div class="form-group top50"><div class="col-sm-6" align="left">
+                                    <a href="javascript:void(0)" id="cancel_subscriptions_bundles_{$plan['id']}" class="btn btn-primary"  onclick="cancelsubscriptionBundles({$plan['id']});">{$cancel_btn_form}</a>
+                       </div></div> </p>
+                        </div>
+                    </div>                
+                {/foreach}
+            {/if}
+            {if $plans|@count <= 0}
+            No Record Found !!
+            {/if}
+            <div class="clearfix"></div>
+            
+                    
+                 
+                   

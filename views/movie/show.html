@@ -1,0 +1,474 @@
+<script>
+    var muviWaterMarkTrailer = "{$waterMarkOnPlayer}";
+</script>
+{$content = $item|json_decode}
+<input type="hidden" value="{$content->movie_id}" id="p_movieid">
+{$casts = $content->casts}
+{$directors = $casts->directors}
+{$isConverted=$content->is_converted}
+{$release_date = $content->release_date}
+{$full_release_date = $content->full_release_date}
+{$censor_rating = $content->censor_rating|replace:'&nbsp;':''}
+{$actors = $casts->actors}
+{$all_series = $allseries|json_decode}
+{$content_banner=$content->content_banner}
+{$trailer_is_converted=$content->trailer_is_converted}
+{$pageUrl = $this->ogUrl}
+{$user_id=Yii::app()->user->id}
+<input class="playlist_user_id" value="{$user_id}" type="hidden"> 
+
+{literal}<div  ng-app="homePageApp" ng-controller="homePageController"> {/literal} 
+    <div class="tab-content custom_tab detail" aria-hidden="true">
+        <div id="info" class="tab-pane fade active">
+            <div class="tab_slide_show" {if $content_banner !=''}style="background-image:url({$content_banner})"{/if}>
+                <div class="layer">
+                    <div class="col-md-2">
+                        {if $this->add_to_favourite}
+                        <div class="heart_tick">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="addFav(this)" name="addfav" class="favAdd" data-fav_status="{$user_status['fav_status']}" data-login_status="{$user_status['login_status']}" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}">
+                                        <i class="fa {if $user_status['fav_status'] == 0}fa-heart{else}fa-heart-o{/if}" aria-hidden="true" style="color: #fff;"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        {/if}
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <h2>{$content->title|utf8_decode}</h2>
+                            <!-- <button type="button" class="close" data-dismiss="tab-content" aria-label="Close">
+                                <span aria-hidden="true">
+                                    <i class="fa fa-close"></i>
+                                </span>
+                            </button> -->
+                        </div>
+                        <div class="row dr_details">
+                            <div class="col-md-6">                            
+                                <div class="movie_certificate">
+                                    {if $content->genres|@count > 0}
+                                    <ul>                                
+                                        {$genre_count = $content->genres|count}
+                                        {$j=0}
+                                        {foreach from=$content->genres item=genre}
+                                            <li>{$genre}
+                                            {$j = $j+1}
+                                            {if $j != $genre_count}
+                                                <i class="fa fa-circle" aria-hidden="true"></i>
+                                            {/if}
+                                            </li>
+                                        {/foreach}
+                                    </ul>                            
+                                    {/if}
+                                </div>
+                                <div class="text_header">
+                                    <ul>
+                                        <li class="special">RT</li>
+                                        <li>{$content->rt->field_value}</li>
+                                        <li class="special">IMDb</li>
+                                        <li>{$content->imdb_score->field_value}</li>
+                                        <li class="special">MPAA</li>
+                                        <li>{$content->mpaa->field_value}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    {$content->play_btn}
+                                </div>
+                                <div class="col-md-6">
+                                    {if isset($Yii->user->id) && $Yii->user->id > 0}
+                                        <a href="javascript:void(0)" class="family_pack">
+                                            Play Trailer
+                                        </a>
+                                    {else}
+                                    
+                                        <a href="/tr/user/login" class="family_pack">
+                                            BUY NOW
+                                        </a>
+                                        
+                                    {/if}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="movie_cast_details">
+                                    <h3>
+                                        <span>{if $content->video_duration != '' }{$content->video_duration}{/if}</span>
+                                        <strong>{if $full_release_date != ''}{$full_release_date}{/if}</strong>
+                                    </h3>
+                                    <h4>
+                                        <span>Director</span>
+                                        <strong>{$content->director1->field_value}</strong>
+                                    </h4>
+                                    <h4>
+                                        <span>Cast</span>
+                                        <strong>
+                                            {foreach from=$casts key=counter item=cast}
+                                                {if $cast|count>0} 
+                                                    {assign var=val value=$val+1}
+                                                {/if}
+                                            {/foreach}
+                                            {if $val > 0 && $cast|is_array}
+                                                {foreach from=$casts key=role item=cast}                                  
+                                                    {foreach from=$cast key=counter item=cast_role}
+                                                        <a href="/star/{$cast_role->permalink}" style="color:#248ac3">{$cast_role->celeb_name}</a>{if $counter < $cast|count-1}, {/if}
+                                                    {/foreach}
+                                                {/foreach}                                        
+                                            {/if}
+                                        </strong>
+                                    </h4>
+                                    {if $content->story !='' } 
+                                        <p>{$content->story|utf8_decode}</p>
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>
+        <div id="trailer" class="tab-pane fade">
+            <div class="tab_slide_show" {if $content_banner !=''}style="background-image:url({$content_banner})"{/if}>
+                <div class="layer">
+                    <div class="col-md-2">
+                        {if $this->add_to_favourite}
+                        <div class="heart_tick">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="addFav(this)" name="addfav" class="favAdd" data-fav_status="{$user_status['fav_status']}" data-login_status="{$user_status['login_status']}" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}">
+                                        <i class="fa {if $user_status['fav_status'] == 0}fa-heart{else}fa-heart-o{/if}" aria-hidden="true" style="color: #fff;"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        {/if}
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <h2>{$content->title|utf8_decode}</h2>
+                            <!-- <button type="button" class="close" data-dismiss="tab-content" aria-label="Close">
+                                <span aria-hidden="true">
+                                    <i class="fa fa-close"></i>
+                                </span>
+                            </button> -->
+                        </div>
+                        <div class="row dr_details">
+                            <div class="col-md-6">                            
+                                <div class="movie_certificate">
+                                    <img src="{$content->poster}" style="width:250px;">
+                                </div>
+                            </div>
+                            <div class="col-md-6">                            
+                                <div class="movie_certificate">
+                                    {if $content->content_types_id != 5}
+                                        {if $content->is_downloadable == 1}
+                                            {$content->download_btn}
+                                        {elseif $content->is_downloadable == 2}
+                                            {if $content->play_btn != ''} {$content->play_btn}{/if}
+                                                {$content->download_btn}
+                                            {else}
+                                            {if $content->play_btn != ''} {$content->play_btn}{/if}
+                                        {/if}                               
+                                    {/if}
+                                    {if $trailer_is_converted !=''}  <a href="#" class="btn btn-default c-btn btn-lg c-font-bold  c-btn-square c-font-uppercase" id="trailer-btn">{$this->Language['view_trailer']}</a> {/if}
+                                    {if $content->content_types_id == 5}
+                                        {if  $content->full_movie != ''}                               
+                                            {if $content->is_downloadable == 1}
+                                                {$content->download_btn}
+                                            {elseif $content->is_downloadable == 2}
+                                                {if $content->play_btn != ''} <a href="javascript:void(0);"  class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercas" onclick="playAudio(this)" id="{$content->movie_id}" data-content_type="{$content->is_episode}" >{$this->Language['btn_play']}</a>{/if}
+                                                {$content->download_btn}
+                                            {else}
+                                                {if $content->play_btn != ''}  <a href="javascript:void(0);"  class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercas" onclick="playAudio(this)" id="{$content->movie_id}" data-content_type="{$content->is_episode}" >{$this->Language['btn_play']}</a>{/if}
+                                            {/if}
+                                        {/if}
+                                    {/if}
+                                    {if $content->content_types_id == 6}
+                                    <a href="#" class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercase" data-index="0" onclick="playAllAudio(this)" id="{$content->movie_id}">{$this->Language['play_all']}</a>
+                                    {/if}
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>
+        <div id="cast_crew" class="tab-pane fade">
+            <div class="tab_slide_show" {if $content_banner !=''}style="background-image:url({$content_banner})"{/if}>
+                <div class="layer round_image movibo_library ">                              
+                    <div class="col-md-2">
+                        {if $this->add_to_favourite}
+                        <div class="heart_tick">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="addFav(this)" name="addfav" class="favAdd" data-fav_status="{$user_status['fav_status']}" data-login_status="{$user_status['login_status']}" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}">
+                                        <i class="fa {if $user_status['fav_status'] == 0}fa-heart{else}fa-heart-o{/if}" aria-hidden="true" style="color: #fff;"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        {/if}                               
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <h3>{$content->title|utf8_decode}</h3>
+                        </div>
+                    </div>
+                    {literal} 
+                    <div class="container">
+                            <div class="movie_category">
+                                <h2>{/literal}{$this->Language['cast_crew']}{literal}</h2>
+                            </div>
+                            <div class="loader-new" ng-show="!castCrew.cast_list" style="margin-top: 10%;text-align: center; ">
+                                <img src="{/literal}{$this->siteurl}{$Yii->theme->baseUrl}{literal}/images/loading.gif">
+                            </div>
+                            <div class="left-element" ng-if="castCrew.cast_list.length > 6">
+                                <a class="backward owl-next" href="javascript:void(0)" ng-click="preSlider('slideCrew_'+$index)"></a>
+                            </div>
+                            <data-owl-carousel id="slideCrew_{{$index}}" class="owl-carousel owl-theme custom_hover_effect1" data-options="{}" ng-if="castCrew.cast_list">
+                                <div class="custom_images" owl-carousel-item="" data-options="{}" ng-repeat="crew in castCrew.cast_list">
+                                    <img id="song__img1" class="tile__img img-circle" src="{{crew.celeb_image}}" alt="" width="177" height="177"/>
+                                    <h3><a style="color: white;" href="/star/{{crew.permalink}}">{{crew.name}}</a></h3>
+                                </div>                
+                            </data-owl-carousel> 
+                            <div class="right-element" ng-if="castCrew.cast_list.length > 6">
+                                <a class="forward owl-next" href="javascript:void(0)" ng-click="nextSlider('slideCrew_'+$index)"></a>
+                            </div>
+                            
+                        </div>
+                </div>
+            </div>        
+        </div>
+        {/literal}
+        <div id="review" class="tab-pane fade" >
+            <div class="tab_slide_show" {if $content_banner !=''}style="background-image:url({$content_banner})"{/if}>
+                <div class="layer round_image movibo_library ">                              
+                    <div class="col-md-2">
+                        {if $this->add_to_favourite}
+                        <div class="heart_tick">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="addFav(this)" name="addfav" class="favAdd" data-fav_status="{$user_status['fav_status']}" data-login_status="{$user_status['login_status']}" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}">
+                                        <i class="fa {if $user_status['fav_status'] == 0}fa-heart{else}fa-heart-o{/if}" aria-hidden="true" style="color: #fff;"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        {/if}                               
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <h3>{$content->title|utf8_decode}</h3>
+                        </div>
+                    </div>
+                    {literal}
+                    <div class="container">
+                        <div class="movie_category">
+                            <h2>{/literal}{$this->Language['review']}{literal}</h2>
+                        </div>
+                        <div class="comment-list">                                    
+                            <div class="col-md-6">
+                                <form action="" method="post">
+                                    <div class="form-group" style="color:#FFFFFF">
+                                        <label>Your Comment</label>
+                                        <div class="pull-right">
+                                            <div star-rating rating="reviewRating" max-rating="5"></div>   
+                                        </div>
+                                        <textarea name="comment"  ng-model="content.model" class="form-control" my-maxlength="50"  style="height:250px;opacity:.5;"></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-info"  ng-disabled="isDisabled" ng-click="reviweCommentPost(content, {/literal}{$content->movie_id} {literal})">Post Comment</button>
+                                    <span style="color: white;float: right;" ng-show= "reviewResponse.msg"> {{reviewResponse.msg}}</span>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <!-- First Comment -->
+                                <div class="loader-new" ng-show="!reviews.msg" style="text-align: center;">
+                                        <img src="{/literal}{$this->siteurl}{$Yii->theme->baseUrl}{literal}/images/loading.gif">
+                                </div>
+                                <article class="row" ng-repeat="re in reviews.review">
+                                    <div class="col-md-2 col-sm-2 hidden-xs">
+                                        <figure class="thumbnail">
+                                            <img class="img-responsive img-circle" src="{{re.profile_pic}}" />
+                                        </figure>
+                                    </div>
+                                    <div class="col-md-10 col-sm-10">
+                                        <div class="panel panel-default arrow left" >
+                                            <div class="panel-body">
+                                            <header class="text-left">
+                                                <div class="comment-user">
+                                                    <i class="fa fa-user"></i> {{re.user_name}}
+                                                    <time class="comment-date" style="float: right;"><i class="fa fa-clock-o"></i> {{re.date | date: "MMM dd ,yyyy"}}</time>
+                                                </div>
+                                            
+                                                <div star-rating rating="re.rating|number" max-rating="5" read-only="true"></div>
+                                            </header>
+                                            <div class="comment-post">
+                                                <p>
+                                                        {{re.content}}
+                                                </p>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>                                        
+                        </div>
+                    </div>
+                
+                </div>
+            </div>        
+        </div>
+        {/literal}
+        <div id="related_films" class="tab-pane fade" >
+                <div class="tab_slide_show" {if $content_banner !=''}style="background-image:url({$content_banner})"{/if}>
+                    <div class="layer  movibo_library ">                              
+                        <div class="col-md-2">
+                            {if $this->add_to_favourite}
+                            <div class="heart_tick">
+                                <ul>
+                                    <li>
+                                        <a href="javascript:void(0);" onclick="addFav(this)" name="addfav" class="favAdd" data-fav_status="{$user_status['fav_status']}" data-login_status="{$user_status['login_status']}" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}">
+                                            <i class="fa {if $user_status['fav_status'] == 0}fa-heart{else}fa-heart-o{/if}" aria-hidden="true" style="color: #fff;"></i>
+                                        </a>
+                                        
+                                    </li>
+                                </ul>
+                            </div>
+                            {/if}                               
+                        </div>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <h3>{$content->title|utf8_decode}</h3>
+                            </div>
+                        </div>
+                        {literal}
+                        <div class="container">
+                                <div class="movie_category">
+                                    <h2>{/literal}{$this->Language['related_movies']}{literal}</h2>
+                                </div>
+                                <div class="loader-new" ng-show="!RelatedMovieContent.contentData" style="margin-top: 10%; text-align: center;">
+                                    <img src="{/literal}{$this->siteurl}{$Yii->theme->baseUrl}{literal}/images/loading.gif">
+                                </div>
+                                <div class="left-element" ng-if="RelatedMovieContent.contentData">
+                                        <a class="backward owl-next" href="javascript:void(0)" ng-click="preSlider('slide_'+$index)"></a>
+                                </div>
+                                <data-owl-carousel id="slide_{{$index}}" class="owl-carousel owl-theme custom_hover_effect" data-options="{}" ng-if="RelatedMovieContent.contentData">
+                                    <div class="custom_images" owl-carousel-item="" data-options="{}" ng-repeat="content in RelatedMovieContent.contentData">
+                                        <div class="custom_images_fade">
+                                            <img class="tile__img" src="{{content.poster}}">
+                                            <div class="overlay">
+                                                <div class="text">
+                                                    <div class="text_header">
+                                                        <h2>{{content.title | utfdecode}}
+                                                            <span>{{convertToMin(content.video_duration)}}  {{content.release_date | NA}}</span>
+                                                        </h2>
+                                                        <ul>
+                                                            <li class="special">RT</li>
+                                                            <li>{{content.rt.field_value | NA}}</li>
+                                                            <li class="special">IMDb</li>
+                                                            <li>{{content.imdb_score.field_value|NA}}</li>
+                                                            <li class="special">MPAA</li>
+                                                            <li>{{content.mpaa.field_value|NA}}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="text_section">
+                                                        <ul>
+                                                            <li>
+                                                                <div class="favourite">
+                                                                    <i class="fa fa-heart-o" aria-hidden="true" style="color: #fff;"></i>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="play" ng-if="content.play_btn" ng-bind-html="content.play_btn | html">
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="submit_tick">
+                                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                        
+                                                    </div>
+                                                    <div class="text_footer">
+                                                        <h5><span>Director</span>{{content.custom[0].field_value | NA}}</h5>
+                                                        <h6><span>Cast</span>Steve Mcqueen, Lorem Ipsum, Dolor Sit Amet, Lorem Amet Sit</h6>                                                
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h3><a href="{{content.permalink }}">{{content.title | utfdecode}}</a></h3>
+                                    </div>                
+                                </data-owl-carousel> 
+                                <div class="right-element" ng-if="RelatedMovieContent.contentData">
+                                    <a class="forward owl-next" href="javascript:void(0)" ng-click="nextSlider('slide_'+$index)"></a>
+                                </div>
+                                <div ng-show="RelatedMovieContent.contentData.length == 0" style="margin-top: 10%; text-align: center;">
+                                    <h3 style="color: #333;"> Movies are not available</h3>
+                                </div>
+                            </div>
+                    
+                    </div>
+                </div>        
+            </div>
+    </div>
+
+    <div class="moovibo-nav_bottom_slide-down">
+        <div class="headerWrap headerInside">
+            <nav class="navbar navbar-inverse" style="border-radius:0px;">
+                <div class="customNav">
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="#info" data-toggle="tab">{/literal}{$this->Language['info']}{literal}</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li>
+                            <!-- {/literal} {if $trailer_is_converted !=''}{literal}
+                            <li>
+                                <a href="#trailer" data-toggle="tab">TRAILERS</a>
+                            </li>                        
+                            <li>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li>
+                            {/literal} {/if} -->
+                            {literal}
+                            <li>
+                                <a href="javascript:void(0)" ng-click="tabDetailPage({/literal}{$content->movie_id}{literal},{/literal}{$content->movie_stream_id}{literal}, 'cast_crew' )">{/literal}{$this->Language['cast_crew']}{literal}</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li>
+                        
+                            <li>
+                                <a href="javascript:void(0)"  ng-click="tabDetailPage({/literal}{$content->movie_id}{literal},null, 'review' )">{/literal}{$this->Language['review']}{literal} <span class="badge">{/literal}{$content->reviews|json_decode|@count}{literal}</span></a>
+                            </li>
+                        
+                            <li>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" ng-click="tabDetailPage({/literal}{$content->movie_id}{literal},{/literal}{$content->movie_stream_id}{literal}, 'related_films' )">{/literal}{$this->Language['related_movies']}{literal}</a>
+                            </li>                                             
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+{/literal}  
+<div id="myTrailer"> 
+    <div class="wrapper">
+        <div class="videocontent"></div> 
+    </div>
+</div>
+
+<script type="text/javascript" src="{$this->siteurl}/common/js/fancybox.js"></script>
+<link rel="stylesheet" href="{$this->siteurl}/common/css/fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="{$this->siteurl}/common/rating/bootstrap-rating.js"></script>
+<script type="text/javascript" src="{$this->siteurl}/js/content.js"></script>
+<script type="text/javascript" src="{$this->siteurl}{$Yii->theme->baseUrl}/js/controller.js"></script>
+<script>
+    var user_id = "{$Yii->user->id}";      
+</script>

@@ -1,0 +1,189 @@
+<input type="hidden" value="{$this->add_to_favourite}" id="favourite_enable">
+<input type="hidden" value="{$this->add_to_playlist}" id="playlist_enable">
+<input type="hidden" value="{$this->autoplay_episode}" id="autoplay_episode">
+<script>
+	//queuelist object we can get all audio info by using this object
+	var muviAudioMusicPlayerObj = [];
+	var favourite_enable = $('#favourite_enable').val();
+	var playlist_enable = $('#playlist_enable').val();
+	var autoplay_episode = $('#autoplay_episode').val();
+</script>
+<input type="hidden" value="{$this->autoplay_episode}" id="autoplay_enable">
+<div class="ap" id="ap">
+    <div class="ap__inner">
+        <div id="player-blur">
+            <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/progress_bar.jpg"> 
+        </div>
+        <!-- play buton area -->
+        <div class="ap__item ap__item--playback">
+            <div class="art">
+                <div class="card">
+                    <a href="#"><figure><img src="" class="imag_album"></figure></a>
+                </div>
+                <div class="art-desc">
+                    <h6 class="c-font-white"></h6>
+                    <p class="c-font-white c-font-12 meta-info"></p>
+                </div>
+            </div>
+        </div>
+        <!-- ./ play buton area end-->
+        <!-- progress-bar -->
+        <div class="ap__item ap__item--track">
+            <div class="play-section">
+                <button class="ap__controls ap__controls--prev"> 
+                    <svg version="1.1" fill="#7e7c8a" width="20" height="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  x="0px" y="0px" viewBox="-255 128 512 512" xml:space="preserve">
+                        <g>
+                            <g id="skip-previous">
+                                <rect x="-255" y="128" fill="#FFFFFF" width="85.3" height="512"/>
+                                <polygon fill="#FFFFFF" points="-105.7,384 257,640 257,128"/>
+                            </g>
+                        </g>
+                    </svg> 
+                </button>
+                <button class="ap__controls ap__controls--toggle"> 
+                    <svg class="icon-play" version="1.1" 
+                    baseProfile="tiny" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-487 360.4 47.6 47.6" xml:space="preserve" width="20" height="20" data-play="M-2356.8,2285.6c-13.1,0-19-11.3-19-22.4V1994c0-11.2,5.9-22.4,19-22.4c4.3,0,8.7,1.3,13.1,3.9l233.1,134.6
+                      c7.9,4.6,12.4,11.3,12.4,18.5s-4.5,14-12.4,18.5l-233.1,134.6C-2348.1,2284.3-2352.6,2285.6-2356.8,2285.6z M-2356.8,1985.6
+                      c-4.4,0-5,5.3-5,8.4v269.2c0,3.1,0.7,8.4,5,8.4c1.2,0,3.3-0.3,6.1-2l233.1-134.6c3.4-2,5.4-4.4,5.4-6.4s-2-4.5-5.4-6.4
+                      l-233.1-134.6C-2353.6,1985.9-2355.6,1985.6-2356.8,1985.6z">
+                        <g>
+                            <polygon fill="#32C5D2" class="play-btn" points="-482.2,360.4 -482.2,408 -444.8,384.2 " d=""/>
+                            <path class="pause-btn" fill="#32C5D2" d="M-469,401.4c0,3.7-3,6.6-6.6,6.6l0,0c-3.7,0-6.6-3-6.6-6.6V367c0-3.7,3-6.6,6.6-6.6l0,0
+                            c3.7,0,6.6,3,6.6,6.6V401.4z"/>
+                            <path class="pause-btn" fill="#32C5D2" d="M-469,401.4c0,3.7-3,6.6-6.6,6.6l0,0c-3.7,0-6.6-3-6.6-6.6V367c0-3.7,3-6.6,6.6-6.6l0,0
+                            c3.7,0,6.6,3,6.6,6.6V401.4z"/>
+                            <path class="pause-btn" fill="#32C5D2" d="M-444.1,401.4c0,3.7-3,6.6-6.6,6.6l0,0c-3.7,0-6.6-3-6.6-6.6V367c0-3.7,3-6.6,6.6-6.6l0,0
+                            c3.7,0,6.6,3,6.6,6.6V401.4z" />
+                        </g>
+                    </svg> 
+                </button>
+
+                <button class="ap__controls ap__controls--next"> <svg version="1.1" fill="#7e7c8a" width="20" height="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-255 128 512 512" xml:space="preserve">
+        <g>
+          <g id="skip-previous">
+            <rect x="171.7" y="128" fill="#FFFFFF" width="85.3" height="512"/>
+            <polygon fill="#FFFFFF" points="107.7,384 -255,640 -255,128 		"/>
+          </g>
+        </g>
+        </svg> </button>
+                        </div>
+                        <div class="track">
+
+                            <!-- progress bar -->
+                            <div class="progress-container">
+                                <div class="progress">
+                                    <!-- timmer portion -->
+                                    <div class="track__time">
+                                        <span class="track__time--current meta-info">0:00</span>
+                                        <span class="track__time--duration meta-info">0:00</span>
+                                    </div>
+
+                                    <div class="progress__bar"></div>
+                                    <div class="progress__preload"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./ progress-bar -->
+
+                    <!-- player controles-->
+                    <div class="ap__item ap__item--settings">
+
+
+
+                        <!--shuffle-->
+                        <!--<button class="ap__controls ap__controls--shuffle">
+					<img class="icon icons8-Shuffle shuffleimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABq0lEQVRoge2Ya5XDIBCFr4RIqIRKqIRKQEIk4KASKmUlVEIkREL6g3CSZYfHTCCQPXzn8KeP4c7NDAGATqfTCq/aAo6yAPgAGGoLkbKsYwZwr6xFxOKMsa4cPm4CCy7WF1QCor7wBbJjgnHmxoj5WP/zganx2BzuYPUFJ3BKnWqhaOl87KDPQKwxk3D7FIokMIMupwH5nJ8RNoqFIiZ4E7/ThAgFf0OGmviWR/qGIsTtJ6Hcjy2JlPgXCr2ZB5jVyPcUNMIJUojq/QjKmXRaP5e4D/wWn63eY+yfgl4/0+C7DxSs9xAKm8gBcveBgvUeY8Jx96vyxHH3m0Djgu5buvs1+bfuDzDngKYJuT+u3zWNht99+5ZWibFOL7uY+/ukUrBbidPexhr+lcfdqaqEePs4xe+FYivPG3+Ti+GeBYpupzX87gMmQa4g34EmK3ZpTFn33acQK6XQkTLrvZA7Qod6bqzQHEXuhRZsW2mKR8YkkvuCEzDlEJIriWz3QjOAH/C2CXeYnpgOiD/tnCwl1MS3erLSkZZoM4jqvSUuVe8Ul6p3ikvVe6fTCl8URNhtOU3WGAAAAABJRU5ErkJggg==" width="25" height="20"> 
+				</button>-->
+
+                        <!--repeat-->
+                        <button class="ap__controls ap__controls--repeat"> 
+	  <svg version="1.1" width="20" fill="#7e7c8a" height="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-452 254 54 54" style="enable-background:new -452 254 54 54;" xml:space="preserve">
+      <g>
+        <path class="st2" d="M-400.8,275h-5.1c-0.8,0-1.5-0.4-1.8-1.2s-0.2-1.5,0.4-2.1l3.6-3.6c0.5-0.5,0.8-1.2,0.8-2c0-0.7-0.3-1.4-0.8-2
+                            l-4.6-4.6c-1.1-1-2.9-1.1-3.9,0l-3.6,3.6c-0.6,0.6-1.4,0.7-2.1,0.4c-0.8-0.3-1.2-1-1.2-1.8v-5.1c0-1.5-1.2-2.8-2.8-2.8h-6.4
+                            c-1.5,0-2.8,1.2-2.8,2.8v5.1c0,0.8-0.4,1.5-1.2,1.8c-0.7,0.3-1.5,0.2-2.1-0.4l-3.6-3.6c-1.1-1.1-2.9-1-3.9,0l-4.6,4.6
+                            c-0.5,0.5-0.8,1.2-0.8,2c0,0.7,0.3,1.4,0.8,2l3.6,3.6c0.6,0.6,0.7,1.4,0.4,2.1s-1,1.2-1.8,1.2h-5.1c-1.5,0-2.8,1.2-2.8,2.8v6.4
+                            c0,1.5,1.2,2.8,2.8,2.8h5.1c0.8,0,1.5,0.4,1.8,1.2s0.2,1.5-0.4,2.1l-3.6,3.6c-0.5,0.5-0.8,1.2-0.8,2c0,0.7,0.3,1.4,0.8,2l4.6,4.6
+                            c1.1,1.1,2.9,1.1,3.9,0l3.6-3.6c0.6-0.6,1.4-0.7,2.1-0.4c0.8,0.3,1.2,1,1.2,1.8v5.1c0,1.5,1.2,2.8,2.8,2.8h6.4
+                            c1.5,0,2.8-1.2,2.8-2.8v-5.1c0-0.8,0.4-1.5,1.2-1.8c0.8-0.3,1.5-0.2,2.1,0.4l3.6,3.6c1.1,1.1,2.9,1.1,3.9,0l4.6-4.6
+                            c0.5-0.5,0.8-1.2,0.8-2c0-0.7-0.3-1.4-0.8-2l-3.6-3.6c-0.6-0.6-0.7-1.4-0.4-2.1s1-1.2,1.8-1.2h5.1c1.5,0,2.8-1.2,2.8-2.8v-6.4
+                            C-398,276.2-399.2,275-400.8,275z M-400,284.2c0,0.4-0.4,0.8-0.8,0.8h-5.1c-1.6,0-3,0.9-3.6,2.4c-0.6,1.5-0.3,3.1,0.9,4.3l3.6,3.6
+                            c0.3,0.3,0.3,0.8,0,1.1l-4.6,4.6c-0.3,0.3-0.8,0.3-1.1,0l-3.6-3.6c-1.1-1.1-2.8-1.5-4.3-0.9c-1.5,0.6-2.4,2-2.4,3.6v5.1
+                            c0,0.4-0.4,0.8-0.8,0.8h-6.4c-0.4,0-0.8-0.4-0.8-0.8v-5.1c0-1.6-0.9-3-2.4-3.6c-0.5-0.2-1-0.3-1.5-0.3c-1,0-2,0.4-2.8,1.2l-3.6,3.6
+                            c-0.3,0.3-0.8,0.3-1.1,0l-4.6-4.6c-0.3-0.3-0.3-0.8,0-1.1l3.6-3.6c1.1-1.1,1.5-2.8,0.9-4.3c-0.6-1.5-2-2.4-3.6-2.4h-5.1
+                            c-0.4,0-0.8-0.4-0.8-0.8v-6.4c0-0.4,0.4-0.8,0.8-0.8h5.1c1.6,0,3-0.9,3.6-2.4c0.6-1.5,0.3-3.1-0.9-4.3l-3.6-3.6
+                            c-0.3-0.3-0.3-0.8,0-1.1l4.6-4.6c0.3-0.3,0.8-0.3,1.1,0l3.6,3.6c1.1,1.1,2.8,1.5,4.3,0.9c1.5-0.6,2.4-2,2.4-3.6v-5.1
+                            c0-0.4,0.4-0.8,0.8-0.8h6.4c0.4,0,0.8,0.4,0.8,0.8v5.1c0,1.6,0.9,3,2.4,3.6c1.5,0.6,3.1,0.3,4.3-0.9l3.6-3.6c0.3-0.3,0.8-0.3,1.1,0
+                            l4.6,4.6c0.3,0.3,0.3,0.8,0,1.1l-3.6,3.6c-1.1,1.1-1.5,2.8-0.9,4.3c0.6,1.5,2,2.4,3.6,2.4h5.1c0.4,0,0.8,0.3,0.8,0.8V284.2z" />
+        <path class="st0" d="M-425,272c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S-420,272-425,272z M-425,288c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7
+                            S-421.1,288-425,288z" />
+      </g>
+      </svg> </button>
+
+                        <!--volume-->
+                        <div class="ap__controls volume-container dn">
+                            <button class="volume-btn"> <svg class="icon-volume-on" version="1.1" fill="#333" width="20" height="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	 x="0px" y="0px" viewBox="-255 128 512 512" xml:space="preserve">
+        <g>
+          <path  fill="#FFFFFF" d="M-255,298.7v170.7h113.8L1,611.6V156.4l-142.2,142.2H-255z M129,384c0-51.2-28.4-93.9-71.1-113.8v227.6
+			C100.6,477.9,129,435.2,129,384z M57.9,133.7v59.7C140.4,219,200.1,293,200.1,384S140.4,549,57.9,574.6v59.7
+			C171.7,608.7,257,506.3,257,384S171.7,159.3,57.9,133.7z"/>
+        </g>
+        </svg> <svg class="icon-volume-off" version="1.1" width="20" height="20" baseProfile="tiny" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	 x="0px" y="0px" viewBox="-255 128 512 512" xml:space="preserve">
+        <g>
+          <path  fill="#FFFFFF" d="M116.5,382.5c0-45.9-25.5-84.1-63.8-102v56.1l63.8,63.8C116.5,392.7,116.5,387.6,116.5,382.5z
+			 M180.3,382.5c0,23-5.1,45.9-12.8,66.3l38.3,38.3c17.9-30.6,25.5-68.9,25.5-107.1c0-109.6-76.5-201.4-178.5-224.4v53.6
+			C126.7,234.6,180.3,300.9,180.3,382.5z M-194.6,153l-33.2,33.1L-107.9,306h-119.9v153h102L1.8,586.5V415.6l109.6,109.6
+			c-17.9,12.8-35.7,23-58.6,30.6v53.5c35.7-7.6,66.3-23,94.4-45.9l51,51l33.1-33.1L1.8,351.9L-194.6,153z M1.8,178.5l-53.6,53.6
+			l53.6,53.6V178.5z"/>
+        </g>
+        </svg> </button>
+                            <div class="volume">
+                                <div class="volume__track">
+                                    <div class="volume__bar"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Share-->
+                        <div class="ap__controls volume-container dn">
+                           <button class="ap__controls ap__controls--playlist"> <svg version="1.1" width="20" height="20" baseProfile="tiny" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	 x="0px" y="0px" viewBox="-255 128 512 512" xml:space="preserve">
+        <g>
+          <path fill="#FFFFFF" d="M251.6,307.1L105.3,160.9c-3.6-3.6-7.9-5.4-12.9-5.4s-9.2,1.8-12.9,5.4c-3.6,3.6-5.4,7.9-5.4,12.9v73.1h-64
+		c-135.8,0-219.1,38.4-250,115.1c-10.1,25.5-15.1,57.2-15.1,95.1c0,31.6,12.1,74.6,36.3,128.9c0.6,1.3,1.6,3.6,3,6.9
+		c1.4,3.2,2.7,6.1,3.9,8.6c1.1,2.5,2.4,4.6,3.7,6.3c2.3,3.2,5,4.9,8,4.9c2.9,0,5.1-1,6.7-2.9c1.6-1.9,2.4-4.3,2.4-7.1
+		c0-1.7-0.2-4.2-0.7-7.6c-0.5-3.3-0.7-5.6-0.7-6.7c-1-12.9-1.4-24.7-1.4-35.1c0-19.2,1.7-36.5,5-51.7c3.3-15.2,8-28.4,13.9-39.6
+		c5.9-11.1,13.5-20.8,22.9-28.9c9.3-8.1,19.4-14.7,30.1-19.9c10.8-5.1,23.4-9.2,38-12.1c14.6-3,29.2-5,44-6.1
+		c14.8-1.1,31.5-1.7,50.1-1.7h64v73.1c0,5,1.8,9.2,5.4,12.9c3.6,3.6,7.9,5.4,12.9,5.4c5,0,9.2-1.8,12.9-5.4l146.3-146.3
+		c3.6-3.6,5.4-7.9,5.4-12.9C257,315.1,255.2,310.8,251.6,307.1z"/>
+        </g>
+        </svg> 
+        </button>
+
+                          
+							<div class="volume shareicon">
+          <p class="c-font-white">Share In</p>
+          <ul class="list-inline">
+            <li><a href="https://www.facebook.com/sharer/sharer.php?u={$this->siteurl}{$pageUrl}"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/Share-FB.png" height="30" width="30"></a></li>
+                                    <li><a href="https://twitter.com/intent/tweet?text={$this->siteurl}{$pageUrl}"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/Share-Twitter.png" height="30" width="30"></a></li>
+                                    <li><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/Share-Google-Plus.png" height="30" width="30"></li>
+          </ul>
+        </div>
+
+                        </div>
+						<div class="ap__controls volume-container ">
+                            <button class="ap__controls ap__controls--playlist queList">
+                                <img class="mt" src="{$this->siteurl}{$Yii->theme->baseUrl}/images/playlist.png" alt="Playlist">
+                            </button>
+                        </div>
+
+					</div>
+                    <!-- ./player controles ends -->
+                </div>
+	
+	</div>
+
+

@@ -1,0 +1,56 @@
+{foreach from=$value1['contents'] key=k item=value}
+{assign var="img_path" value=PGProduct::getpgImage($value['id'],'standard')}
+<div class="col-md-3 col-sm-6 c-margin-b-20">
+    <div class="c-content-product-2 c-bg-white">
+        <div class="c-content-overlay">
+            <div class="c-overlay-wrapper">
+                <div class="c-overlay-content">
+                    <a class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$producturl}/{$value['permalink']}">{$this->Language['explore']}</a>
+                </div>
+            </div>
+            {assign var="cropDimesion" value=Yii::app()->common->getPgDimension()}    
+            {assign var="img_path" value=PGProduct::getpgImage($value['id'],'standard')}
+            <div style="height: {$cropDimesion['height']}px; background-image: url('{$img_path}');background-size: {$cropDimesion['width']}px {$cropDimesion['height']}px;" data-height="height" class="c-bg-img-center c-overlay-object covered"></div>
+        </div>
+        <div class="c-info">
+            <p class="c-title c-font-16 c-font-slim" style="min-height: 47px;">
+                <a href="{$producturl}/{$value['permalink']}">
+                    {if $value['name']|count_characters > 30}
+                    {$value['name']|substr:0:30}
+                    {else}
+                    {$value['name']}
+                    {/if}
+                </a>
+            </p>
+            {if $value['is_preorder'] == 0}
+            <p class="c-price c-font-14 c-font-slim">
+                {Yii::app()->common->formatPrice($value['sale_price'],$value['currency_id'])}
+            </p>
+            {else}
+            <p class="c-price c-font-14 c-font-slim">&nbsp;</p>
+            {/if}
+        </div>
+        <div role="group" class="btn-group btn-group-justified">
+            {if $value['status']==1}
+            {if $value['is_preorder'] == 0}
+            <div role="group" class="btn-group c-border-top">
+                <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" onclick="showcart({$value['id']}, 1);">{$this->Language['add-to-cart']}</a>
+            </div>
+            <div role="group" class="btn-group c-border-left c-border-top">
+                <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product"  onclick="showcart({$value['id']}, 2);">{$this->Language['ordernow']}</a>
+            </div>
+            {else}
+            <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product"  onclick="window.location='{$producturl}/{$value['permalink']}'">PreOrder Now</a>
+            {/if}
+            {elseif $value['status']==3}
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group c-border-top" role="group">
+                    <div class="stockout">{$this->Language['stock_out']}</div>
+                </div>
+            </div>
+            {/if}                    
+        </div>
+    </div>
+</div>
+{/foreach}
+

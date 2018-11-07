@@ -1,0 +1,74 @@
+{$post = $post|json_decode}
+<div class="product-big-title-area">
+    <div class="c-layout-page">
+        {if !$this->is_mobileview}
+        <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+            <div class="container">
+                <div class="c-page-title c-pull-left">
+                    <h3 class="c-font-uppercase c-font-sbold">{$this->Language['blog']}</h3>
+                    <h4 class=""></h4>
+                </div>
+                <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                    <li class="c-state_active"></li>
+                </ul>
+            </div>
+        </div>
+        {/if}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 top20">
+                    <div class="product-bit-title">
+                        <h2>{$post->post_title|utf8_decode}</h2>
+                        <p>
+                            {$this->Language['by']} <b>{$post->author}</b>, {$this->Language['published_on']} <b>{$post->date}</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="single-product-area blogs ">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {if $post->thumb !=""}
+                    <div class="featured_image">
+                        {$post->thumb}
+                    </div>
+                {/if}
+                <div class="desc">{$post->full_desc|utf8_decode}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {foreach from=$comments item=comment}
+            {$this->Language['by']} : {$comment->fullname}<br />
+            {$comment->comment} <br />
+            <hr />
+            {/foreach}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div id="comment_form"></div> 
+</div>
+
+<script>
+    $(document).ready(function(){
+         $.ajax({
+        url: "/blog/LoadCommentForm",
+        data: "post_id="+{$post->post_id},
+        type:'POST',
+        success: function (data) {
+            $('#comment_form').html(data);
+        }
+        });
+    });
+</script>

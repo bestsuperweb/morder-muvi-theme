@@ -1,0 +1,12 @@
+<div class="col-md-12">
+    <div class="relative">
+        <form method="post" id="commentform" name="comment-form" novalidate="novalidate"> 
+            <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+            <div style="display: none;" id="comment_loader" class="loader"></div>
+            <h2 class="comment-icon title1">{$this->Language['comments']}</h2><br>
+            <div class="form-group comment_field"><textarea class="form-control input-xxxlarge" placeholder="{$this->Language['write_something_here']}" rows="4" id="commentfield" name="commentfield" aria-required="true"></textarea></div>
+            <div class="form-group"><button data-content_id="{$content->movie_id}" class="btn c-theme-btn btn-default post-comment pull-right" type="submit"><i class="fa fa-comments padding-right-10" aria-hidden="true"></i>{$this->Language['post_your_comment']}</button></div>
+            <div class="clearfix"></div>
+        </form>
+    </div>
+</div>

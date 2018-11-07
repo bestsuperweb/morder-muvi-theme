@@ -1,0 +1,209 @@
+{assign var=pgcsettings value=Yii::app()->general->getPgSettings()}
+{assign var=kartgeoblock value=$pgcsettings['kart_geo_block']}
+{if $kartgeoblock}
+<link rel="stylesheet" href="{$this->siteurl}/common/bootstrap-forms/css/bootstrap-formhelpers.css" type="text/css" />
+<script type="text/javascript" src="{$this->siteurl}/common/bootstrap-forms/js/bootstrap-formhelpers.js"></script>
+<script type="text/javascript" src="{$this->siteurl}/common/bootstrap-forms/js/bootstrap-formhelpers-countries.js"></script>
+{/if}
+<!-- BEGIN: HEADER -->
+<header>    
+    {if isset($Yii->user->id) && $Yii->user->id > 0}    
+    <div class="moovibo-main after_login">
+        <div class="headerWrap">
+            <nav class="navbar">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{$this->siteurl}">
+                        <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/logo-2.png" border="0" alt="" />
+                    </a>
+                </div>
+                <div class="search-container">
+                    <a href="javascript:void(0)" id="search_button"><button type="submit" ><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/search.png" /></button></a>
+                </div>
+                <div class="moovibo-nav">
+                    <div class="">
+                        <nav class="navbar navbar-inverse">
+                            <div class="customNav">
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                                        aria-controls="navbar">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                </div>
+                                <div id="navbar" class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav">
+                                        {if $this->main_menu|@count > 0}
+                                            {for $i = 0 to $this->main_menu|@count}
+                                                {if $i < 6}
+                                                    <li><a href="{$this->main_menu[$i]['permalink']}">{$this->main_menu[$i]['title']}</a></li>                                           
+                                                    {if $i < 5}
+                                                        <li><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                                    {/if}
+                                                {/if}
+                                            {/for}                                            
+                                        {/if} 
+                                        {if $this->main_menu|@count > 6}
+                                            <li><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                            <li class="more-header-link">
+                                                <a href="javascript:void(0)" aria-expanded="false">More <span class="caret"></span></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    {for $i = 6 to $this->main_menu|@count}
+                                                    <li><a href="{$this->main_menu[$i]['permalink']}">{$this->main_menu[$i]['title']}</a></li>
+                                                    {/for}    
+                                                </ul>
+                                            </li>                                       
+                                        {/if}
+                                        {$totallang = $this->enable_laguages|count} 
+                                        {if $totallang > 1} 
+                                            {$studio_languages = $this->enable_laguages}
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" >
+                                                    <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/chat_global.png" data-toggle="dropdown" aria-expanded="false">
+                                                </a>                                
+                                                <ul class="dropdown-content">
+                                                    {foreach from=$studio_languages key=key item=value} 
+                                                        <li><a href="javascript:void(0)" class="profile {if $language_code == $value['code']}active{/if}" onclick="changeLang('{$value['code']}')">{$value['name']}</a></li>
+                                                    {/foreach}
+                                                </ul>
+                                            </li>
+                                        {/if}
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                        
+                    </div>
+                </div>
+                <div id="navbar" class="navbar-sign_up">
+                    <span> {$this->user_menu[0]['display_name']}</span>
+                   
+                    <div class="dropdown">
+                        <img src="{$this->user_menu[0]['profile_image']}"  id="userProfile" class="img-circle dropdown-toggle" width="50"  data-toggle="dropdown" />
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="caret"><i class="fa fa-angle-down"></i></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right">                           
+                            <li><a href="{$this->siteurl}/user/favourites"><i class="fa fa-heart-o" aria-hidden="true"></i> {$this->Language['my_favourite']} <span id="my-fav-count">0</span></a></li>      
+                            <li><a href="{$this->siteurl}/user/watchHistory"><i class="fa fa-check" aria-hidden="true"></i> {$this->Language['watch_history']} <span id="my-watch-list-count">0</span></a></li>
+
+                            <li class="divider"></li>
+
+                            <li><a href="{$this->siteurl}/user/profile?tab=Info"><i class="fa" aria-hidden="true"></i>{$this->Language['profile']}</a></li>  
+                            <li><a href="{$this->siteurl}/user/favourites"><i class="fa" aria-hidden="true"></i>{$this->Language['my_favourite']}</a></li> 
+                            <li><a href="{$this->siteurl}/user/watchHistory"><i class="fa" aria-hidden="true"></i>{$this->Language['watch_history']}</a></li>
+                            <li><a href="{$this->siteurl}/user/profile?tab=purchaseHistory"><i class="fa" aria-hidden="true"></i>{$this->Language['purchase_history']}</a></li>
+                            <!-- <li><a href="{$this->siteurl}/user/profile?tab=Library"><i class="fa" aria-hidden="true"></i>{$this->Language['my_library']}</a></li> -->
+                            <li><a href="{$this->siteurl}/user/logout"><i class="fa" aria-hidden="true"></i> {$this->Language['logout']}</a></li>                           
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="custom_search_bar" style="display: none;">
+                    <div class="search-container">
+                        <form action="/search/show_all" onsubmit="return validate_search();" id = "search-form">
+                            <button class="submit_button" type="submit"><i class="fa fa-search"></i></button>
+                          <input type="text" class="form-control search-box-input ui-autocomplete-input" id="siteSearch"  placeholder="Search.." name="search_field" autocomplete="off">
+                          <button class="submit_button2" type="submit">
+                                        <span aria-hidden="true" onclick="closeSearch()">
+                                                <i class="fa fa-close"></i>
+                                        </span>
+                          </button>
+                        </form>
+                      </div>
+            </div>
+        </div>
+    </div>
+    {else}    
+    <div class="moovibo-main">
+        <div class="headerWrap">
+            <nav class="navbar">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{$this->siteurl}">
+                        <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/logo.png" border="0" alt="" />
+                    </a>
+                </div>
+                <div class="search-container">
+                    <form action="/search/show_all" onsubmit="return validate_search();" id = "search-form" >
+                        <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                        <a href="javascript:void(0)">
+                            <button type="submit"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/search.png" /></button>
+                            <input type="text" id="siteSearch" placeholder="{$this->Language['what_do_you_wanna_watch']}" name="search_field" autocomplete="off" />
+                        </a>
+                    </form>
+                </div>
+                <div id="navbar" class="navbar-sign_up">
+                    <a href="{$this->siteurl}/user/login">{$this->Language['sign_in']}</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+    {/if}
+</header>
+
+<!-- END: HEADER -->
+{if $kartgeoblock}
+{literal}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.bfh-selectbox').on('change.bfhselectbox', function () {
+        var countrycode = $(this).val();
+        $('.loader_cart').show();
+        var url = '{/literal}{$this->siteurl}{literal}/shop/CountryChange';
+        $.post(url, {'countrycode': countrycode}, function (res) {
+            window.location.reload();
+        })
+    });    
+});
+</script>
+{/literal}
+{/if}
+
+{if isset($Yii->user->id) && $Yii->user->id > 0}  
+{literal}
+<script type="text/javascript">
+$(document).ready(function(){
+    $.ajax({
+        type: "GET",
+        url: HTTP_ROOT + "/rest/ViewFavourite/",
+        dataType: 'json',
+        beforeSend: function (request) {
+            request.setRequestHeader("authToken", STORE_AUTH_TOKEN);            
+            request.setRequestHeader("lang_code", current_language_code);
+            request.setRequestHeader("user_id", {/literal}{$Yii->user->id}{literal});
+        },
+        success: function (response) {
+            $('#my-fav-count').text(response.item_count);
+        }
+    });
+    $.ajax({
+        type: "GET",
+        url: HTTP_ROOT + "/rest/watchHistory/",
+        dataType: 'json',
+        beforeSend: function (request) {
+            request.setRequestHeader("authToken", STORE_AUTH_TOKEN);            
+            request.setRequestHeader("lang_code", current_language_code);
+            request.setRequestHeader("user_id", {/literal}{$Yii->user->id}{literal});
+        },
+        success: function (response) {
+            $('#my-watch-list-count').text(response.item_count);
+        }
+    });   
+});
+var countToggle = 0
+$('#search_button').click(function () {
+    closeSearch();
+});
+function closeSearch(){
+    $('.custom_search_bar').slideToggle();
+    if(countToggle%2 == 0){
+        $(".after_login .headerWrap").css("position", "absolute");
+    }else{
+        $(".after_login .headerWrap").css("position", "fixed");
+    }
+    countToggle++;
+}
+
+</script>
+{/literal}
+{/if}

@@ -1,0 +1,47 @@
+<div class="product-big-title-area">
+    {if !$this->is_mobileview}
+    <div class="c-layout-page">
+        <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+            <div class="container">
+                <div class="c-page-title c-pull-left">
+                    <h3 class="c-font-uppercase c-font-sbold">{$this->Language['blog']}</h3>
+                    <h4 class=""></h4>
+                </div>
+                <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                    <li class="c-state_active"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {/if}
+    <div class="single-product-area blog_content">
+        <div class="container">
+            <div class="row top20">
+                {foreach from=$data|json_decode item=content}
+                <div class="col-md-12">
+                    <h2>{$content->post_title|utf8_decode}</h2>
+                    <p>
+                        {$this->Language['by']} <b>{$content->author}</b>, {$this->Language['published_on']} <b>{$content->date}</b>
+                    </p>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {if $content->thumb !=""}<div class="post-thumbnail">{$content->thumb}</div> {/if}
+                            <div class="short_desc">{$content->short_desc|utf8_decode}&nbsp;<a href="{$content->permalink}{if $this->is_mobileview}?mobileview=1{/if}">{$this->Language['view_more']}</a></div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="product-pagination text-center">
+                        <nav>
+                            {$pagination}
+                        </nav>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+{if !empty($saveaddress)}
+<div class="col-md-6 top10" id="savedaddress">
+    <div class="row-fluid row">        
+        {foreach from=$saveaddress key=k item=value name=foo}
+        {assign var="vid" value=$value['id']}
+        <div class="col-md-6" style="margin-top: 20px;">
+                <div class="c-content-bar-1 c-align-left c-bordered c-theme-border c-shadow">
+                    <a href="javascript:void(0);" onclick="deliveraddress('{$vid}',this)" title="{$this->Language['deliver_here']}" class="plan-box">
+                        <div style="color: #3f444a;min-height: 160px;">
+                            <div class="tick-icon" {if $selected_id == $vid} style="display: block;" {else} style="display:none;" {/if}></div>
+                            <h2>{$value['first_name']}</h2>
+                            <p>{$value['address']}, {if $value['address2']}{$value['address2']},{/if} {$value['city']}, {$value['state']}, {$value['zip']}</p>
+                            <p>{$value['country']}</p>
+                            <p>{$this->Language['phone_number']} : {$value['phone_number']}</p> 
+                        </div>
+                    </a>
+                    <div>
+                        <input type="button" value="Edit" onclick="editaddress('{$vid}')" class="btn c-btn c-theme-btn c-btn-square c-font-white">
+                        <input type="button" value="Delete" onclick="deleteaddress('{$vid}')" class="btn c-btn c-theme-btn c-btn-square c-font-white pull-right">
+                    </div>
+                </div>
+            </div>
+        {if $smarty.foreach.foo.iteration % 2 == 0}
+            <div style="clear: both;"></div>
+        {/if}
+        {/foreach}               
+    </div>    
+</div>
+{/if} 
+{assign var=pgsettings value=Yii::app()->general->getPgSettings()}
+{assign var=pgcontries value=$pgsettings['restrict_country']|json_decode:true}
+<div id="address_div" class="col-md-6 top10">    
+    <div class="row">
+        <div class="form-group col-md-12">
+            <label class="control-label">{$this->Language['text_full_name']}</label>
+            <input type="text" placeholder="{$this->Language['text_name_placeholder']}" title="{$this->Language['fill_out_this_field']}" name="ship[first_name]" class="form-control c-square c-theme" value="{$req['first_name']}" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-12">
+            <label class="control-label">{$this->Language['address_line_1']}</label>
+            <input type="text" placeholder="{$this->Language['street_address']}" title="{$this->Language['fill_out_this_field']}" name="ship[address]" class="form-control c-square c-theme" value="{$req['address']}" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-12">
+            <label class="control-label">{$this->Language['address_line_2']}</label>
+            <input type="text" placeholder="{$this->Language['apartment_suite']}" name="ship[address2]" class="form-control c-square c-theme" value="{$req['address2']}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="control-label">{$this->Language['city']}</label>
+            <input type="text" placeholder="{$this->Language['city']}" title="{$this->Language['fill_out_this_field']}" name="ship[city]" class="form-control c-square c-theme" value="{$req['city']}" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="control-label">{$this->Language['state_province_region']}</label>
+            <input type="text" placeholder="{$this->Language['state_province_region']}" title="{$this->Language['fill_out_this_field']}" name="ship[state]" class="form-control c-square c-theme" value="{$req['state']}" required>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="control-label">{$this->Language['postcode']}</label>
+            <input type="text" placeholder="{$this->Language['postcode']}" title="{$this->Language['fill_out_this_field']}" name="ship[zip]" class="form-control c-square c-theme" value="{$req['zip']}" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="control-label">{$this->Language['country']}</label>
+            <select title="{$this->Language['select_an_item']}" name="ship[country]" class="form-control c-square c-theme" required >
+                <option value="">-{$this->Language['select']}-</option>
+                {if empty($pgcontries)}
+                    {foreach from=$countries key=k item=coun}                                          
+                    <option value="{$coun['code']}" {if ($req['country']==$coun['country'])} selected="selected" {/if}>{$coun['country']}</option>
+                    {/foreach}
+                {else}
+                    {foreach from=$countries key=k item=coun}
+                    {if $coun['code']|in_array:$pgcontries}                    
+                    <option value="{$coun['code']}" {if ($req['country']==$coun['country'])} selected="selected" {/if}>{$coun['country']}</option>                    
+                    {/if}
+                    {/foreach}
+                {/if}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="control-label">{$this->Language['phone_number']}</label>
+            <input type="text" placeholder="{$this->Language['phone_number']}" name="ship[phone_number]" class="form-control c-square c-theme" value="{$req['phone_number']}" maxlength="15">
+        </div>
+    </div>
+    <div class="row">
+        {if empty($req)}
+        <div class="form-group col-md-7">
+            <div class="c-checkbox">
+                <input type="checkbox" id="checkbox1-11" class="c-check" value="1" name="ship[saveaddr]" checked="checked">
+                <label for="checkbox1-11">
+                    <span class="inc"></span>
+                    <span class="check"></span>
+                    <span class="box"></span> {$this->Language['save_address']} </label>
+            </div>
+        </div>
+        {/if}
+        <div class="col-md-5">
+            <div {if (empty($req))} class="pull-right" {/if}>
+                <a href="javascript:void(0);" class="btn c-btn btn-lg c-theme-btn c-btn-square c-font-white c-font-bold c-font-uppercase c-cart-float-r" onclick="validateshiping('{if !empty($req)}{$req['id']}{else}insert{/if}')">{if (!empty($req))}{$this->Language['save_continue']}{else}{$this->Language['continue']}{/if}</a>
+            </div>
+        </div>
+    </div>
+</div>

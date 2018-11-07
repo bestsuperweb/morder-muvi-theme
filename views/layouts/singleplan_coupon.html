@@ -1,0 +1,47 @@
+<input name="data[plan_id]" type="hidden" id="plan_id" value="{$singlePlanCoupon['plan_id']}"  />
+<input name="data[currency_id]" type="hidden" id="currency_id" value="{$singlePlanCoupon['currency_id']}"  />
+<input type="hidden" name="data[discount_amount]" id="discount_amount" value="">
+<input type="hidden" name="data[free_trail_charged]" id="free_trail_charged" value="">
+<div class="clearfix"></div>
+<div class="row border-right plandetails">
+    <div class="col-md-12">
+        <div class="form-group top50">
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <div style="font-weight: bold">
+                        <span id="charged_amt" data-amount="{$price}"></span>
+                        <span id="discount_charged_amt" style="display: none;">
+                            <span id="labele_text">{$this->Language['price']}</span>
+                            <span id="dis_charged_amt" style="text-decoration: line-through;"></span>
+                            <sup><span style="font-weight: bold;font-size: 15px;" id="discount_charged_amt_span"></span></sup><br>
+                            <span id="free_trail_txt" style="font-weight: bold;font-size: 15px;"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-5 ">
+        {$signup_steps = Yii::app()->general->signupSteps()}
+        {if $signup_steps == 1 && $reactivate != 1 && $activate != 1}
+        {$disabled = "disabled"}
+        {else}
+        {$disabled = ""}
+        {/if}
+        <div class="col-md-10">
+            <input type="text" {$disabled} class="form-control" name="data[coupon_code]" id="coupon" placeholder="{$this->Language['coupon_code_optional']}" autocomplete="off" >
+        </div>
+        <div class="col-md-2">
+            <button type="button" {$disabled} class="btn btn-info btn-flat" id="coupon_btn" onclick="validateCouponForSubscription();">{$this->Language['btn_apply']}</button>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="col-md-12">
+            <div id="invalid_coupon_error" style="color:red;font-size:16px;display:none"></div>
+            <div id="valid_coupon_suc" class="has-success" style="display: none;">
+                <label for="inputSuccess" class="control-label" style="font-weight: normal;color: #4da30c;font-size:16px;">{$this->Language['discount_on_coupon']} <span id="coupon_in_amt"></span></label>
+            </div>
+        </div>
+    </div>
+</div>

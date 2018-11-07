@@ -1,0 +1,28 @@
+<script>
+  
+                $(document).ready(function() {
+         var isshow = localStorage.getItem('isshow');
+    if (isshow== null) {
+        localStorage.setItem('isshow', 1);
+                    
+                    $("#cookieModal").modal("show");
+                }       
+                });
+            </script>
+           
+            <div id="cookieModal" class="modal fade login-popu">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="position: relative;">  
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" style="line-height: 1;">&nbsp;</h4>
+                        </div>                    
+                        <div class="modal-body">                            
+                            <div class="row-fluid">
+                                <div class="col-md-12">{$this->cookie_msg_new}</div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>          
+                    </div>		
+                </div>
+            </div>

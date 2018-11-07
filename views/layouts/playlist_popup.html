@@ -1,0 +1,75 @@
+<div class="modal fade" id="addToPlaylist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<div class="modal fade " id="SuccessPopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document"> 
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title c-font-uppercase c-font-bold" id="calenderModalLabel"></h4> 
+            </div>
+            <div class="modal-body"> 
+                <div class="succs_msg"></div>
+                <div class="form-group" id="calender-input-form">
+                    <p class="success_message"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="editPlaylist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+    <form name="edit_playlist_form" id="edit_playlist_form" method="post">
+        <div class="modal-dialog" role="document"> <div class="modal-content">
+                <div class="modal-header"> 
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title c-font-uppercase c-font-bold" id="calenderModalLabel">{$this->Language['edit_playlist_name']}</h4> 
+                </div>
+                <div class="modal-body"> 
+                    <div class="loader loader_playlist"  style='display:none;'></div>
+
+                    <div class="form-group" id="play_list_update">
+                        <input type="hidden" id="user_id" value="" />
+                        <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="new_playlist" name="editplaylist" placeholder="{$this->Language['create_playlist']}">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary pull-right bold_class btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold  update_playlist"  id='update_playlist'>{$this->Language['save_playlist']}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal fade" id="deletePlaylist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document"> 
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"> 
+                <span id="playlistbodymodal"></span>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" class="btn btn-primary  bold_class btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold  action_btn">{$this->Language['yes']}</a>
+                <button class="btn btn-primary pull-right bold_class btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold  " data-dismiss="modal" type="button" >{$this->Language['btn_cancel']}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteFav" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document"> 
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"> 
+                <span id="Favbodymodal"></span>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" class="btn btn-primary  bold_class btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold  action_btn">{$this->Language['yes']}</a>
+                <button class="btn btn-primary pull-right bold_class btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold  " data-dismiss="modal" type="button" >{$this->Language['btn_cancel']}</button>
+            </div>
+        </div>
+    </div>
+</div>

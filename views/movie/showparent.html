@@ -1,0 +1,396 @@
+<script>
+    var muviWaterMarkTrailer = "{$waterMarkOnPlayer}";
+</script>
+{$content = $item|json_decode}
+<input type="hidden" value="{$content->movie_id}" id="p_movieid">
+{$casts = $content->casts}
+{$directors = $casts->directors}
+{$isConverted=$content->is_converted}
+{$release_date = $content->release_date}
+{$censor_rating = $content->censor_rating|replace:'&nbsp;':''}
+{$actors = $casts->actors}
+{$all_series = $allseries|json_decode}
+{$content_banner=$content->content_banner}
+{$trailer_is_converted=$content->trailer_is_converted}
+{$pageUrl = $this->ogUrl}
+{$full_release_date = $content->full_release_date}
+{$user_id=Yii::app()->user->id}
+<input class="playlist_user_id" value="{$user_id}" type="hidden">
+    
+<div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+    <div class="container">
+        <div class="c-page-title c-pull-left">
+            <h3 class="c-font-sbold c-font-uppercase">{$content->title|utf8_decode}</h3>
+        </div>
+    </div>
+</div>
+<div class=" c-size-sm c-overflow-hide jiii"> 
+    {if $content_banner !=''}
+    <img src="{$content_banner}" alt="{$content->title|utf8_decode}" title="{$content->title|utf8_decode}" class="img-responsive responsive-image"/>
+    {/if} 
+    <div class="container">
+        <div class="c-shop-product-details-2 content-area">
+            <div class="row bottom25">
+
+                <div class="col-md-6">
+                    <div class="c-product-gallery">
+                        <div class="c-zoom1">
+                            <div class="row">
+                                <div class="col-md-offset-2 col-md-8 ">
+                                    <div class="artwork-wrapper ">
+                                        <img src="{$content->poster}" alt="{$content->title|utf8_decode}" class="img-responsive">
+                                        <div class="artwork__meta hide">
+                                            <div class="media__block--1">
+                                                <a href="browse__music" class="media__block"> <div><i class="fa fa-music"></i>
+                                                        <h4>{$this->Language['browse_music']}</h4></div></a>
+                                            </div>
+                                            <div class="media__block--2">
+                                                <a href="shop__products" class="media__block"> <div>
+                                                        <i class="fa fa-shopping-cart"></i>
+                                                        <h4>{$this->Language['shop_products']}</h4></div>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        {if $this->add_to_favourite}
+                                        <a href="javascript:void(0);" onclick="addFav(this)" name="addfav" class="favAdd" data-fav_status="{$user_status['fav_status']}" data-login_status="{$user_status['login_status']}" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}"> 
+                                            <div class="ellipse__shape favourite "> 
+                                                <i class="fa fa-heart-o {if $user_status['fav_status'] ==0} hidden {/if}"></i>
+                                                <i class="fa fa-heart {if $user_status['fav_status'] !=0} hidden {/if}"></i>
+                                                <div class="favourite_text">
+                                                    <span class="favorate__this {if $user_status['fav_status'] ==0} hidden {/if}">{$this->Language['add_to_fav']}</span>
+                                                    <span class="favorited__already {if $user_status['fav_status'] !=0} hidden {/if}">{$this->Language['added_to_fav']}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        {/if}
+                                        <div class="ellipse__shape share">
+                                            <i class="fa fa-share"></i>
+
+                                            <div class="share_text">
+                                                <span class="share__this">
+                                                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={$pageUrl}" data-title="{$this->Language['share_in_facebook']}"><i class="fa fa-facebook-square" aria-hidden="true" alt="{$this->Language['share_in_facebook']}" title="{$this->Language['share_in_facebook']}"></i></a>
+                                                    <a target="_blank" href="https://twitter.com/intent/tweet?text={$pageUrl}" data-title="{$this->Language['share_in_twitter']}">  <i class="fa fa-twitter-square" aria-hidden="true" alt="{$this->Language['share_in_twitter']}" title="{$this->Language['share_in_twitter']}"></i></a>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>	 
+                <div class="loader" id="loader_fav"></div>
+                <div class="col-md-6">
+                    <div class="c-product-meta">
+                        <div class="c-content-title-1" style="float:none;">
+                            <h3 class="c-font-uppercase c-font-bold" style="word-wrap: break-word;"> {$content->title|utf8_decode} {if $censor_rating !="" }<span class="label label-red label-green">{$censor_rating} </span> </h3>{/if}
+                            <div class="c-line-left"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="rating">
+                                    {$review_summary}
+                                    <span>{$this->Language['viewall']}<a href="#reviews_section" class='review_link'> {$this->Language['reviews']}</a> </span>
+                                </div>
+                            </div>
+                        </div>
+                        {if $content->show_booking_button}
+                            {if $content->start_time !="0000-00-00 00:00:00" }
+                                <p>
+                                    <button  name="addtocal" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}" data-start_time="{$content->start_time}" data-booking_time="{$content->booking_time}" data-book_type="1" data-booking_with_cal="1" class="btn btn-lg btn-primary addtocal cbook c-btn-square" type="button"><i class="fa fa-clock-o" aria-hidden="true"></i>{if $content->booking_status}{$this->Language['booked']}{else}{$this->Language['book']}{/if}</button>
+                                </p>
+                            {else}
+                                <p>
+                                   <button  name="addtocal" data-content_id="{$content->movie_id}" data-content_type="{$content->is_episode}" class="btn btn-lg btn-primary addtocal c-btn-square" data-booking_time="{$content->booking_time}" data-book_type="2" data-booking_with_cal="1" type="button"><i class="fa fa-clock-o" aria-hidden="true"></i>{if $content->booking_status}{$this->Language['added_to_calender']}{else}{$this->Language['add_to_calender']}{/if}</button>
+                                </p>
+                            {/if}
+                        {/if}                        
+                        <div class="row meta__info">
+                            {if $content->genres|@count > 0}
+                            <div class="col-sm-12 ">
+                                <p><span class="c-font-bold c-font-uppercase">{$this->Language['genre']} </span>
+                                    <span class="c-font-none">{$genre_count = $content->genres|count}
+                                        {$j=0}
+                                        {foreach from=$content->genres item=genre}{$genre}{$j = $j+1}
+                                        {if $j != $genre_count}
+                                        ,
+                                        {/if}
+                                        {/foreach} </span></p>
+                            </div>
+                            {/if}
+                            {if $content->video_duration != '' }
+                            <div class="col-sm-12 ">
+                                <p><span class="c-font-bold c-font-uppercase">{$this->Language['duration']} : </span>
+                                    <span class="c-font-none">{$content->video_duration} </span></p>
+                            </div>
+                            {/if}
+                            {if $full_release_date != ''}
+                            <div class="col-sm-12 ">
+                                <p><span class="c-font-bold c-font-uppercase">{$this->Language['sort_release_date']} : </span>
+                                    <span class="c-font-none">{$full_release_date}</span></p>
+                            </div>
+                            {/if}
+                        </div>
+                        {assign var=subprice value=$subscribed_price|substr:1}
+                        {assign var=unsubprice value=$unsubscribed_price|substr:1}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="ppv_price">
+                                     {if $is_subscribed} 
+                                    <h1>{$subscribed_price|truncate:1:"":true}{$subprice}</h1>
+                                    <h4> <b style="color: #e73946;text-decoration: line-through;">{$unsubscribed_price|truncate:1:"":true}</span>{$unsubprice}</b></h4>
+                                    {else}
+                                    <h1>{$unsubscribed_price|truncate:1:"":true}{$unsubprice}</h1>
+                                    <h4><b style="color: #e73946;text-decoration: line-through;">{$subscribed_price|truncate:1:"":true}{$subprice}</b></h4>
+
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="action__sec">
+
+                            {if $trailer_is_converted !=''}  <a href="#" class="btn btn-default c-btn btn-lg c-font-bold  c-btn-square c-font-uppercase " id="trailer-btn">{$this->Language['view_trailer']}</a> {/if}
+                            <span style="display:none;">{$content->play_btn}</span>
+                        </div>
+
+                        <div class="row content__navtab">
+                            <div class="col-md-12">
+                                <ul class="nav nav-tabs">
+                                    {if $content->story !='' } 
+                                    <li class="active">
+                                        <a href="#tab1default" data-toggle="tab">
+                                            <span class="c-font-bold c-font-uppercase">{$this->Language['story']} </span>
+                                        </a>
+                                    </li>
+                                    {/if}
+                                    {foreach from=$casts key=counter item=cast}
+                                    {if $cast|count>0} 
+                                    {assign var=val value=$val+1}
+                                    {/if}
+                                    {/foreach}                                
+                                    {assign var=counte value=0}                                
+                                    {if $val > 0 && $cast|is_array}
+                                    <li class="{if $content->story == ''} active {/if}  ">
+                                        <a href="#tab2default" data-toggle="tab">
+                                            <span class="c-font-bold c-font-uppercase">{$this->Language['cast']} </span>
+                                        </a>
+                                    </li>
+                                    {/if}
+
+                                </ul>
+                                <div class="tab-content">
+                                    {if $content->story !='' } <div class="tab-pane fade in active" id="tab1default">
+                                        <p>{if $content->story|utf8_decode|count_characters > 75}{$content->story|utf8_decode|truncate:190}&nbsp;&nbsp;
+                                            <a href="javascript:void();" class="more"
+                                               data-toggle="modal" data-target=".bs-example-modal-lg2"><b>{$this->Language['more']}</b></a>{else}{$content->story|utf8_decode}{/if}
+                                        </p>
+                                    </div>{/if}
+                                    {foreach from=$casts key=counter item=cast}
+                                    {if $cast|count>0} 
+                                    {assign var=val value=$val+1}
+                                    {/if}
+                                    {/foreach}                                
+                                    {if $val > 0 && $cast|is_array}
+                                    <div class="tab-pane fade {if $content->story == '' } in active {/if}" id="tab2default">
+                                        <div class="row">
+                                            {foreach from=$casts key=role item=cast}                                    
+                                            {foreach from=$cast key=counter item=cast_role}
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="cast clearfix">
+                                                    <a href="{$cast_role->full_permalink}">
+                                                        <img src="{$cast_role->celeb_image}" alt="{$cast_role->celeb_name}" title="{$cast_role->celeb_name}"
+                                                             class="recent-thumb" width="50" height="50"></a>
+                                                    <p class="light-grey"><a href="{$cast_role->full_permalink}">{$cast_role->celeb_name}</a>
+                                                        <br />{$role}</p>
+                                                </div>
+                                            </div>
+                                            {/foreach}
+                                            {/foreach}
+                                        </div>
+                                    </div>
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row bottom25 hide">
+				{if Yii::app()->general->getStoreLink()}
+                {if !empty($contentproduct)}
+                <div class="container" id="shop__products">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="c-shop-product-details-2 content-area ">
+                                {include file='../shop/list.html'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				{/if}
+				{/if}
+			</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                {if $episode|@count>0}    <div class="c-content-title-1" style="float:none;">
+                    <h3 class="c-font-uppercase c-font-bold" style="word-wrap: break-word;">                                    
+                        {$this->Language['episodes']}                                  
+                    </h3>
+                    <div class="c-line-left"></div>
+                </div>{/if}
+            </div>
+
+            <div class="col-sm-6">
+                {if $all_series|@count > 1}
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3 class="c-font-uppercase c-font-bold text-right text-left-xs season-dropdown_title">                                    
+                            {$this->Language['season']}                                
+                        </h3>
+                    </div>
+                    <div class="col-sm-6">
+                        <select id="series" name="series" class="form-control form-control-border">
+                            {foreach from=$all_series item=series}
+                            <option value="{$series->series_number}" {if $default_series == $series->series_number}selected="selected"{/if}>{$this->Language['season']} {$series->series_number}</option>
+                            {/foreach}
+                        </select>
+
+                    </div>
+                </div>{/if}
+            </div>
+
+        </div> 
+        {if $episode|@count>0} 
+
+        <div class="row relative">
+            <!--To list episodes-->
+            <input type="hidden" name="content_id" id="content_id" value="{$content->movie_id}" />
+            <input type="hidden" name="default_series" id="default_series" value="{$default_series}" />
+            {$pagination}
+            <div id="episodes" class="cust-row"></div>
+            <div class="loader" id="loader_episode" style="display: none;"><div class="dot1"></div><div class="dot2"></div><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>
+
+        </div>
+        {/if} 
+         <div class="row bottom25" id='reviews_section'>
+            <div class="col-md-12">
+                <div class="loader" id="loader_review"></div>
+                <div class="form-group review_form  c-content-title-1">
+                    {$review_form}
+                </div>
+            </div>
+        </div>
+    </div>
+    {if $this->studio->comment_activated == 1}
+    <div class="row">
+        {include file='../media/comment_form.html'}
+        {include file='../media/comment_list.html'}            
+    </div>
+    {/if}
+</div>      
+
+<div id="myTrailer"> 
+    <div class="wrapper">
+        <div class="videocontent"></div> 
+    </div>
+</div>
+
+    
+<script type="text/javascript" src="{$this->siteurl}/common/js/fancybox.js"></script>
+<link rel="stylesheet" href="{$this->siteurl}/common/css/fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="{$this->siteurl}/common/rating/bootstrap-rating.js"></script>
+<script type="text/javascript">
+var trailerUrl = '{$item->trailer_url}';
+var trailerIsConverted = '{$item->trailer_is_converted}';
+var v_logo = '{$item->v_logo}';
+var HTTP_ROOT = '{$this->siteurl}';
+var is_mobile = 0;
+var multipleVideoResolution = {$multipleVideo|json_encode};
+var defaultResolution = '{$defaultResolution}';
+var createSignedUrl = "{$this->siteurl}/user/getNewSignedUrlForTrailer";
+$(document).ready(function() {
+    $('.videocontent').hide();
+    
+     
+});
+</script>
+	<script type="text/javascript" src="{$this->siteurl}/js/content.js"></script>
+	 {literal}
+    <script type="text/javascript">
+        $(document).ready(function () {
+	   $('.loader').hide();
+	   var user_id = $('.playlist_user_id').val();
+           episodeContent();
+		$("#episodes").on("click", ".multipart_child", function() {
+			var stream_id = $(this).attr('data-stream-id');console.log(stream_id);
+			var title = $('.episode_content_'+stream_id).find('.c-title').html();
+			var story = $('.episode_content_'+stream_id).find('.c-full-desc').html();
+			$('#multipart_child_title').html($.trim(title));
+			$('#multipart_child_story').html($.trim(story));
+		});
+	});
+    </script>
+    {/literal}
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-lg" role="document"> <div class="modal-content">
+            <div class="modal-header"> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Ã—</span></button> 
+                <h4 class="modal-title" id="mySmallModalLabel">{$this->Language['cast']}</h4> 
+            </div>
+            <div class="modal-body"> 
+                <div class="row">
+                    <!--Star/Cast lists-->
+                    {assign var=val value=0}
+                    {foreach from=$casts key=counter item=cast}
+                    {if $cast|count>0} 
+                    {assign var=val value=$val+1}
+                    {/if}
+                    {/foreach}                                
+                    {assign var=counte value=0}
+                    {if $val > 0}
+                    <div class="row">                                
+                    {foreach from=$casts key=role item=cast}                                    
+                        {foreach from=$cast key=counter item=cast_role}
+                        <div class="col-md-6 col-sm-6">
+                            <div class="cast clearfix">
+                                <a href="{$cast_role->full_permalink}">  <img src="{$cast_role->celeb_image}" alt="{$cast_role->celeb_name}" title="{$cast_role->celeb_name}" class="recent-thumb" width="50" height="50"></a>
+                                <p class="light-grey"><a href="{$cast_role->full_permalink}"> {$cast_role->celeb_name}</a><br />{$role}</p>
+                            </div>
+                        </div>                        
+                        {/foreach}                                
+                    {/foreach}
+                    </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-lg" role="document"> <div class="modal-content">
+            <div class="modal-header"> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button> 
+                <h4 class="modal-title c-font-uppercase c-font-bold" id="mySmallModalLabel">{$this->Language['story']}</h4> 
+            </div>
+            <div class="modal-body"> 
+                {$content->story|utf8_decode}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-lg" role="document"> <div class="modal-content">
+            <div class="modal-header"> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button> 
+                <h4 class="modal-title c-font-uppercase c-font-bold" id="multipart_child_title"></h4> 
+            </div>
+            <div class="modal-body" id="multipart_child_story"> 
+
+            </div>
+        </div>
+    </div>
+</div>

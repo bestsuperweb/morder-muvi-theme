@@ -1,0 +1,155 @@
+<div id="crop-avatar">
+    <section>
+        <div class="moovibo_banner after_login_banner">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/after_login_banner.png" style="width:100%; ">
+                        <div class="editing">
+                            <form id="user-account-form" method="POST" action="javascript:void(0);">
+                                <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                                <div id="profile-errors" class="error center"></div>
+                                <div id="profile-loading" class="loader"></div> 
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="profile_icon_editing_icon" style="position: relative;">
+                                            <img src="{$this->user_menu[0]['profile_image']}" class="img-circle" style="width:152px; height: 152px;">
+                                            <a href="javascript:void(0)" data-target="#avatar-modal" data-toggle="modal" style="position: absolute;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="profile_icon_editing">
+                                            <h2>PROFILE</h2>
+                                            <h3>{$user->display_name}</h3>
+                                            <div class="form-group">
+                                                <h2>{$this->Language['contact_info']}<a href="javascript:void(0)" class="profile-box edit-icon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></h2>
+                                                <div class="profile-label">
+                                                    <p class="form-control-static">{$user->display_name}</p>
+                                                    <p class="form-control-static">{$user->email}</p>
+                                                </div>
+                                                <div class="profile-control hide">
+                                                    <p class="form-control-static">
+                                                        <input required type="text" class="form-control c-square c-theme" value="{$user->display_name}" placeholder="{$this->Language['text_name_placeholder']}" name="name" id="name" />
+                                                    </p>
+                                                    <p class="form-control-static"><input readonly type="text" class="form-control" value="{$user->email}" placeholder="Email" name="{$this->Language['text_email_placeholder']}" id="email" /></p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <h2>{$this->Language['bio']} <a href="javascript:void(0)" class="bio-box edit-icon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                </h2>
+                                            </div>
+                                            <div class="bio-label">
+                                                <p>An insane general triggers a path to nuclear holocaust that a War Room full of politicians and generals frantically tries to stop.</p>
+                                            </div>
+                                            <div class="bio-control hide">
+                                                <p><textarea class="form-control" style="height:120px;resize:none">An insane general triggers a path to nuclear holocaust that a War Room full of politicians and generals frantically tries to stop.</textarea></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="profile_icon_editing-second">
+                                            <div class="form-group">
+                                                <h2>CHANGE PASSWORD <a href="javascript:void(0)" class="change-password-box edit-icon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                </h2>
+                                                <div class="change-password-label">
+                                                    <p class="form-control-static">*********</p>
+                                                    <p class="form-control hide"><input type="password" name="new_password" id="new_password" /></p>
+                                                </div>
+                                                <div class="change-password-control hide"> 
+                                                    <p class="form-control-static"><input type="password" class="form-control" placeholder="{$this->Language['text_password_placeholder']}" name="new_password" id="new_password" /></p>
+                                                    <p class="form-control-static"><input type="password" class="form-control" placeholder="{$this->Language['confirm_password']}" name="confirm_password" id="confirm_password" /></p>
+                                                </div>                                            
+                                            </div>
+                                            <div class="login_social_account profile_social">
+                                                <button id="update-btn" class="btn btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold" type="submit">{$this->Language['btn_update_profile']}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </section>
+    <!-- Cropping modal -->
+    <div class="modal fade" id="avatar-modal" tabindex="-1" role="dialog" aria-labelledby="avatar-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="height:500px;">
+                <form class="avatar-form form-inline" method="post" action="{$this->siteurl}/user/upload_image" enctype="multipart/form-data">
+                    <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="avatar-modal-label">{$this->Language['profile_change']}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="avatar-body">
+
+                            <!-- Upload image and data -->
+                            <div class="avatar-upload">
+                                <input class="avatar-src" name="avatar_src" type="hidden">
+                                <input class="avatar-data" name="avatar_data" type="hidden">
+                                <input class="" name="fileinfo" id="fileinfo" type="hidden">
+                                <div class="form-group">
+                                    <label class="wd160">{$this->Language['file_upload_profile']}</label>
+                                    <input class="avatar-input" id="avatarInput" name="Filedata" type="file" />
+                                </div>                                     
+                            </div>
+
+                            <!-- Crop and preview -->
+                            <div class="avatar-wrapper"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold avatar-save" type="submit">{$this->Language['btn_save']}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+ </div>
+
+ {literal}
+<script>
+    $(document).ready(function(){        
+        $(".edit-icon").on('click', function(){
+            if($(this).hasClass('profile-box')){
+                if($(this).hasClass('open')){
+                    $('.profile-label').removeClass('hide');
+                    $('.profile-control').addClass('hide');                    
+                }
+                else{
+                    $('.profile-label').addClass('hide');
+                    $('.profile-control').removeClass('hide');                    
+                }
+                $(this).toggleClass('open');                
+            }
+            else if($(this).hasClass('change-password-box')){
+                if($(this).hasClass('open')){
+                    $('.change-password-label').removeClass('hide');
+                    $('.change-password-control').addClass('hide');                    
+                }
+                else{
+                    $('.change-password-label').addClass('hide');
+                    $('.change-password-control').removeClass('hide');                    
+                } 
+                $(this).toggleClass('open');               
+            }
+            else if($(this).hasClass('bio-box')){
+                if($(this).hasClass('open')){
+                    $('.bio-label').removeClass('hide');
+                    $('.bio-control').addClass('hide');                    
+                }
+                else{
+                    $('.bio-label').addClass('hide');
+                    $('.bio-control').removeClass('hide');                    
+                } 
+                $(this).toggleClass('open');               
+            }
+        });
+    });
+
+</script>
+{/literal}

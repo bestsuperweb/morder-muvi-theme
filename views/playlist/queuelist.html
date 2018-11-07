@@ -1,0 +1,10 @@
+{$data = $contents|json_decode}
+{assign var=num value=0}
+{foreach from=$data item=list}
+<div class="row queueItem" data-track="{$num++}">
+<div class="queue_item col-sm-3"><img src="{$list->poster}" height="50" width="50"></div>
+<div class="col-sm-5"><span>{$list->content_title}</span></div>
+<div class="col-sm-2"><div class="eq"><div class="eq__bar"></div><div class="eq__bar"></div><div class="eq__bar"></div></div></div>
+<div class="col-sm-2 text-right"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/Icons/more.png" height="20" width="20"></div>
+</div>
+{/foreach}	

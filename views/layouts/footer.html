@@ -1,0 +1,62 @@
+<a name="footer"></a>
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="footer-logo">
+                <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/footer_logo.png" />
+            </div>
+            <div class="footer-contact-details">                
+                <ul>
+                    {if $this->footer_menu|@count > 0}
+                        {foreach from=$this->footer_menu key=key item=mitem}
+                            {assign var=val value=$val+1}                            
+                            <li>
+                                <a href="{$mitem['permalink']}" title="{$mitem['title']}">{$mitem['title']}</a>
+                                {if $val%5 == 0}
+                                </li></ul></div><div class="footer-contact-details"><ul>
+                                {/if}
+                                {if $val == $this->footer_menu|@count}
+                                    <li><a href="{Yii::app()->controller->base_url}/contactus" title="{$this->Language['contact_us']}">{$this->Language['contact_us']}</a></li>
+                                    {if $this->has_blog}
+                                    <li><a href="{Yii::app()->controller->base_url}/blog" title="{$this->Language['head_blog']}">{$this->Language['head_blog']}</a></li>
+                                    {/if}
+                                    {if $this->has_faqs}
+                                    <li><a href="{Yii::app()->controller->base_url}/faqs" title="{$this->Language['faq']}">{$this->Language['faq']}</a></li>
+                                    {/if}
+                                {/if}
+                            </li>
+                        {/foreach}
+                    {/if}                   
+                </ul>
+            </div>            
+            <div class="footer-contact-details">                
+                <nav class="social">
+                    <ul>
+                        <li>
+                            <a href="#"></a>
+                        </li>
+                        <li>
+                            <a href="#" class="g"></a>
+                        </li>
+                        <li>
+                            <a href="#" class="h"></a>
+                        </li>
+                        <li>
+                            <a href="#" class="i"></a>
+                        </li>
+                    </ul>
+                </nav>
+                <p>#moovibo</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mobibo_copyright">
+                2018 © Moovıbo Corp.
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: LAYOUT/FOOTERS/FOOTER-6 -->
+{if $this->is_audio_enable == 1}
+{include file='../layouts/player.html'}    
+{/if}

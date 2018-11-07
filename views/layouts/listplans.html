@@ -1,0 +1,56 @@
+{if $plans|@count > 0}
+{foreach from=$plans key=counter item=plan}
+    {$month_original =  $this->Original['select_month']|trim}
+    {$year_original =  $this->Original['select_year']|trim}
+    {$day_original =  $this->Original['day']|trim}
+    {$plan_recurrence = $plan->recurrence|trim}
+    {$recurrence_trial = $plan->trial_recurrence|trim}
+    {if $month_original == $plan_recurrence}
+        {$recurrence = $this->Language['select_month']}
+    {elseif $year_original == $plan_recurrence}
+        {$recurrence = $this->Language['select_year']}
+    {else}
+        {$recurrence = $plan_recurrence}
+    {/if}
+
+    {if $month_original == $recurrence_trial}
+        {$trial_recurrence = $this->Language['select_month']}
+    {elseif $day_original == $recurrence_trial}
+        {$trial_recurrence = $this->Language['day']}
+    {else}
+        {$trial_recurrence = $recurrence_trial}
+    {/if}
+    {$class= ""}
+    {$style = "display:none;"}
+    {if $plan->id == $default_plan_id}
+        {$class= "choosen"}
+        {$style = "display:block;"}
+        <input name="data[plan_id]" type="hidden" id="plan_id" value="{$plan->id}"  />
+        <input name="data[currency_id]" type="hidden" id="currency_id" value="{$plan->currency_id}"  />
+        <input type="hidden" name="data[is_subscription_bundles]" id="is_subscription_bundles" value="{$plan->is_subscription_bundle}"  />
+    {/if}
+    {$price = $plan->price}    
+    {$price_arr = '.'|explode:$price}    
+    {$currency_id = $plan->currency_id}
+    <div class="buy_movies_details_box"> 
+        
+            <h3>{$plan->name}</h3>
+            <h5>{$price_arr[0]}.
+                <span>{$price_arr[1]}</span>
+                <strong>TL</strong>
+            </h5>
+            <h4>FOR {$plan->frequency} PASS</h4>
+            <a href="javascript:void(0)" data-planId="{$plan->id}" data-currencyId = "{$plan->currency_id}" onclick="navigateSignup(this, 2, true)">{$this->Language['buy_this_movie']}</a>
+            <h6>{$this->Language['we_dont_charge_you']}</h6>
+    </div>                
+{/foreach}
+<!-- {if $isCouponExists}
+    {include file='../layouts/general_coupon.html'}
+{/if}
+{else}
+    {$this->Language["no_record_found"]}
+{/if} -->
+<div class="clearfix"></div>
+<script>
+    var userEmail = "{$Yii->user->email}";
+</script>

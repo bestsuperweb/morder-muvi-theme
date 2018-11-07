@@ -1,0 +1,215 @@
+<link rel="stylesheet" href="{$this->siteurl}/bannerStyle/style_1/css/style.css" type="text/css">
+<script type="text/javascript" src="{$this->siteurl}/bannerStyle/style_1/js/bannerslide.js"></script>
+
+<script type="text/javascript" src="{$this->siteurl}/js/iphone-inline-video.js"></script>
+
+{$template_name=$this->template->code}
+{if $template_name == 'traditional-byod'}
+<div class="container">{/if}
+	{foreach from=$banner_sections|json_decode item=banner_section}
+	{foreach from=$banner_section->banners key=counter item=banner}
+	{$auto_scroll=$banner->auto_scroll}{$scroll_interval=$banner->scroll_interval} {/foreach}
+	<div id="bootstrap-touch-slider" class="carousel bs-slider slide  control-round indicators-line" {if $auto_scroll=='1'
+	 } data-ride="carousel" data-interval="{$scroll_interval}" {/if}>
+
+		<!-- Wrapper For Slides -->
+		<div class="carousel-inner" role="listbox">
+			{foreach from=$banner_section->banners key=counter item=banner}
+			{$banner_text=$banner->banner_text}
+			{$banner_join_btn=$banner->join_btn}
+			{$url_text=$banner->url_text}
+			{$class = ""}
+			{if $counter == 0}
+			{$class = "active"}
+			{/if}
+			{$banner_style = $banner->banner_style}
+			{$banner_type=$banner->banner_type}
+			{$auto_scroll=$banner_style->auto_scroll}
+			{$scroll_interval=$banner_style->scroll_interval}
+			{$widthImage=$banner_style->h_banner_dimension}
+			{$heightImage=$banner_style->v_banner_dimension}
+			{$bannerImage = $banner->banner_full_path}
+			<!-- Third Slide -->
+			<div class="item {$class}">
+				<input type="hidden" id="auto_scroll" value="{$auto_scroll}">
+				<input type="hidden" id="scroll_interval" value="{$scroll_interval}">
+				<input type="hidden" id="widthImage" value="{$widthImage}">
+				<input type="hidden" id="heightImage" value="{$heightImage}">
+				<!-- Slide Background -->
+				{if $banner_type == '1'}
+				<img src="{if $bannerImage != ''}{$bannerImage}{else}https://placeholdit.imgix.net/~text?txtsize=500&txt={$widthImage}x{$heightImage}&w={$widthImage}&h={$heightImage}{/if}"
+				 class="slide-image" />
+				{else}
+				<div align="center" class="videocontainer">
+					<video autoplay="false" preload="none" loop muted="true" id="background" width="100%" height="auto" playsinline>
+						<source src="{$banner->video_url}">
+					</video>
+					<span class="butn-banner-mute" onClick="muteBannerVdo(this);">
+						<i class="fa fa-volume-off" aria-hidden="true"></i>
+						<i class="fa fa-volume-up _on" aria-hidden="true"></i>
+					</span>
+				</div>
+				{/if}
+
+
+				{foreach from=$banner->bannerProperties key=counter item=properties}
+				{if $properties->banner_url !='' }
+				<a href="{$properties->banner_url}">
+					<div class="bs-slider-overlay"></div>
+				</a>
+				{/if}
+				<div class="container">
+					<div class="row">
+						<!-- Slide Text Layer -->
+						<div class="slide-text  {if $properties->is_advance == 1}slide_advance{/if}">
+							{if $properties->is_advance == 0}
+							{if $properties->banner_text_heading !='' }
+							<div class="bnr-text-large">{$properties->banner_text_heading}</div>
+							{/if}
+
+							{if $properties->banner_text_description !='' }
+							<br>
+							<div class="bnr-text-small">{$properties->banner_text_description}</div>
+							{/if}
+
+							{$user_id=Yii::app()->user->id}
+
+							{if ($properties->banner_button_type == 1 && $properties->banner_button_link !=='') ||
+							($properties->banner_button_type == 0 && $user_id < 1)} <br>
+								{if $properties->banner_button_text !=''}
+								<a href="{if $properties->banner_button_type == 0 && $user_id < 1}{$this->siteurl}/user/register {else}{$properties->banner_button_link}{/if}"
+								 class="joinnow {if $template_name == 'traditional-byod'}  bannerBtn {/if}">
+									{$properties->banner_button_text}</a>
+								{/if}
+								{/if}
+								{else}
+								{$properties->advance_content}
+								{/if}
+						</div>
+					</div>
+				</div>
+				{/foreach}
+			</div>
+			{/foreach}
+		</div><!-- End of Wrapper For Slides -->
+		<!-- Left Control -->
+		{foreach from=$banner_section->banners key=counter item=banner}
+		{if $counter > 0}
+		<a class="left carousel-control" href="#bootstrap-touch-slider" role="button" data-slide="prev">
+			<span class="fa fa-angle-left" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+
+		<!-- Right Control -->
+		<a class="right carousel-control" href="#bootstrap-touch-slider" role="button" data-slide="next">
+			<span class="fa fa-angle-right" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+		{/if}
+		{/foreach}
+	</div>{/foreach}
+	{if $template_name == 'traditional-byod'}
+</div>{/if}
+{literal}
+<script>
+	function muteBannerVdo(obj) {
+		if ($(obj).siblings('video').prop('muted')) {
+			$(obj).siblings('video').prop('muted', false);
+			$(obj).addClass('_on');
+		} else {
+			$(obj).siblings('video').prop('muted', true);
+			$(obj).removeClass('_on');
+		}
+	}
+	$(function () {
+		var autoScroll = $('#auto_scroll').val();
+		var interval = $('#scroll_interval').val();
+		loadSlider(autoScroll, interval);
+	});
+
+	function loadSlider(autoScroll, interval) {
+		//Stop slide if video is in 1st slide
+		if ($('#bootstrap-touch-slider').length > 0) {
+			if ($('.carousel-inner .item.active video').length) {
+				$('#bootstrap-touch-slider').carousel({
+					interval: false
+				});
+				$('#bootstrap-touch-slider').data('bs.carousel').options.interval = false;
+				$('#bootstrap-touch-slider').carousel('pause');
+			} else {
+				if (autoScroll == 0) {
+					$('#bootstrap-touch-slider').carousel({
+						interval: false
+					});
+					$('#bootstrap-touch-slider').data('bs.carousel').options.interval = false;
+					$('#bootstrap-touch-slider').carousel('pause');
+				} else {
+					$('#bootstrap-touch-slider').carousel({
+						interval: interval
+					});
+					$('#bootstrap-touch-slider').data('bs.carousel').options.interval = interval;
+					$('#bootstrap-touch-slider').carousel('cycle');
+				}
+			}
+		}
+
+		//To pause all video plying and play if in 1st slide
+		$('.carousel-inner').find('video').each(function () {
+			var cItem = $(this);
+			enableInlineVideo(this);
+			if ($(this).closest('.item').index() != 0) {
+				cItem.trigger('pause');
+			}
+		});
+		if ($('#bootstrap-touch-slider').length > 0) {
+			$("#bootstrap-touch-slider").on('slide.bs.carousel', function (evt) {
+				if ($('.carousel-inner .item.active video').length) {
+					$('#bootstrap-touch-slider').carousel({
+						interval: false
+					});
+					$('#bootstrap-touch-slider').data('bs.carousel').options.interval = false;
+					$('.carousel-inner .item.active .videocontainer video').trigger('pause');
+				}
+				if ($('.carousel-inner .item').eq($(evt.relatedTarget).index()).find('video').length) {
+					$('.carousel-inner .item').eq($(evt.relatedTarget).index()).find('.videocontainer').find('video').trigger('play');
+				}
+			});
+			$("#bootstrap-touch-slider").on('slid.bs.carousel', function (evt) {
+				if ($('.carousel-inner .item.active video').length) {
+					$('#bootstrap-touch-slider').carousel({
+						interval: false
+					});
+					$('#bootstrap-touch-slider').data('bs.carousel').options.interval = false;
+					$('#bootstrap-touch-slider').carousel('pause');
+				} else {
+					if (autoScroll == 0) {
+						$('#bootstrap-touch-slider').carousel({
+							interval: false
+						});
+						$('#bootstrap-touch-slider').data('bs.carousel').options.interval = false;
+						$('#bootstrap-touch-slider').carousel('pause');
+					} else {
+						$('#bootstrap-touch-slider').carousel({
+							interval: interval
+						});
+						$('#bootstrap-touch-slider').data('bs.carousel').options.interval = interval;
+						$('#bootstrap-touch-slider').carousel('cycle');
+					}
+
+				}
+			});
+		}
+
+	}
+	$(window).scroll(function () {
+		//stop playing vdo after scroll down.
+		if ($('#bootstrap-touch-slider').length > 0) {
+			if ($(window).scrollTop() > $('#bootstrap-touch-slider').offset().top + $('#bootstrap-touch-slider').height()) {
+				$('#bootstrap-touch-slider .carousel-inner .item.active .videocontainer video').trigger('pause');
+			} else {
+				$('#bootstrap-touch-slider .carousel-inner .item.active .videocontainer video').trigger('play');
+			}
+		}
+	});
+</script>
+{/literal}

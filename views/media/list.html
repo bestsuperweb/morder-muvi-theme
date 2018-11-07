@@ -1,0 +1,82 @@
+
+<div class="product-big-title-area">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$category->title|utf8_decode}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="single-product-area content-area listPage">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 top10 filter-select-item">
+                {foreach from=$selected_genres item=selected_genre}
+                {if $selected_genre != ''}
+                <code class="tagdesign"> {$selected_genre} <span class="tag-delete crusor" onclick="removetaglist('{$selected_genre}');">X</span></code>
+                {/if}
+                {/foreach}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <div class="dropdown filter">
+                    <button class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercase dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">{$this->Language['filter']}
+                        <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1">
+                        <form action="{$this->siteurl}/{$category->permalink}" method="get" name="listingSearch" id="filterFormPopup" class="mCustomScrollbar" data-mcs-theme="dark">
+                            <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                            <div class="row">    
+                                <div class="col-xs-7">
+                                    <ul class="list-inline">
+                                     <label for="email" class="filter_by">{$this->Language['filter_by']}</label><br>
+
+                                        {foreach from=$genres item=genre}
+                                         <div class="col-md-12">
+                                        <li><label class="c-title c-font-16 c-weight-300"> <input type="checkbox" class="genre" value="{$genre}" onclick="getsortlist(this.value)">{$genre}</label></li>
+                                        </div>{/foreach} 
+                                    </ul>
+                                </div>
+                                <div class="col-xs-5">
+                                    <label for="email" class="sort_by">{$this->Language['sort_by']}</label><br>
+                                    <span class="sortby c-font-16 {if $smarty.get.orderby == 'lastupload'} sortby_active {/if} crusor" onclick="sortby('lastupload');">{$this->Language['sort_last_uploaded']}</span> <br />
+                                    <span class="sortby c-font-16 {if $smarty.get.orderby == 'releasedate'} sortby_active {/if} crusor " onclick="sortby('releasedate');">{$this->Language['sort_release_date']}</span> <br />
+                                    <span class="sortby c-font-16 {if $smarty.get.orderby == 'sortasc'} sortby_active {/if} crusor" onclick="sortby('sortasc');">{$this->Language['sort_alpha_a_z']}</span> <br />
+                                    <span class="sortby c-font-16 {if $smarty.get.orderby == 'sortdesc'} sortby_active {/if} crusor" onclick="sortby('sortdesc');">{$this->Language['sort_alpha_z_a']}</span>                   
+
+                                </div>
+                            </div>
+                        </form> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="content_list"></div>
+        <div class="row">
+            {if $item_count > 0}
+                {include file='../layouts/listitem.html'}
+            {/if}           
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-pagination text-center">
+                    <nav>
+                        {$pagination}
+                    </nav>                        
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(window).bind("load", function() {
+    $(".c-overlay-object").matchHeight();
+	$("p.c-title").matchHeight();
+	$("p.caption_genre").matchHeight();
+	$(".c-info").matchHeight();
+	$(".list-box").matchHeight();
+	$.fn.matchHeight._update();    
+});
+</script>	

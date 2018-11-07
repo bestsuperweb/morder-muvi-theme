@@ -1,0 +1,42 @@
+{$list = $playlist_name|json_decode}
+<div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>{$this->Language['add_to_playlist']}</h5></li>
+                </div>
+                <div class="col-md-12">
+                    <hr> 
+                </div>
+                <div class="col-md-12">
+                    <div class='user_playlist' id='PlaylistOption'>
+                        {foreach from=$list item=listitem}
+                        {assign var=num value=$num+1}
+                        <a href="javascript:void(0);" id="playlist_add_song" data-name="{$listitem->playlist_name}" data-playlist-id="{$listitem->id}"><p class="c-white"><img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/Icons/playlist.png" class="img-playlist">&nbsp;&nbsp;&nbsp;{$listitem->playlist_name}</p></a>
+                        {/foreach}
+                    </div>
+                    <form name="playlist_form" id="playlist_form" method="post">
+                        <div  id="play_list">
+                            <input type="hidden" id="movie_id" value="" />
+                            <input type="hidden" id="user_id" value="" />
+                            <input type="hidden" id="is_episode" value="" />
+                            <input type="hidden" id="que_id" value="" />
+                            <input type="hidden" id="is_content" value="" />
+                            <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                            <div class="form-group bottom10p">
+                                <input type="text" class="form-control" id="new_playlist" name="newplaylist" placeholder="{$this->Language['create_playlist']}">
+                            </div>
+                            <div class="loader" id="playlist_loading"></div>
+                        </div>
+                        <button type="submit" class="btn as-btn-accent as-btn-md center-block top10p save_playlist" id='save_playlist'>{$this->Language['save_playlist']}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$("#PlaylistOption").mCustomScrollbar();	
+</script>

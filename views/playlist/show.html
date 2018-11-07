@@ -1,0 +1,128 @@
+{$content = $playlist_data|json_decode}
+<input type="hidden" value="{$content->id}" id="p_id">
+<input type="hidden" value="{$count_list}"  id="total">
+
+{$pageUrl = Yii::app()->request->url}
+{$user_id=Yii::app()->user->id}
+<input class="playlist_user_id" value="{$user_id}" type="hidden">    
+<div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+    <div class="container">
+        <div class="c-page-title c-pull-left">
+            <h3 class="c-font-sbold c-font-uppercase">{$content->playlist_name|utf8_decode}</h3>
+        </div>
+    </div>
+</div>
+<div class=" c-size-sm c-overflow-hide"> 
+    <div class="container">
+        <div class="c-shop-product-details-2 content-area">
+            <div class="row bottom25">
+                <div class="col-md-6">
+                    <div class="c-product-gallery">
+                        <div class="c-zoom1">
+                            <div class="row">
+                                <div class="col-md-offset-2 col-md-8 ">
+                                    <div class="artwork-wrapper ">
+                                        <img src="{$playlist_poster}" alt="{$content->title|utf8_decode}" title="{$content->title|utf8_decode}" class="img-responsive" />
+
+                                        {if $this->add_to_favourite}
+                                        <a href="javascript:void(0);" onclick="addFav(this)"  name="addfav" class="favAdd" data-fav_status="{$user_status['fav_status']}" data-login_status="{$user_status['login_status']}" data-content_id="{$content->id}" data-content_type="4"> 
+                                            <div class="ellipse__shape favourite "> 
+                                                {if $user_status['fav_status'] ==0}<i class="fa fa-heart"></i>{else}<i class="fa fa-heart-o"></i>{/if}
+                                                <div class="favourite_text">
+                                                    <span class="favorate__this {if $user_status['fav_status'] ==0} hidden {/if}">{$this->Language['add_to_fav']}</span>
+                                                    <span class="favorited__already {if $user_status['fav_status'] !=0} hidden {/if}">{$this->Language['added_to_fav']}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        {/if}
+                                        <div class="ellipse__shape share">
+                                            <i class="fa fa-share"></i>
+
+                                            <div class="share_text">
+                                                <span class="share__this">
+                                                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={$this->siteurl}{$pageUrl}" data-title="Facebook Share"><i class="fa fa-facebook-square" aria-hidden="true" title="{$this->Language['share_in_facebook']}"></i></a>
+                                                    <a target="_blank" href="https://twitter.com/intent/tweet?text={$this->siteurl}{$pageUrl}" data-title="Share on Twitter">  <i class="fa fa-twitter-square" aria-hidden="true" title="{$this->Language['share_in_twitter']}"></i></a>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>	 
+                <div class="loader" id="loader_fav"></div>
+                <div class="col-md-6">
+                    <div class="c-product-meta">
+                        <div class="c-content-title-1" style="float:none;">
+                            <h3 class="c-font-uppercase c-font-bold" style="word-wrap: break-word;"> {$content->playlist_name|utf8_decode} </h3>
+                            <div class="c-line-left"></div>
+                        </div>
+                        <div class="action__sec">
+                            {if $count_list > 0}<div class="playPlaylist btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercase" data-playlist_id="{$content->id}" data-playlist_name="{$content->playlist_name}" data-user_id="0" data-index="0">{$this->Language['play_all']} </div>{/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom30 hidden-xs hidden-sm"></div>
+        <div class="bottom30 hidden-xs hidden-sm"></div>
+        <div class="row bottom25">
+            <div class="col-md-12">
+                <div class="track__header">
+                    <div id="player-blur"><img src="{$content->poster}"></div>
+                    <span class="c-font-white">{$this->Language['tracklist']}</span> </div>
+                <div class="bottom30 hidden-xs"></div>
+                <div class="bottom30 hidden-xs hidden-sm"></div>
+                <input type="hidden" name="playlist_id" id="playlist_id" value="{$content->id}" />
+                <input type="hidden" id ="playlist_name" value="{$content->playlist_name}">
+                <div class="track-content">
+                    <div class="row">
+                        <div class="col-md-offset-1 col-md-10">
+                            <ol class="tracklist record-tracklist" id="playlist"></ol>
+                        </div>
+                        <div class="loader loader_episode" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{$this->siteurl}/common/js/fancybox.js"></script>
+<link rel="stylesheet" href="{$this->siteurl}/common/css/fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="{$this->siteurl}/common/rating/bootstrap-rating.js"></script>
+<script type="text/javascript">
+	var trailerUrl = '{$content->trailer_url}';
+	var trailerIsConverted = '{$content->trailer_is_converted}';
+	var v_logo = '{$v_logo}';
+	var HTTP_ROOT = '{$this->siteurl}';
+	var is_mobile = 0;
+	var multipleVideoResolution = {$multipleVideo|json_encode};
+	var defaultResolution = '{$defaultResolution}';
+	var createSignedUrl = "{$this->siteurl}/user/getNewSignedUrlForTrailer";
+	var added_fav = "{$this->Language['added_to_fav']}";
+	var add_fav = "{$this->Language['add_to_fav']}";
+	$(document).ready(function () {
+		$('.videocontent').hide();
+	});
+</script>
+{literal}
+<style type="text/css">
+    .RDVideoHelper{display: none;}
+    .videocontent{display: block;}
+    video::-webkit-media-controls {display:none !important;}
+    .playbtn{background:none !important;}
+</style>  
+<script type="text/javascript">
+$(document).ready(function () {
+    var user_id = $('.playlist_user_id').val();
+    var total = $('#total').val();
+    $('#main').addClass('c-layout-page');
+    if (total > 0) {allPlaylistData();}
+});
+</script>
+{/literal}
+
+

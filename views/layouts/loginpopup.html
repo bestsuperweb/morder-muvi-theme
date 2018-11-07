@@ -1,0 +1,204 @@
+<!-- Login Modal -->
+<div id="loginModal" class="modal fade login-popu">
+    <div class="modal-dialog">
+        <div class="modal-content" style="position: relative;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{$this->Language['oops_only']}</h4>
+            </div>            
+            <div class="modal-body">
+                <div class="row-fluid popup_bottom">
+
+                    <input type="hidden" id="content_title" value="">
+                    <input type="hidden" id="movie_id" value="" />
+                    <input type="hidden" id="stream_id" value="" />
+                    <input type="hidden" id="season_id" value="" />
+                    <input type="hidden" id="isppv" value="" />
+                    <input type="hidden" id="videotype" value="" />
+                    <input type="hidden" id="content-permalink" value="" />
+                    <input type="hidden" id="content-type-permalink" value="" />
+					<input type="hidden" id="isDownload" value="" />
+                    <input type="hidden" id="is_ppv_bundle" value="" />
+                    <input type="hidden" id="isadv" value="" />
+                    <div class="col-md-12" id="login_form_div">
+                        <input type="hidden" value="" id="play_url" />
+                        <input type="hidden" value="" id="to_play" />
+
+                        <form name="login_form" id="login_form" method="post" class="form-horizontal" action="javascript:void(0);">
+                            <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                            <div class="form-group">
+                                <h4>{$this->Language['already_registered']}</h4>
+                                <div id="login_errors" class="error"></div>
+                                <div id="success_message" class="message"></div>
+                                <div class="loader" id="login_loading"></div>
+                            </div>
+                            {if $this->studio->social_logins}
+                            {if isset($smarty.session.social) } 
+                            {assign var=socialAuth value=$smarty.session.social}
+                            {else}
+                            {assign var=socialAuth value=$this->getSocialUrls()}
+                            {/if}
+                            {if $socialAuth}
+                            <div class="form-group">
+                                <ul class="social-icons invert">
+                                    {if ($this->studio->social_logins & 1) && $socialAuth['fb_url'] }
+                                    <li><a href="javascript:void(0);" data-url="{$socialAuth['fb_url']}" data-login="1" class="facebook_login facebook social_login"></a></li>     
+                                    {/if}
+                                    {if ($this->studio->social_logins & 2) && $socialAuth['gplus_url'] }
+                                    <li><a href="{$socialAuth['gplus_url']}" class="googleplus social_login"></a></li>    
+                                    {/if}  
+                                </ul>
+                            </div>
+                            {/if}
+                            {/if}
+                            <div class="form-group">
+                                <label for="username">{$this->Language['text_email']}</label>
+                                <input type="email" name="LoginForm[email]" id="username" placeholder="{$this->Language['text_email_placeholder']}" autocomplete="off" class="form-control" value="" />
+                            </div>
+
+
+                            <div class="form-group ">
+                                <label for="password">{$this->Language['text_password']}</label>
+                                <div class="controls">
+                                    <input type="password" name="LoginForm[password]" id="password" placeholder="{$this->Language['text_password_placeholder']}" autocomplete="off" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="form-group ">
+                                <div class="controls">
+                                    <button type="submit" class="btn c-btn c-theme-btn c-btn-square c-font-white c-font-bold c-font-uppercase c-cart-float-r" name="login_submit" id="login-btn">{$this->Language['btn_login']}</button>
+                                    <div id="login-loading" class="loader" style="display: none;"></div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <div class="controls">
+                                    <div class="pull-left"><a class="link-ylw txt-right" href="javascript:void(0);" onclick="showRegister();">{$this->Language['btn_register']}</a></div>
+                                    <div class="pull-right"><a class="link-ylw txt-right" href="{$this->siteurl}/user/forgot" >{$this->Language['forgot_password']}</a></div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                        </form>  
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12" id="register_form_div" style="display: none;">
+                        <form id="register_form" name="register_form" method="POST" class="form-horizontal" action="javascript:void(0);">
+                            <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                            <div class="form-group">
+                                <h4>{$this->Language['new_member']}</h4>
+
+                                <div id="register_errors" class="error text-center"></div> 
+                                <div id="register_message" class="success text-message"></div> 
+                                <div id="loader_register" class="loader"></div>
+                            </div>
+                            {if $this->studio->social_logins}
+                            {if isset($smarty.session.social) } 
+                            {assign var=socialAuth value=$smarty.session.social}
+                            {else}
+                            {assign var=socialAuth value=$this->getSocialUrls()}
+                            {/if}
+                            {if $socialAuth}
+                            <div class="form-group">
+                                <ul class="social-icons invert">
+                                    {if ($this->studio->social_logins & 1) && $socialAuth['fb_url'] }
+                                    <li><a href="javascript:void(0);" data-url="{$socialAuth['fb_url']}" data-login="1" class="facebook_login facebook social_login"></a></li>     
+                                    {/if}
+                                    {if ($this->studio->social_logins & 2) && $socialAuth['gplus_url'] }
+                                    <li><a href="{$socialAuth['gplus_url']}" class="googleplus social_login"></a></li>    
+                                    {/if}  
+                                </ul>
+                            </div>
+                            {/if}
+                            {/if}
+
+                            {if ($this->chkStudioForCustomProfile)}
+                            {$counter = 0} 
+                            {if (count($this->custom_fields) > 0)}
+                            {foreach from=$this->custom_fields item=fields}
+                            <div class="form-group">
+
+                                <label for="" >{$fields['label']}</label>
+
+                                {$fields['field']}
+
+                            </div>
+                            {/foreach}
+                            {/if}
+                            {else}
+                            <div class="form-group">
+                                <label for="name">{$this->Language['text_full_name']}</label>
+                                <input type="text" required name="data[name]" id="fullname" placeholder="{$this->Language['text_name_placeholder']}" autocomplete="off" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="username">{$this->Language['text_email']}</label>
+                                <input type="email" required name="data[email]" id="email" placeholder="{$this->Language['text_email_placeholder']}" autocomplete="off" class="form-control" />
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="password">{$this->Language['text_password']}</label>
+                                <div class="controls">
+                                    <input type="password" required name="data[password]" id="join_password" placeholder="{$this->Language['text_password_placeholder']}" autocomplete="off" class="form-control" />
+                                </div>
+                            </div>
+                            {$counter = 0} 
+                            {if (count($this->custom_fields) > 0)}
+                            {foreach from=$this->custom_fields item=fields}
+                            <div class="form-group">
+
+                                <label for="" >{$fields['label']}</label>
+
+                                {$fields['field']}
+
+                            </div>
+                            {/foreach}
+                            {/if}
+                            {/if}
+                            <div class="form-group ">
+                                
+                                <div class="controls">
+                                    <input name="data[subscribe_newsletter]" value="1" type="checkbox" checked="checked"> &nbsp;{$this->Language['subscribe_to_announcement']}
+                                </div>
+                            </div>
+                            <input type="hidden" id="chk_register" name="chk_register" value="" />
+                            <div class="clear"></div>
+                            <div class="form-group ">
+                                <div class="controls pull-left">
+                                    <button type="submit" class="btn c-btn c-theme-btn c-btn-square c-font-white c-font-bold c-font-uppercase c-cart-float-r" name="register_submit" id="register-btn">{$this->Language['btn_signup']}</button>
+                                </div>
+                                <div class="pull-right"><a class="link-ylw txt-right" href="javascript:void(0);"  onclick="showLogin();">{$this->Language['btn_login']}</a></div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>          
+        </div>		
+    </div>
+</div>
+<div id="playchkModal" class="modal fade login-popu" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog">
+        <div class="modal-content" style="position: relative;">
+            <div class="modal-header">
+                <button type="button" class="close sub-popup-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title sub_title">{$this->Language['perimission_denied']}</h4>
+            </div>            
+            <div class="modal-body">
+                <div id="subscribe_loading" class="loader" style="display: none;"></div>
+                <div class="row-fluid popup_bottom">
+                    <div id="subscribe_errors" class="error text-left"></div>
+                    <div id="subscribe_success" class="error text-left" style="color:green;"></div>
+                    <p>{$this->Language['subscribe_msg']}</p>
+                    <div class="col-md-12" id="playchk_div">
+                        <button type="button" class="btn btn-blue" id="sub_btn" onclick="subscribe()">{$this->Language['subscribe_btn']}</button>
+                        <button type="button" class="btn sub-popup-close" id="cancel_btn" data-dismiss="modal">{$this->Language['btn_cancel']}</button> 
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>          
+        </div>		
+    </div>
+</div>
+<div id="ppvModal" class="modal fade login-popu" data-backdrop="static" data-keyboard="false"></div>
+<script type="text/javascript" src="{$this->siteurl}/js/themes/loginpopup.js"></script>

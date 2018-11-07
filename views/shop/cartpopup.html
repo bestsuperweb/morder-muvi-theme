@@ -1,0 +1,40 @@
+<div class="c-cart-menu" {if $smarty.session.totalqnt!=0} style="border: 1px solid #f3f3f3;" {/if}>
+ {if $smarty.session.totalqnt!=0}
+    <div class="c-cart-menu-title">
+        <p class="c-cart-menu-float-l c-font-sbold">
+            <span class="total_cnt">{$smarty.session.totalqnt}</span> {$this->Language['item-s']}
+        </p>
+        <p class="c-cart-menu-float-r c-theme-font c-font-sbold  total_amount">{$smarty.session.item_total}</p>
+    </div>
+    <ul class="c-cart-menu-items">
+        {assign var="producturl" value=Yii::app()->createUrl("/")}
+        {assign var="cart_item" value=$smarty.session.cart_item}
+        {foreach from=$cart_item key=k item=item}
+            {assign var="img_path" value=PGProduct::getpgImage($item['id'],'thumb')}
+            {assign var="itemid" value=$k}
+            {assign var="qnty" value=$item['quantity']}
+            <li id='cart_tr{$itemid}'>
+                <div class="c-cart-menu-close">
+                    <a onclick="removefromcart('{$itemid}', 'cart_tr{$itemid}','{$qnty}');" href="javascript:void(0);" class="c-theme-link">&times;</a>
+                </div>
+                <img src="{$img_path}" />
+                <div class="c-cart-menu-content">
+                    <p><span class="total_cnt">{$item["quantity"]}</span> x
+                        <span class="c-item-price c-theme-font">{Yii::app()->common->formatPrice($item['price'],$item['currency_id'])}</span>
+                    </p>
+                    <a href="{$producturl}/{$item['permalink']}" class="c-item-name c-font-sbold">
+                        {if $item['name']|count_characters > 30}
+                        {$item['name']|substr:0:30}
+                        {else}
+                        {$item['name']}
+                        {/if}
+                    </a>
+                </div>
+            </li>
+        {/foreach}
+    </ul>
+    <div class="c-cart-menu-footer">
+        <a href="javascript:void(0);" onclick="goKart();" class="btn btn-md c-btn c-btn-square c-theme-btn c-font-white c-font-bold c-center c-font-uppercase view_cart">View Cart</a>
+    </div>
+ {/if}
+</div>

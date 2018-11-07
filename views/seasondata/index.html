@@ -1,0 +1,42 @@
+<div class="product-big-title-area">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$parent_name} : {$this->Language['season']} {$season}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="single-product-area content-area listPage">
+    <div class="container">
+        <div id="content_list"></div>
+        <div class="row">
+            {if $total > 0}
+            {include file='../layouts/listitem.html'}
+            {/if}
+         
+        </div>
+        {if $total > $page_size}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-pagination text-center">
+                    <nav>
+                        {$pagination}
+                    </nav>                        
+                </div>
+            </div>
+        </div>
+        {/if}
+    </div>
+</div>
+<script type="text/javascript" >
+$( window ).load(function() {
+       $("img.play_box_img").matchHeight();
+       $(".play-box").matchHeight();
+       $(".movie_name_title").matchHeight();
+       $(".movie_genre_title").matchHeight();
+       $(".caption").matchHeight();
+       $.fn.matchHeight._update();    
+});
+
+</script>

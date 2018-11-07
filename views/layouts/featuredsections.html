@@ -1,0 +1,251 @@
+<script>
+  var parentThemeName = "{$this->studio->parent_theme}";
+  var addToCart = "{$this->Language['add-to-cart']}";
+  var orderNow = "{$this->Language['ordernow']}";
+  var more = "{$this->Language['more']}";
+  var preOrder = "{$this->Language['pre_order']}";
+  var stockOut = "{$this->Language['stock_out']}";
+  var inactive = "{$this->Language['inactive']}";
+</script>
+<!-- <div class="wrapper">
+    <div class="slider responsive row" id="category-slider">
+        {foreach from=$this->main_menu key=key item=mitem}  
+          <div class="col-md-3 col-sm-6 slide">                 
+             <a href="{$mitem['permalink']}">
+              {if $key=='0'}
+              <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/11047/original/category-6_1524321188.jpg" class="img-responsive img-rounded" >
+              {/if}
+              {if $key=='1'}
+              <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/11047/original/category-1_1524321115.jpg" class="img-responsive img-rounded" >
+              {/if}
+              {if $key=='2'}
+              <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/11047/original/category-5_1524321173.jpg" class="img-responsive img-rounded" >
+              {/if}
+              {if $key=='3'}
+              <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/11047/original/category-3_1524321155.jpg" class="img-responsive img-rounded" >
+              {/if}
+              {if $key=='4'}
+              <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/11047/original/category-2_1524321140.jpg" class="img-responsive img-rounded" >
+              {/if}
+              <h3 class="text-center category-title">{$mitem['title']}</h3>
+             </a>
+           </div>        
+        {/foreach}
+    </div>     
+  </div> -->
+
+  {literal}
+  <div class="wrapper">
+    <div ng-app="FeaturedContents" ng-controller="HomeFeaturedSections" id="homepage_sections" class="relative" ng-cloak>
+      <div ng-repeat="(index, section) in sections" ng-if="section.total > 0" class="parent_sec_{{section.id}} parent-sec-hide" id="section_{{section.id}}">
+        <div ng-if="index == 2"> <br><br>               
+          <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/original/Place-1-Hollywood-x_1526342454.png" style="width: 100%;" >
+          <br><br>
+        </div>
+        <div ng-if="index == 6"> <br><br>               
+          <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/original/Place-2-bollywood-x_1526344040.png" style="width: 100%;" >
+          <br><br>
+        </div>
+        <div ng-if="index == 10"> <br><br>               
+          <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/original/Place-3-yesilcam-x_1526344053.png" style="width: 100%;" >
+          <br><br>
+        </div>
+        <div ng-if="index != 0 && index%4 == 0" class="row" > <br><br>
+          <div class="col-md-3 col-sm-6 slide">                
+           <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/original/suc3_1525908082.png" class="img-responsive img-rounded" >
+           <h3 class="text-center category-title"></h3>
+         </div>
+         <div class="col-md-3 col-sm-6 slide">
+          <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/original/fantastik3_1525908102.png" class="img-responsive img-rounded" >
+          <h3 class="text-center category-title"></h3>
+        </div>
+        <div class="col-md-3 col-sm-6 slide">
+          <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/original/korku3_1525908052.png" class="img-responsive img-rounded" >
+          <h3 class="text-center category-title"></h3>
+        </div>
+        <div class="col-md-3 col-sm-6 slide">
+          <img src="https://d1op7c8sil1f1a.cloudfront.net/imagegallery/original/bollywood4_1525908304.png" class="img-responsive img-rounded" >
+          <h3 class="text-center category-title"></h3> <br><br>
+        </div>
+      </div> 
+      <div class="row">
+        <div class="col-sm-12">
+          <h2 class="clearfix"> 
+            <span style="display:inline-block; margin-top:6px;" class="caps ">{{section.title | utfdecode}}</span>
+            <a ng-if="section.cpermalink" ng-href="{/literal}{$this->siteurl}/{literal}{{section.cpermalink}}" class="btn btn-lg c-theme-btn c-btn-square c-btn-uppercase c-btn-bold pull-right">{/literal}{$this->Language['view_more']}{literal}</a>
+          </h2>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="slider responsive">
+          <div ng-repeat="content in section.contents" class="col-md-3 col-sm-6">
+            <div class="c-content-product-2 c-bg-white list-box">
+              <div class="c-content-overlay">
+                <div class="c-overlay-wrapper">
+                  <div class="c-overlay-content" ng-if="section.content_type != 1 && content.play_btn && content.content_types_id != 3" ng-bind-html="content.play_btn | html"></div>
+                  <div class="c-overlay-content" ng-if="section.content_type != 1 && !content.play_btn || content.content_types_id == 3">
+                    <a href="{{content.permalink}}" class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" data-pjax="#main">{/literal}{$this->Language['explore']}{literal}</a>';
+                  </div>
+                  <div class="c-overlay-content" ng-if="section.content_type == 1">
+                    <a href="{{content.permalink}}" class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" data-pjax="#main" tabindex="0">{/literal}{$this->Language['explore']}{literal}</a>
+                  </div>
+                </div>
+                <div class="c-bg-img-top-center c-overlay-object text-center">
+                  <img src="{{content.poster}}" alt="" title="{{content.title | utfdecode}}" class="list-poster">
+                </div>
+              </div>
+              <div class="c-info">
+                <p class="c-title c-font-16 c-font-slim" ng-if="section.content_type != 1">
+                  <a href="{{content.permalink}}" >{{content.title | utfdecode}}</a>
+                </p>
+                <p class="caption_genre c-title c-font-16 c-font-slim" ng-if="section.content_type == 1">
+                  <a href="{{content.permalink}}" data-pjax="#main" tabindex="0">{{content.name | html}}</a>
+                </p>
+                <p class="caption_genre c-font-15" ng-if="section.content_type == 1" ng-bind="content.price"></p>
+                <p class="caption_genre c-font-15" ng-if="section.content_type != 1"></p>
+              </div>
+              <div role="group" class="btn-group btn-group-justified" ng-if="section.content_type == 1">
+                <div role="group" class="btn-group c-border-top" ng-if="content.status == 1">
+                  <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" ng-click="addCart(content.id,1)" tabindex="0">{{addToCart}}</a>
+                </div>
+                <div role="group" class="btn-group c-border-left c-border-top" ng-if="content.status == 1">
+                  <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" ng-click="addCart(content.id,2)" tabindex="0">{{preOrder}} </a>
+                </div>
+                <div role="group" class="btn-group c-border-top" ng-if="content.status == 2">
+                  <div class="stockout">{/literal}{$this->Language['inactive']}{literal}</div>
+                </div>
+                <div role="group" class="btn-group c-border-top" ng-if="content.status == 3">
+                  <div class="stockout">{{stockOut}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span>{{updateSlider(section.id)}}</span>
+    </div>
+    <div class="loader _home_featured" ng-if="isLoader" style="display:block;" ></div>
+  </div>
+
+  <script> 
+    var LIMIT = 5;
+
+    var app = angular.module('FeaturedContents', [])
+    .filter('html',function($sce){
+      return function(input){
+        return $sce.trustAsHtml(input);
+      };
+    })
+    .filter('utfdecode',function($sce){
+      return function(input){
+        var rData = input;
+        try{ rData = decodeURIComponent(escape(input))}catch(e){}
+        return rData;
+      };
+    });
+
+    app.controller('HomeFeaturedSections', function($scope, $http, $window, $timeout,$location) {
+      $scope.sections = [];
+      $scope.hide_featured = {/literal}{$hide_featured};{literal}
+      $scope.dataoffsetG = 5;
+      $scope.len = 5;
+
+      if($scope.hide_featured == 0){
+        $scope.sections = {/literal}{$sections};{literal}
+      }else{
+        $scope.dataoffsetG = 0;
+        $scope.len = 0;
+      }
+
+      if($scope.sections.length >= $scope.len){
+       $scope.isLoader = true;
+     }else{
+       $scope.isLoader = false;        
+     }
+
+     $scope.inProgress = false;
+     $scope.updateSlider = function(secID){
+      initSlickSlider('.parent_sec_'+secID+' .slider');
+      $('.parent_sec_'+secID+'._init').removeClass('_init');
+      initPjax('.parent_sec_'+secID);
+    };
+    $scope.addCart = function(id,flag){
+      showcart(id,flag);
+    };
+
+    function loadNextSections(dataoffset){
+      $scope.inProgress = true;
+      $http.get(HTTP_ROOT+"/rest/loadFeaturedSections?authToken="+STORE_AUTH_TOKEN+"&dataoffset="+dataoffset+"&viewlimit="+LIMIT+"&themes="+parentThemeName+ "&lang_code={/literal}{$this->language_code}{literal}").then(function (response) {
+        if(response.data.section.length > 0){  
+          for(var j = 0; j < response.data.section.length; j++){
+            $scope.sections.push(response.data.section[j]);                    
+          }                 
+          $scope.dataoffsetG = dataoffset+LIMIT;
+          $scope.addToCart = addToCart;
+          $scope.orderNow = orderNow;
+          $scope.more = more;
+          $scope.preOrder = preOrder;
+          $scope.stockOut = stockOut;
+          $scope.inProgress = false;
+        }else{
+          $scope.isLoader = false;
+        } 
+      });  
+    } 
+
+    angular.element($window).bind("scroll", function(e) {
+      if($('.loader._home_featured').length > 0){
+        if($scope.sections.length >= $scope.len && !$scope.inProgress && $(window).scrollTop() >= $('.loader._home_featured').offset().top - $(window).height()) {
+          loadNextSections($scope.dataoffsetG);
+        }
+      }
+    });
+    angular.element($window).bind('load', function() {
+      if($scope.sections.length >= $scope.len && !$scope.inProgress && $(window).scrollTop() >= $('.loader._home_featured').offset().top - $(window).height()) {
+        loadNextSections($scope.dataoffsetG);
+      }
+    });
+  }); 
+
+    function initPjax(parentObj){
+      if ($.support.pjax) {
+        $(parentObj).find('a').each(function(){
+          if($(this).attr('href').length > 0 && $(this).attr('href') != 'javascript:void(0);'){
+            $(this).attr('data-pjax', '#main');
+          }
+        })
+      }
+    }
+
+    
+    $('#category-slider').slick({
+      autoplay:false,
+      autoplaySpeed:3000,
+      arrows:false,
+      centerMode:true,
+      slidesToShow:4,
+      slidesToScroll:1
+    });
+
+    $(window).on('load', function(){
+      AOS.init({
+        offset: 300,
+        duration: 500,
+        easing: 'ease-in-out-cubic',
+        delay: 200,
+      });
+    });    
+
+    $('table.gallery td[rowspan="3"]').height($('td').width()*0.75);
+    $('table.gallery td[rowspan="6"]').height($('td').width()*1.5);
+    $('table.gallery td[rowspan="2"]').height($('td').width()*0.5);
+
+    $( window ).resize(function() {
+      $('table.gallery td[rowspan="3"]').height($('td').width()*0.75);
+      $('table.gallery td[rowspan="6"]').height($('td').width()*1.5);
+      $('table.gallery td[rowspan="2"]').height($('td').width()*0.5);
+    });
+
+  </script>
+  {/literal}

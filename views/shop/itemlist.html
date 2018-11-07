@@ -1,0 +1,85 @@
+<div class="c-layout-page">
+    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+        <div class="container">
+            <div class="c-page-title c-pull-left">
+                <h3 class="c-font-uppercase c-font-sbold">{$this->Language['product_list']}</h3>
+            </div>
+            <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                <li>
+                    <a href="{$this->siteurl}">{$this->Language['shop']}</a>
+                </li>
+                <li>/</li>
+                <li>
+                    <a href="{$this->siteurl}/shop">{$this->Language['product_list']}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">                
+        <div class="content-area">
+            <div class="row">
+                {foreach from=$product key=k item=value}
+
+                <div class="col-md-3 col-sm-6 c-margin-b-20">
+                    <div class="c-content-product-2 c-bg-white list-box">
+                        <div class="c-content-overlay">
+                            <div class="c-overlay-wrapper">
+                                <div class="c-overlay-content">
+                                    <a class="btn btn-md c-btn-grey-1 c-btn-uppercase c-btn-bold c-btn-border-1x c-btn-square" href="{$this->siteurl}/{$value['permalink']}">{$this->Language['explore']}</a>
+                                </div>
+                            </div>
+                            <div class="c-bg-img-top-center c-overlay-object text-center">
+                                <img class="list-poster" src="{$value['poster']}"/>
+                            </div>
+                        </div>
+                        <div class="c-info">
+                            <p class="caption_genre c-title c-font-16 c-font-slim">
+                                <a href="{$this->siteurl}/{$value['permalink']}"> {if $value['name']|count_characters > 30}
+                                    {$value['name']|substr:0:30}
+                                    {else}
+                                    {$value['name']}
+                                    {/if}</a></p>
+                            {if $value['is_preorder'] == 0}
+                            <p class="caption_genre c-font-16">
+                                {Yii::app()->common->formatPrice($value['sale_price'],$value['currency_id'])}
+                            </p>
+                            {else}
+                            <p class="c-price c-font-14 c-font-slim">
+                                &nbsp;
+                            </p>
+                            {/if}
+                        </div>
+                        {if $value['status']==1}
+                        <div class="btn-group btn-group-justified" role="group">
+                            {if $value['is_preorder'] == 0}
+                            <div class="btn-group c-border-top" role="group">
+                                <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="showcart({$value['id']}, 1);">{$this->Language['add-to-cart']}</a>
+                            </div>
+                            <div class="btn-group c-border-left c-border-top" role="group">
+                                <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="showcart({$value['id']}, 2);">{$this->Language['ordernow']}</a>
+                            </div>
+                            {else}
+                            <a class="btn btn-lg c-btn-white c-btn-uppercase c-btn-square c-font-grey-3 c-font-white-hover c-bg-red-2-hover c-btn-product" href="javascript:void(0);" onclick="window.location = '{$this->siteurl}/{$value['permalink']}'">{$this->Language['pre_order']}</a>
+                            {/if}
+                        </div>
+                        {elseif $value['status'] ==3}
+                        <div class="btn-group btn-group-justified" role="group">
+                            <div class="btn-group c-border-top" role="group">
+                                <div class="stockout">{$this->Language['stock_out']}</div>
+                            </div>
+                        </div>
+                        {/if}
+                    </div>
+
+                </div>
+                {/foreach}
+            </div>
+        </div>
+        <div class="product-pagination text-center">
+            <nav>
+                {$pagination}
+            </nav>                        
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{$this->siteurl}{$Yii->theme->baseUrl}/js/cart.js"></script>

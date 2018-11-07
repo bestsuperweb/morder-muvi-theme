@@ -1,0 +1,62 @@
+{if $comments|count > 0}
+<div class="col-md-12">
+    <div id="comment_list" class="p-t-20">
+        <div class="row"> 
+            {foreach from=$comments item=comment}
+            <div class="col-sm-12">
+                <div class="bubble clearfix">
+                    <img src="{$comment['profile_picture']}" class="img-circle img-responsive" alt="{$comment['username']}" title="{$comment['username']}" />
+                    <div class="bubble-content">
+                        <div class="bubble-content-inner">
+                            <div class="point"></div>
+                            <h4 class="media-heading">{$comment['username']}</h4>
+                            <p class="comment_message">{$comment['comment']}</p>
+                            <p class="c-grey">{$comment['comment_since']}</p>
+                        </div>
+                        <div class="row"><div class="col-md-12"><a href="javascript:void(0);" class="reply_btn pull-right" onclick="show_reply({$comment['comment_id']});">{$this->Language['reply']}</a></div></div>
+                        <div id="reply_area_{$comment['comment_id']}" style="display: none;">
+                            <form>
+                                <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+                                <div class="loader" style="display:none;"></div>        
+                                <div class="col-sm-8">
+                                    <textarea name="reply_text" placeholder="{$this->Language['reply_here']}" class="form-control"></textarea>
+                                </div>
+                                <div class="col-sm-2"><input type="button" value="{$this->Language['reply']}" class="btn-small btn btn-primary comment-reply-btn" data-content_id="{$content->movie_id}" data-parent_id="{$comment['comment_id']}" /></div>
+                            </form>                    
+                        </div>
+                        {foreach from=$comment['replies'] item=reply}
+                        <div class="row p-t-10 reply_bubble">
+                            <div class="col-sm-12">
+                                <div class="bubble clearfix">
+                                    <img src="{$reply['profile_picture']}" class="img-circle img-responsive" alt="{$reply['username']}" title="{$reply['username']}" />
+                                    <div class="bubble-content">
+                                        <div class="bubble-content-inner">
+                                            <div class="point"></div>
+                                            <h4 class="media-heading top5">{$reply['username']}</h4>
+                                            <p class="reply_message">{$reply['message']}</p>
+                                            <span class="c-grey bottom5">{$reply['reply_since']}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {/foreach}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="clear" style="height:5px;"></div>
+
+                </div>
+
+                <div class="clear"></div>
+
+
+            </div>
+            {/foreach}  
+        </div>
+    </div>
+    <div class="clear divider"></div>
+
+</div>
+{/if}
