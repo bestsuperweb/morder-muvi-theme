@@ -54,6 +54,21 @@
                                 				<img src="https://d2wk81qbuk09ji.cloudfront.net/11047/public/imagegallery/original/standup_1541610164.png" >
                                 			</a>
                                 		</li>
+                                		{$totallang = $this->enable_laguages|count} 
+                                        {if $totallang > 1} 
+                                            {$studio_languages = $this->enable_laguages}
+                                            <li class="dropdown language-dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" >
+                                                    <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/chat_global.png" data-toggle="dropdown" aria-expanded="false" width="30" style="vertical-align: middle;"> 
+                                                    Languages
+                                                </a>                                
+                                                <ul class="dropdown-content">
+                                                    {foreach from=$studio_languages key=key item=value} 
+                                                        <li><a href="javascript:void(0)" class="profile {if $language_code == $value['code']}active{/if}" onclick="changeLang('{$value['code']}')">{$value['name']}</a></li>
+                                                    {/foreach}
+                                                </ul>
+                                            </li>
+                                        {/if}
                                 	</ul>
                                     <ul class="nav navbar-nav" style="display: none;">
                                         {if $this->main_menu|@count > 0}
@@ -82,7 +97,8 @@
                                             {$studio_languages = $this->enable_laguages}
                                             <li class="dropdown">
                                                 <a href="javascript:void(0);" class="dropdown-toggle" >
-                                                    <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/chat_global.png" data-toggle="dropdown" aria-expanded="false">
+                                                    <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/chat_global.png" data-toggle="dropdown" aria-expanded="false" width="30" style="vertical-align: middle;"> 
+                                                    Languages
                                                 </a>                                
                                                 <ul class="dropdown-content">
                                                     {foreach from=$studio_languages key=key item=value} 
@@ -99,20 +115,6 @@
                     </div>
                 </div>
                 <div id="navbar" class="navbar-sign_up">
-                	{$totallang = $this->enable_laguages|count} 
-                    {if $totallang > 1} 
-                        {$studio_languages = $this->enable_laguages}
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" >
-                                <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/chat_global.png" data-toggle="dropdown" aria-expanded="false">
-                            </a>                                
-                            <ul class="dropdown-content">
-                                {foreach from=$studio_languages key=key item=value} 
-                                    <li><a href="javascript:void(0)" class="profile {if $language_code == $value['code']}active{/if}" onclick="changeLang('{$value['code']}')">{$value['name']}</a></li>
-                                {/foreach}
-                            </ul>
-                        </li>
-                    {/if}
                     <span> {$this->user_menu[0]['display_name']}</span>
                    
                     <div class="dropdown">

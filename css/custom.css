@@ -119,20 +119,39 @@ p {
 .dropdown-content{
   display: none;
 }
-.dropdown:hover .dropdown-content{
+.dropdown.language-dropdown .dropdown-toggle.c-link{
+  color: #fff !important;
+}
+.dropdown.language-dropdown .dropdown-toggle.c-link:hover{
+  background-color: rgba(41, 11, 42, 0.8) !important;
+  color: #fff !important; 
+}
+.dropdown.language-dropdown:hover .dropdown-content{
   display: block;
   position: absolute !important;
-  border-top: #00aeef solid 5px;
-  padding: 10px 15px;
-  background-color: rgba(0, 0, 0, 0.8);
-  min-width: 100%;
+  border-top: transparent solid 5px;
+  padding: 10px 15px 50px;
+  background-color: rgba(41, 11, 42, 0.8);
+  min-width: calc( 100% + 80px );
   margin-top: -4px;
+}
+.dropdown.language-dropdown:hover .dropdown-toggle.c-link{
+  background-color: rgba(41, 11, 42, 0.8);
+  color: #00aeef !important;
+  padding-right: 80px;
+  margin-right: -80px;
 }
 .dropdown-content li{
   list-style: none;
+  margin: 2px 0;
+}
+.dropdown-content li a.active, .dropdown-content li a:hover{
+  background: rgba(56, 184, 255, .3);
 }
 .dropdown-content li a{
   color: #fff;
+  padding: 5px 20px;
+  border-radius: 20px;
 }
 .after_login .navbar-sign_up img {
   vertical-align: middle;
@@ -3234,10 +3253,6 @@ button#register_membership {
   float: right;
   color: #fff;
   margin-top: 3px;
-}
-
-.dropdown-content a.active {
-  color: #00a99d;
 }
 
 .dropdown:hover .dropdown-content {
