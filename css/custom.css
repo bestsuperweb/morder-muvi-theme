@@ -929,6 +929,7 @@ a.right.carousel-control span.fa.fa-angle-right{
 .text_header {
   width: 100%;
   float: left;
+  max-height: 65px;
 }
 
 .text_header h2 {
@@ -1786,6 +1787,12 @@ a.playbtn, a.playaudio {
   border-radius: 50%;
   background: rgba(0, 174, 239, 0.5) url(../images/arrow-right.png) center 16px no-repeat;
   margin-left: 50px;
+}
+
+.movibo_library .right-element a.backward:hover,
+.movibo_library .right-element a.forward:hover{
+	border: rgba(34, 33, 65, 0.7) solid 6px;
+	background-color: rgba(0, 174, 239, .9);
 }
 
 .movibo_library .tab_slide_show .round_image .left-element a.backward {
