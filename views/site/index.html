@@ -220,7 +220,13 @@
                                                         </a>
                                                 </strong>
                                             </h4>
-                                            <p>{{content.story | utfdecode | limitTo : 500 }}</p>
+                                            <p>
+                                            	<span class="sotry-short">{{content.story | utfdecode | limitTo : 200 }}</span>
+                                            	<span class="story-full" ng-if="content.story.length > 200">
+	                                            	{{content.story | utfdecode }}
+	                                            </span>
+                                            	<a class="story-readmore" href="#" ng-if="content.story.length > 200">READ MORE</a>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>

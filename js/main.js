@@ -34,6 +34,22 @@ jQuery(document).ready(function($) {
         }
     });*/    
 
+    $('body').on('click', '.story-readmore', function(event) {
+    	event.preventDefault();
+    	/* Act on the event */
+    	if ($(this).html() == 'READ MORE' ) {
+    		$(this).html('READ LESS');
+    		$(this).parent().children('.story-short').hide();
+    		$(this).parent().children('.story-full').show();
+    	}else{
+    		$(this).html('READ MORE');
+    		$(this).parent().children('.story-short').show();
+    		$(this).parent().children('.story-full').hide();
+    	}    	
+
+    });
+
+
     $(window).scroll(function(event) {
       event.preventDefault();
       /* Act on the event */

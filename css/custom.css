@@ -1264,6 +1264,7 @@ a.playbtn, a.playaudio {
   float: left;
   height: 600px;
   position: relative;
+  /*filter: grayscale(100%);*/
 }
 
 .layer {
@@ -1565,6 +1566,20 @@ a.playbtn, a.playaudio {
   padding-top: 30px;
   width: 80%;
   float: left;
+  height: 350px;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+
+.movie_cast_details p span.story-full{
+	display: none;
+}
+
+.movie_cast_details p a{
+	padding: 5px 20px;
+    background: #000000;
+    font-size: 13px;
+    border-radius: 15px;
 }
 
 .tab_slide_show .movie_category h2 {
@@ -1789,10 +1804,11 @@ a.playbtn, a.playaudio {
   margin-left: 50px;
 }
 
-.movibo_library .right-element a.backward:hover,
+.movibo_library .left-element a.backward:hover,
 .movibo_library .right-element a.forward:hover{
 	border: rgba(34, 33, 65, 0.7) solid 6px;
 	background-color: rgba(0, 174, 239, .9);
+	transform: scale(1.2);
 }
 
 .movibo_library .tab_slide_show .round_image .left-element a.backward {
@@ -4286,4 +4302,25 @@ button#register_membership {
 }
 @media only screen and (min-width:320px) and (max-width:480px){
 	
+}
+
+/* width */
+p::-webkit-scrollbar {
+    width: 5px;
+    background: transparent;
+}
+
+/* Track */
+p::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+p::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+/* Handle on hover */
+p::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255, .5);
 }
