@@ -2,14 +2,15 @@
     <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
         <div class="container">
             <div class="c-page-title c-pull-left">
-                <h3 class="c-font-uppercase c-font-sbold">{$this->Language['search_results']}</h3>
+                <!-- <h3 class="c-font-uppercase c-font-sbold">{$this->Language['search_results']}</h3> -->
             </div>
         </div>
-    </div>
+    </div>   
     <div class="container" id="search_results" style="padding-top: 20px;min-height: 333px;">
-    	<h3 style="color: #fff; ">Movies ( {{$item_count}} results )</h3>
-    	<hr style="border-color: #fff;">
-        <div id="content_list"></div>
+    	 <div style="margin: 150px -15px 0;">
+	    	<h3 style="color: #fff; ">Movies <small class="text-muted">( {{$item_count}} results )</small></h3>
+	    	<hr style="border-color: gray;">        
+	    </div>
         <div class="row">
             {if $item_count > 0}
                 {include file='../layouts/listitem.html'}       
