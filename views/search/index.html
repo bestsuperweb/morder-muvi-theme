@@ -6,7 +6,9 @@
             </div>
         </div>
     </div>
-    <div class="container" style="padding-top: 20px;min-height: 333px;">
+    <div class="container" id="search_results" style="padding-top: 20px;min-height: 333px;">
+    	<h3 style="color: #fff; ">Movies ( {{$item_count}} results )</h3>
+    	<hr style="border-color: #fff;">
         <div id="content_list"></div>
         <div class="row">
             {if $item_count > 0}
