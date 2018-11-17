@@ -645,6 +645,66 @@ a.right.carousel-control span.fa.fa-angle-right{
   vertical-align: middle;
 }
 
+#category-page-nav{
+	position: fixed;
+    top: 110px;
+    z-index: 100;
+}
+
+#category-page-nav .navbar.navbar-inverse{
+	background: rgba(43, 13, 42, .7);
+}
+
+.filter-div{
+	padding: 15px 0;
+}
+.filter-div span.dropdown{
+	color: #fff;
+	border-bottom: 3px solid transparent;
+    padding: 10px;
+}
+.filter-div span.dropdown.open{
+	border-color: #38B8FF;
+}
+.filter-div div.dropdown-menu{
+	background: rgba(43, 13, 42, .7);
+	max-height: 450px;
+	overflow-y: scroll;
+}
+.filter-div div.dropdown-menu li{
+	padding: 2px 10px;
+	cursor: pointer;
+}
+.filter-div div.dropdown-menu li.tag-delete{
+	color: #32c5d2;
+}
+.filter-div div.dropdown-menu li:hover{
+	border-radius: 20px;
+    background: rgba(56, 184, 255, .5);    
+}
+.filter-div div.dropdown-menu:before{
+	border-bottom: none;
+}
+/* width */
+.filter-div div.dropdown-menu::-webkit-scrollbar {
+    width: 5px;
+    background: transparent;
+}
+
+/* Track */
+.filter-div div.dropdown-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+.filter-div div.dropdown-menu::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255, .5);
+}
+
+/* Handle on hover */
+.filter-div div.dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255, .5);
+}
 
 @media only screen and (min-width:320px) and (max-width:480px){
 	

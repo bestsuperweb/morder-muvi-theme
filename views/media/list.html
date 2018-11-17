@@ -1,82 +1,242 @@
+<div class="moovibo-nav" id="category-page-nav">
+	<div class="headerWrap headerInside">
+		<nav class="navbar navbar-inverse">
+			<div class="customNav">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+					aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav c-theme-nav">
+					{if $this->main_menu|@count > 0}
+					{foreach from=$this->main_menu key=key item=mitem}
+					{assign var=val value=$val+1}
+					<li {if $mitem['children']|@count> 0}class="c-menu-type-classic"{/if}><a href="{if $mitem['permalink'] == '#'}javascript:void(0);{else}{$mitem['permalink']}{/if}"
+						id="menu-{$val}" {if $mitem['link_type']==2} target="" {/if} class="{$mitem['class']} c-link dropdown-toggle">{$mitem['title']}
+						{if $mitem['children']|@count > 0}<span class="caret"></span>{/if}
 
-<div class="product-big-title-area">
-    <div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
-        <div class="container">
-            <div class="c-page-title c-pull-left">
-                <h3 class="c-font-uppercase c-font-sbold">{$category->title|utf8_decode}</h3>
-            </div>
-        </div>
-    </div>
+
+					</a>
+					{if $mitem['children']|@count > 0}
+					<ul class="dropdown-menu">
+						{foreach from=$mitem['children'] key=key item=mcitem}
+						<li><a href="{$mcitem['permalink']}" id="menu-{$val}" {if $mcitem['link_type']==2}
+							target="_blank" {/if}>{$mcitem['title']} </a> </li> {/foreach} </ul> {/if}
+						</li> <li>
+							{if $val < $this->main_menu|@count}
+							<i class="fa fa-circle" aria-hidden="true"></i>
+							{/if}
+						</li>
+						{/foreach}
+						{/if}
+					</ul>
+				</div>
+				<div id="myPopover" class="hide">
+					<ul class="nav navbar-nav">
+						{foreach from=$studio_languages key=key item=value}
+						{if $value['status'] != 0}
+						<li value="{$value['code']}" class="{if $language_code == $value['code']}active{/if}"
+						onclick="changeLang('{$value['code']}')">{$value['name']} </li>
+						{elseif $value['code'] == "en"}
+						<li value="{$value['code']}" class="{if $language_code == $value['code']}active{/if}"
+						onclick="changeLang('{$value['code']}')"></li>
+						{/if}
+						{/foreach}
+					</ul>
+				</div>
+			</div>
+
+			<div class="text-right filter-div container">
+				<h3 class="pull-left" style="margin: 0; color: #fff;">{$category->title|utf8_decode}</h3>
+				<span class="dropdown" >
+					Languages <span class="caret" data-toggle="dropdown"></span>
+					{$studio_languages = $this->enable_laguages}
+					<div class="dropdown-menu pull-right" role="menu">
+						<div class="col-md-12">
+							{foreach from=$studio_languages key=key item=value} 
+                                <li>{$value['name']}</li>
+                            {/foreach}
+                            <br>
+						</div>
+					</div>
+				</span>	
+				<span class="dropdown" >
+					Movie Type <span class="caret" data-toggle="dropdown"></span>
+					<div class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1">
+						<form action="{$this->siteurl}/{$category->permalink}" method="get" name="listingSearch" id="filterFormPopup" class="mCustomScrollbar" data-mcs-theme="dark">
+							<input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+							<br>
+							<div class="col-md-12">
+								<li class="sortby c-font-16 {if $smarty.get.orderby == 'lastupload'} sortby_active {/if} crusor" onclick="sortby('lastupload');">{$this->Language['sort_last_uploaded']}</li>
+								<li class="sortby c-font-16 {if $smarty.get.orderby == 'releasedate'} sortby_active {/if} crusor " onclick="sortby('releasedate');">{$this->Language['sort_release_date']}</li>
+								<li class="sortby c-font-16 {if $smarty.get.orderby == 'sortasc'} sortby_active {/if} crusor" onclick="sortby('sortasc');">{$this->Language['sort_alpha_a_z']}</li>
+								<li class="sortby c-font-16 {if $smarty.get.orderby == 'sortdesc'} sortby_active {/if} crusor" onclick="sortby('sortdesc');">{$this->Language['sort_alpha_z_a']}</li>
+							</div>
+							<div class="clearfix"></div>				
+
+							<hr>
+
+							{foreach from=$selected_genres item=selected_genre}
+							{if $selected_genre != ''}
+								<div class="col-md-12">
+									<li class="tag-delete crusor" onclick="removetaglist('{$selected_genre}');" >
+										<span >X &nbsp;</span> {$selected_genre} 
+									</li>
+								</div>							 
+							{/if}
+							{/foreach}
+
+							{foreach from=$genres item=genre}
+							<div class="col-md-12">
+								<li><label class="c-title c-font-16 c-weight-300"> <input type="checkbox" class="genre" value="{$genre}" onclick="getsortlist(this.value)">{$genre}</label></li>
+							</div>{/foreach} 
+						</form> 
+						<br>							
+					</div>
+				</span>
+				<span class="dropdown" >
+					IMDb Rating <span class="caret" data-toggle="dropdown"></span>
+					<div class="dropdown-menu pull-right" role="menu">
+						<div class="col-md-12">
+							<li>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+							</li>
+							<li>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star-o"></span>
+							</li>
+							<li>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+							</li>
+							<li>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+							</li>
+							<li>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+							</li>
+							<li>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+								<span class="fa fa-star-o"></span>
+							</li>
+							<br>
+						</div>
+					</div>
+				</span>
+			</div>
+
+		</nav>
+	</div>
 </div>
+
+<div style="height: 300px;"></div>
+
+
+<!-- <div class="product-big-title-area">
+	<div class="c-layout-breadcrumbs-1 c-subtitle c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both">
+		<div class="container">
+			<div class="c-page-title c-pull-left">
+				<h3 class="c-font-uppercase c-font-sbold">{$category->title|utf8_decode}</h3>
+			</div>
+		</div>
+	</div>
+</div> -->
+
 <div class="single-product-area content-area listPage">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 top10 filter-select-item">
-                {foreach from=$selected_genres item=selected_genre}
-                {if $selected_genre != ''}
-                <code class="tagdesign"> {$selected_genre} <span class="tag-delete crusor" onclick="removetaglist('{$selected_genre}');">X</span></code>
-                {/if}
-                {/foreach}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <div class="dropdown filter">
-                    <button class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercase dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">{$this->Language['filter']}
-                        <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1">
-                        <form action="{$this->siteurl}/{$category->permalink}" method="get" name="listingSearch" id="filterFormPopup" class="mCustomScrollbar" data-mcs-theme="dark">
-                            <input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
-                            <div class="row">    
-                                <div class="col-xs-7">
-                                    <ul class="list-inline">
-                                     <label for="email" class="filter_by">{$this->Language['filter_by']}</label><br>
+	<div class="container">
+		<!-- <div class="row">
+			<div class="col-lg-12 top10 filter-select-item">
+				{foreach from=$selected_genres item=selected_genre}
+				{if $selected_genre != ''}
+				<code class="tagdesign"> {$selected_genre} <span class="tag-delete crusor" onclick="removetaglist('{$selected_genre}');">X</span></code>
+				{/if}
+				{/foreach}
+			</div>
+		</div> -->
+		<!-- <div class="row">
+			<div class="col-md-12 text-right">
+				<div class="dropdown filter">
+					<button class="btn c-btn btn-lg c-font-bold c-font-white c-theme-btn c-btn-square c-font-uppercase dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">{$this->Language['filter']}
+						<span class="caret"></span>
+					</button>
+					<div class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1">
+						<form action="{$this->siteurl}/{$category->permalink}" method="get" name="listingSearch" id="filterFormPopup" class="mCustomScrollbar" data-mcs-theme="dark">
+							<input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+							<div class="row">    
+								<div class="col-xs-7">
+									<ul class="list-inline">
+										<label for="email" class="filter_by">{$this->Language['filter_by']}</label><br>
 
-                                        {foreach from=$genres item=genre}
-                                         <div class="col-md-12">
-                                        <li><label class="c-title c-font-16 c-weight-300"> <input type="checkbox" class="genre" value="{$genre}" onclick="getsortlist(this.value)">{$genre}</label></li>
-                                        </div>{/foreach} 
-                                    </ul>
-                                </div>
-                                <div class="col-xs-5">
-                                    <label for="email" class="sort_by">{$this->Language['sort_by']}</label><br>
-                                    <span class="sortby c-font-16 {if $smarty.get.orderby == 'lastupload'} sortby_active {/if} crusor" onclick="sortby('lastupload');">{$this->Language['sort_last_uploaded']}</span> <br />
-                                    <span class="sortby c-font-16 {if $smarty.get.orderby == 'releasedate'} sortby_active {/if} crusor " onclick="sortby('releasedate');">{$this->Language['sort_release_date']}</span> <br />
-                                    <span class="sortby c-font-16 {if $smarty.get.orderby == 'sortasc'} sortby_active {/if} crusor" onclick="sortby('sortasc');">{$this->Language['sort_alpha_a_z']}</span> <br />
-                                    <span class="sortby c-font-16 {if $smarty.get.orderby == 'sortdesc'} sortby_active {/if} crusor" onclick="sortby('sortdesc');">{$this->Language['sort_alpha_z_a']}</span>                   
+										{foreach from=$genres item=genre}
+										<div class="col-md-12">
+											<li><label class="c-title c-font-16 c-weight-300"> <input type="checkbox" class="genre" value="{$genre}" onclick="getsortlist(this.value)">{$genre}</label></li>
+										</div>{/foreach} 
+									</ul>
+								</div>
+								<div class="col-xs-5">
+									<label for="email" class="sort_by">{$this->Language['sort_by']}</label><br>
+									<span class="sortby c-font-16 {if $smarty.get.orderby == 'lastupload'} sortby_active {/if} crusor" onclick="sortby('lastupload');">{$this->Language['sort_last_uploaded']}</span> <br />
+									<span class="sortby c-font-16 {if $smarty.get.orderby == 'releasedate'} sortby_active {/if} crusor " onclick="sortby('releasedate');">{$this->Language['sort_release_date']}</span> <br />
+									<span class="sortby c-font-16 {if $smarty.get.orderby == 'sortasc'} sortby_active {/if} crusor" onclick="sortby('sortasc');">{$this->Language['sort_alpha_a_z']}</span> <br />
+									<span class="sortby c-font-16 {if $smarty.get.orderby == 'sortdesc'} sortby_active {/if} crusor" onclick="sortby('sortdesc');">{$this->Language['sort_alpha_z_a']}</span>                   
 
-                                </div>
-                            </div>
-                        </form> 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="content_list"></div>
-        <div class="row">
-            {if $item_count > 0}
-                {include file='../layouts/listitem.html'}
-            {/if}           
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="product-pagination text-center">
-                    <nav>
-                        {$pagination}
-                    </nav>                        
-                </div>
-            </div>
-        </div>
-    </div>
+								</div>
+							</div>
+						</form> 
+					</div>
+				</div>
+			</div>
+		</div> -->
+		<div id="content_list"></div>
+		<div class="row">
+			{if $item_count > 0}
+			{include file='../layouts/listitem.html'}
+			{/if}           
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="product-pagination text-center">
+					<nav>
+						{$pagination}
+					</nav>                        
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <script type="text/javascript">
-$(window).bind("load", function() {
-    $(".c-overlay-object").matchHeight();
-	$("p.c-title").matchHeight();
-	$("p.caption_genre").matchHeight();
-	$(".c-info").matchHeight();
-	$(".list-box").matchHeight();
-	$.fn.matchHeight._update();    
-});
+	$(window).bind("load", function() {
+		$(".c-overlay-object").matchHeight();
+		$("p.c-title").matchHeight();
+		$("p.caption_genre").matchHeight();
+		$(".c-info").matchHeight();
+		$(".list-box").matchHeight();
+		$.fn.matchHeight._update();    
+	});
 </script>	
