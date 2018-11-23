@@ -94,7 +94,7 @@ p {
 }
 
 .moovibo-main .navbar-header a.navbar-brand {
-  padding: 35px 0;
+  padding: 20px 0;
 }
 
 .moovibo-main .navbar-sign_up {
@@ -104,7 +104,7 @@ p {
 
 .after_login .navbar-sign_up {
   float: right;
-  padding-top: 30px;
+  padding-top: 10px;
   width: 14%;
   text-align: right;
 }
@@ -121,6 +121,7 @@ p {
 }
 .dropdown.language-dropdown .dropdown-toggle.c-link{
   color: #fff !important;
+  padding: 15px;
 }
 .dropdown.language-dropdown .dropdown-toggle.c-link:hover{
   background-color: rgba(41, 11, 42, 0.8) !important;
@@ -570,7 +571,7 @@ a.right.carousel-control span.fa.fa-angle-right{
   padding: 24px 10px 0 10px;
 }
 .after_login .moovibo-nav .navbar-nav>li .fa {
-  padding: 46px 10px 0 10px;
+  padding: 30px 10px;
 }
 .moovibo-nav .navbar-inverse .navbar-nav>li>a {
   color: #00aeef;
@@ -3577,14 +3578,14 @@ button#register_membership {
 	margin-top: 93px;
 }
 .after_login .navbar {
-	background-color: rgba(0,0,0, .9);
+	background-color: rgba(0,0,0, .6);
 }
 .after_login .moovibo-nav {
     width: 74%;
 }
 .after_login .search-container {
 	width: 7%;
-	padding-top: 37px;
+	padding-top: 25px;
 }
 .after_login .search-container a {
     padding: 18px 2px 18px 8px;
@@ -3602,7 +3603,7 @@ button#register_membership {
 }
 .after_login .navbar-inverse .navbar-nav>li>a {
 	font-weight: bold;
-	padding: 40px 9px 28px 9px;
+	padding: 25px 9px 10px;
 	border-bottom: transparent solid 6px;
 }
 
