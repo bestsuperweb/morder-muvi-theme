@@ -33,44 +33,7 @@
                                     </button>
                                 </div>
                                 <div id="navbar" class="navbar-collapse collapse">
-                                	<ul class="nav navbar-nav">
-                                		<li>
-                                			<a href="#">
-                                				<img src="https://d2wk81qbuk09ji.cloudfront.net/11047/public/imagegallery/original/festival_1541610033.png" >
-                                			</a>
-                                		</li>
-                                		<li>
-                                			<a href="#">
-                                				<img src="https://d2wk81qbuk09ji.cloudfront.net/11047/public/imagegallery/original/sport_1541610150.png" >
-                                			</a>
-                                		</li>
-                                		<li>
-                                			<a href="#">
-                                				<img src="https://d2wk81qbuk09ji.cloudfront.net/11047/public/imagegallery/original/kids_1541610133.png" >
-                                			</a>
-                                		</li>
-                                		<li>
-                                			<a href="#">
-                                				<img src="https://d2wk81qbuk09ji.cloudfront.net/11047/public/imagegallery/original/standup_1541610164.png" >
-                                			</a>
-                                		</li>
-                                		{$totallang = $this->enable_laguages|count} 
-                                        {if $totallang > 1} 
-                                            {$studio_languages = $this->enable_laguages}
-                                            <li class="dropdown language-dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" >
-                                                    <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/chat_global.png" data-toggle="dropdown" aria-expanded="false" width="30" style="vertical-align: middle;"> 
-                                                    Languages
-                                                </a>                                
-                                                <ul class="dropdown-content">
-                                                    {foreach from=$studio_languages key=key item=value} 
-                                                        <li><a href="javascript:void(0)" class="profile {if $language_code == $value['code']}active{/if}" onclick="changeLang('{$value['code']}')">{$value['name']}</a></li>
-                                                    {/foreach}
-                                                </ul>
-                                            </li>
-                                        {/if}
-                                	</ul>
-                                    <ul class="nav navbar-nav" style="display: none;">
+                                	<ul class="nav navbar-nav" >
                                         {if $this->main_menu|@count > 0}
                                             {for $i = 0 to $this->main_menu|@count}
                                                 {if $i < 6}
@@ -95,10 +58,9 @@
                                         {$totallang = $this->enable_laguages|count} 
                                         {if $totallang > 1} 
                                             {$studio_languages = $this->enable_laguages}
-                                            <li class="dropdown">
+                                            <li class="dropdown language-dropdown">
                                                 <a href="javascript:void(0);" class="dropdown-toggle" >
                                                     <img src="{$this->siteurl}{$Yii->theme->baseUrl}/images/chat_global.png" data-toggle="dropdown" aria-expanded="false" width="30" style="vertical-align: middle;"> 
-                                                    Languages
                                                 </a>                                
                                                 <ul class="dropdown-content">
                                                     {foreach from=$studio_languages key=key item=value} 
