@@ -89,10 +89,10 @@ p {
   margin-bottom: 0px;
 }
 
-.after_login .headerWrap .navbar {
+/*.after_login .headerWrap .navbar {
   border-bottom: #191919 solid 1px;
 }
-
+*/
 .moovibo-main .navbar-header a.navbar-brand {
   padding: 20px 0;
 }
@@ -104,7 +104,7 @@ p {
 
 .after_login .navbar-sign_up {
   float: right;
-  padding-top: 10px;
+  padding: 10px 0;
   width: 14%;
   text-align: right;
 }
@@ -119,28 +119,29 @@ p {
 .dropdown-content{
   display: none;
 }
-.dropdown.language-dropdown .dropdown-toggle.c-link{
+.moovibo-main .navbar-sign_up .dropdown.language-dropdown{
+	list-style: none;
+}
+.moovibo-main .navbar-sign_up .dropdown.language-dropdown .dropdown-toggle.c-link{
   color: #fff !important;
   padding: 15px;
 }
-.dropdown.language-dropdown .dropdown-toggle.c-link:hover{
+.moovibo-main .navbar-sign_up .dropdown.language-dropdown .dropdown-toggle.c-link:hover{
   background-color: rgba(41, 11, 42, 0.8) !important;
   color: #fff !important; 
 }
-.dropdown.language-dropdown:hover .dropdown-content{
+.moovibo-main .navbar-sign_up .dropdown.language-dropdown:hover .dropdown-content{
   display: block;
   position: absolute !important;
   border-top: transparent solid 5px;
   padding: 10px 15px 50px;
   background-color: rgba(41, 11, 42, 0.8);
   min-width: calc( 100% + 80px );
-  margin-top: -4px;
+  margin-top: 10px;
 }
-.dropdown.language-dropdown:hover .dropdown-toggle.c-link{
-  background-color: rgba(41, 11, 42, 0.8);
+.moovibo-main .navbar-sign_up .dropdown.language-dropdown:hover .dropdown-toggle.c-link{
+  /*background-color: rgba(41, 11, 42, 0.8);*/
   color: #00aeef !important;
-  padding-right: 80px;
-  margin-right: -80px;
 }
 .dropdown-content li{
   list-style: none;
@@ -151,8 +152,9 @@ p {
 }
 .dropdown-content li a{
   color: #fff;
-  padding: 5px 20px;
+  padding: 5px 20px !important;
   border-radius: 20px;
+  border: none !important;
 }
 .after_login .navbar-sign_up img {
   vertical-align: middle;
@@ -161,7 +163,7 @@ p {
 
 .moovibo-main .navbar-sign_up a {
   color: #fff;
-  border-bottom: #00aeef solid 5px;
+  /*border-bottom: #00aeef solid 5px;*/
   padding: 0 5px 16px 5px;
   font-size: 20px;
   font-weight: bold;
@@ -179,7 +181,7 @@ p {
   cursor: pointer;
   float: left;
   width: 61%;
-  padding-top: 27px;
+  padding-top: 20px;
 }
 
 .search-container a {
@@ -3578,20 +3580,20 @@ button#register_membership {
 	margin-top: 93px;
 }
 .after_login .navbar {
-	background-color: rgba(0,0,0, .6);
+	background-color: rgba(0,0,0, .3);
 }
 .after_login .moovibo-nav {
     width: 74%;
 }
 .after_login .search-container {
 	width: 7%;
-	padding-top: 25px;
+	padding-top: 20px;
 }
 .after_login .search-container a {
     padding: 18px 2px 18px 8px;
 	border-radius: 50%;
    	background-color: transparent;
-  	border: #000000 solid 1px;
+  	/*border: 1px solid rgba(0,0,0,.5);*/
     margin-left: 26px;
     width: auto;
     float: none;
@@ -3823,7 +3825,7 @@ button#register_membership {
 	right: -36px;
 	background-color: rgba(0, 0, 0, 0.8);
 	min-width: 300px;
-	margin-top: 14px;
+	margin-top: 10px;
 	border-radius: 0px;
 	min-height: 104vh;
 	padding: 10px 15px;
