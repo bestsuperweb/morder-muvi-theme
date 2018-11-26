@@ -72,19 +72,25 @@
 							<div class="bnr-text-small">{$properties->banner_text_description}</div>
 							{/if}
 
+							{if $properties->banner_button_text !=''} <br>
+								<a href="{if $properties->banner_button_type == 0 && $user_id < 1}{$this->siteurl}/user/register {else}{$properties->banner_button_link}{/if}"
+								 class="joinnow {if $template_name == 'traditional-byod'}  bannerBtn {/if}">
+									{$properties->banner_button_text}</a>
+							{/if}
+
 							{$user_id=Yii::app()->user->id}
 
 							{if ($properties->banner_button_type == 1 && $properties->banner_button_link !=='') ||
 							($properties->banner_button_type == 0 && $user_id < 1)} <br>
 								{if $properties->banner_button_text !=''}
-								<a href="{if $properties->banner_button_type == 0 && $user_id < 1}{$this->siteurl}/user/register {else}{$properties->banner_button_link}{/if}"
+								<!-- <a href="{if $properties->banner_button_type == 0 && $user_id < 1}{$this->siteurl}/user/register {else}{$properties->banner_button_link}{/if}"
 								 class="joinnow {if $template_name == 'traditional-byod'}  bannerBtn {/if}">
-									{$properties->banner_button_text}</a>
+									{$properties->banner_button_text}</a> -->
 								{/if}
-								{/if}
-								{else}
+							{/if}
+							{else}
 								{$properties->advance_content}
-								{/if}
+							{/if}
 						</div>
 					</div>
 				</div>
