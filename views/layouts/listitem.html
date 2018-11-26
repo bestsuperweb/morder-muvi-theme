@@ -22,7 +22,41 @@
                 <div class="c-content-product-2 c-bg-white list-box">
                     <div class="c-content-overlay">
                         <div class="c-overlay-wrapper">
-                            <div class="c-overlay-content">
+                            <div class="c-overlay-content overlay">
+                            	<div class="text_header">
+                                    <h2><a href="{$content->permalink}">{$content->title|utf8_decode}</a>
+                                        <span>
+                                        	{if $content->video_duration != '' }{$content->video_duration}{/if} 
+                                        	{if $content->release_date != ''}{$content->release_date}{/if}
+                                        </span>
+                                    </h2>
+                                    <ul>
+                                        <li class="special">RT</li>
+                                        <li>
+                                        	{if $content->rt->field_value != ''}
+                                        		{$content->rt->field_value} 
+                                        	{else} 
+                                        		N/A 
+                                        	{/if}
+                                        </li>
+                                        <li class="special">IMDb</li>
+                                        <li>
+                                        	{if $content->imdb_score->field_value != ''} 
+                                        		{$content->imdb_score->field_value} 
+                                        	{else} 
+                                        		N/A 
+                                        	{/if}
+                                        </li>
+                                        <li class="special">MPAA</li>
+                                        <li>
+                                        	{if $content->mpaa->field_value != ''}
+                                        		{$content->mpaa->field_value} 
+                                        	{else}
+                                        		N/A 
+                                        	{/if}
+                                        </li>
+                                    </ul>
+                                </div>                          	
                                 {if $content->content_types_id == 5}
                                 {if $content->full_movie != ''}
                                 <div class="play-btn-wrap">
@@ -48,6 +82,25 @@
                                 {/if}
                                 {/if}
                                 {/if}
+
+                                <div class="text_footer">
+                                    <h5><span>Director</span>{$content->director1->field_value }</h5>
+                                    <h6>
+                                    	<span>Cast</span>
+                                    	{foreach from=$content->casts key=counter item=cast}
+                                            {if $cast|count>0} 
+                                                {assign var=val value=$val+1}
+                                            {/if}
+                                        {/foreach}
+                                        {if $val > 0 && $cast|is_array}
+                                            {foreach from=$content->casts key=role item=cast}                                  
+                                                {foreach from=$cast key=counter item=cast_role}
+                                                    {$cast_role->celeb_name}{if $counter < $cast|count-1}, {/if}
+                                                {/foreach}
+                                            {/foreach}                                        
+                                        {/if}
+                                    </h6>
+                                </div>
                             </div>
 
                         </div>
