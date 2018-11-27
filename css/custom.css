@@ -3592,7 +3592,7 @@ button#register_membership {
 
 /************************************After Login layout start here******************************/
 .after_login_banner{
-	margin-top: 93px;
+	margin-top: 60px;
 }
 .after_login .navbar {
 	background-color: rgba(0,0,0, .3);
@@ -4322,6 +4322,9 @@ button#register_membership {
 	min-height: 50px;
 }
 .modal-content .modal-body span{
+	color: #fff;
+}
+.modal-body{
 	color: #fff;
 }
 #loginModal .modal-body {
