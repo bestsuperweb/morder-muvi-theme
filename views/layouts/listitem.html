@@ -24,7 +24,7 @@
                         <div class="c-overlay-wrapper">
                             <div class="c-overlay-content overlay">
                             	<div class="text_header">
-                                    <h2><a href="{$content->permalink}">{$content->title|utf8_decode}</a>
+                                    <h2><a href="{$content->permalink}" style="color: #fff;">{$content->title|utf8_decode}</a>
                                         <span>
                                         	{if $content->video_duration != '' }{$content->video_duration}{/if} 
                                         	{if $content->release_date != ''}{$content->release_date}{/if}
@@ -106,11 +106,11 @@
                         </div>
                         <div class="c-bg-img-top-center c-overlay-object text-center"><img class="list-poster" src="{$content->poster}" /></div>
                     </div>
-                    <div class="c-info">
+                    <!-- <div class="c-info">
                         <p class="c-title c-font-18 c-font-slim">
                             <a href="{$content->permalink}">{$content->title|utf8_decode}</a>
                         </p>                                               
-                    </div>                     
+                    </div>  -->                    
                 </div>
             </div>
             {/if}
