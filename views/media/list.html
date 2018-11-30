@@ -28,38 +28,14 @@
 						<li><a href="{$mcitem['permalink']}" id="menu-{$val}" {if $mcitem['link_type']==2}
 							target="_blank" {/if}>{$mcitem['title']} </a> </li> {/foreach} </ul> {/if}
 						</li> <li>
-							<!-- {if $val < $this->main_menu|@count} -->
+							{if $val < $this->main_menu|@count}
 							<i class="fa fa-circle" aria-hidden="true"></i>
-							<!-- {/if} -->
+							{/if}
 						</li>
 						{/foreach}
 						{/if}
 					<li>						
-						<a>
-							<span class="dropdown" >
-							Genre <span class="caret" data-toggle="dropdown"></span>
-							<div class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1">
-								<form action="{$this->siteurl}/{$category->permalink}" method="get" name="listingSearch" id="filterFormPopup" class="mCustomScrollbar" data-mcs-theme="dark">
-									<input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
-									<br>
-									{foreach from=$selected_genres item=selected_genre}
-									{if $selected_genre != ''}
-										<div class="col-md-12">
-											<li class="tag-delete crusor" onclick="removetaglist('{$selected_genre}');" >
-												<span >X &nbsp;</span> {$selected_genre} 
-											</li>
-										</div>							 
-									{/if}
-									{/foreach}
-
-									{foreach from=$genres item=genre}
-									<div class="col-md-12">
-										<li><label class="c-title c-font-16 c-weight-300"> <input type="checkbox" class="genre" value="{$genre}" onclick="getsortlist(this.value)">{$genre}</label></li>
-									</div>{/foreach} 
-								</form> 
-								<br>							
-							</div>
-							</span>
+						<a>							
 						</a>
 					</li>
 
@@ -80,7 +56,7 @@
 				</div>
 			</div>
 
-			<div class="filter-div container">
+			<div class=" text-right filter-div container">
 				<h3 class="pull-left" style="margin: 0 5px; color: #fff;">{$category->title|utf8_decode}</h3>
 				
 				<span class="dropdown" >
@@ -95,6 +71,30 @@
 								<li class="sortby c-font-16 {if $smarty.get.orderby == 'sortasc'} sortby_active {/if} crusor" onclick="sortby('sortasc');">{$this->Language['sort_alpha_a_z']}</li>
 								<li class="sortby c-font-16 {if $smarty.get.orderby == 'sortdesc'} sortby_active {/if} crusor" onclick="sortby('sortdesc');">{$this->Language['sort_alpha_z_a']}</li>
 							</div>
+						</form> 
+						<br>							
+					</div>
+				</span>
+				<span class="dropdown" >
+					Genre <span class="caret" data-toggle="dropdown"></span>
+					<div class="dropdown-menu pull-right" role="menu" aria-labelledby="menu1">
+						<form action="{$this->siteurl}/{$category->permalink}" method="get" name="listingSearch" id="filterFormPopup" class="mCustomScrollbar" data-mcs-theme="dark">
+							<input type="hidden" name="csrfToken" value="{$smarty.session.csrfToken}" />
+							<br>
+							{foreach from=$selected_genres item=selected_genre}
+							{if $selected_genre != ''}
+								<div class="col-md-12">
+									<li class="tag-delete crusor" onclick="removetaglist('{$selected_genre}');" >
+										<span >X &nbsp;</span> {$selected_genre} 
+									</li>
+								</div>							 
+							{/if}
+							{/foreach}
+
+							{foreach from=$genres item=genre}
+							<div class="col-md-12">
+								<li><label class="c-title c-font-16 c-weight-300"> <input type="checkbox" class="genre" value="{$genre}" onclick="getsortlist(this.value)">{$genre}</label></li>
+							</div>{/foreach} 
 						</form> 
 						<br>							
 					</div>
