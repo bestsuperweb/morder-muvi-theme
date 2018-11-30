@@ -3992,7 +3992,7 @@ button#register_membership {
 	padding-left: 3px;
 }
 #main #content .content-area .c-content-product-2{
-	height: auto !important;
+	/*height: auto !important;*/
 	margin-bottom: 20px;
 	background-color: transparent !important;
 	border: none;
