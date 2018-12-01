@@ -662,9 +662,10 @@ a.right.carousel-control span.fa.fa-angle-right{
 }
 
 #category-page-nav{
-	position: fixed;
+	/*position: fixed;
     top: 70px;
-    z-index: 100;
+    z-index: 100;*/
+    margin-top: 70px;
 }
 
 #category-page-nav .navbar.navbar-inverse{
@@ -1659,7 +1660,18 @@ a.playbtn, a.playaudio {
     font-size: 13px;
     border-radius: 15px;
 }
-
+.cast-img{
+	background-position: center;
+	background-size: cover; 
+	width: 180px; 
+	height: 180px; 
+	display: inline-block; 
+	border: 4px solid #fff;
+	transition: 1s all ease;
+}
+.cast-img:hover{
+	transform: scale(1.2);
+}
 .tab_slide_show .movie_category h2 {
   padding-left: 15.6%;
   font-size: 20px;

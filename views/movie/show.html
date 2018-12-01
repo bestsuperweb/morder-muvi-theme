@@ -211,30 +211,25 @@
                     <div class="col-md-10">
                         <div class="row">
                             <h3>{$content->title|utf8_decode}</h3>
+                            {literal}
+                            <div style="color: #fff; margin: 30px 0;">
+                            <h4>{/literal}{$this->Language['cast_crew']}{literal}</h4>
+	                        </div>	                        
+	                        <div class="row">
+	                        	{/literal}
+	                        	{foreach from=$casts key=role item=cast}                                  
+		                            {foreach from=$cast key=counter item=cast_role}
+		                            	<div class="col-sm-4 col-md-2 text-center">
+		                            		<span style="background: url({$cast_role->celeb_image});" class="img-circle cast-img"></span>
+		                            		<a href="/star/{$cast_role->permalink}" style="color:#248ac3">{$cast_role->celeb_name}</a>	
+		                            	</div>                                
+		                            {/foreach}
+		                        {/foreach}
+		                        {literal}
+		                    </div>	                        
                         </div>
                     </div>
-                    {literal} 
-                    <div class="container">
-                            <div class="movie_category">
-                                <h2>{/literal}{$this->Language['cast_crew']}{literal}</h2>
-                            </div>
-                            <div class="loader-new" ng-show="!castCrew.cast_list" style="margin-top: 10%;text-align: center; ">
-                                <img src="{/literal}{$this->siteurl}{$Yii->theme->baseUrl}{literal}/images/loading.gif">
-                            </div>
-                            <div class="left-element" ng-if="castCrew.cast_list.length > 6">
-                                <a class="backward owl-next" href="javascript:void(0)" ng-click="preSlider('slideCrew_'+$index)"></a>
-                            </div>
-                            <data-owl-carousel id="slideCrew_{{$index}}" class="owl-carousel owl-theme custom_hover_effect1" data-options="{}" ng-if="castCrew.cast_list">
-                                <div class="custom_images" owl-carousel-item="" data-options="{}" ng-repeat="crew in castCrew.cast_list">
-                                    <img id="song__img1" class="tile__img img-circle" src="{{crew.celeb_image}}" alt="" width="177" height="177"/>
-                                    <h3><a style="color: white;" href="/star/{{crew.permalink}}">{{crew.name}}</a></h3>
-                                </div>                
-                            </data-owl-carousel> 
-                            <div class="right-element" ng-if="castCrew.cast_list.length > 6">
-                                <a class="forward owl-next" href="javascript:void(0)" ng-click="nextSlider('slideCrew_'+$index)"></a>
-                            </div>
-                            
-                        </div>
+                    
                 </div>
             </div>        
         </div>
