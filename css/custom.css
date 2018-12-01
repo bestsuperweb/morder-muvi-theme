@@ -4463,3 +4463,7 @@ p::-webkit-scrollbar-thumb:hover {
 	text-align: left;
     padding: 0 5px;
 }
+
+.company-information-page ol{
+	color: #38B7FF;
+}
