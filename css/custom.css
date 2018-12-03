@@ -4465,6 +4465,9 @@ p::-webkit-scrollbar-thumb:hover {
     padding: 0 5px;
 }
 
-.company-information-page ol{
+.static-page ol,
+.static-page li,
+.static-page a,
+.static-page strong{
 	color: #38B7FF;
 }
