@@ -248,7 +248,10 @@ $("#siteSearchField").catcomplete({
 var price   = $('div.ppv_price h1').eq(0).html();
 console.log(price);
 var btn     = $('a.playbtn').eq(0).html();
+if(typeof price !== typeof undefined){
 $('a.playbtn').eq(0).html(btn + ' ' + price );
+}
+
 
 });
 
