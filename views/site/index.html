@@ -204,9 +204,10 @@
                                             <h4>
                                                 <span>Director</span>
                                                 <strong>
-                                                    <a ng-repeat="dir in content.casting.director" href="{{dir.full_permalink}}">
+                                                    {{content.director1.field_value}}
+                                                     <a ng-repeat="dir in content.casting.director" href="{{dir.full_permalink}}">
                                                         {{dir.celeb_name | NA}}
-                                                    </a>
+                                                    </a> 
                                                 </strong>
                                             </h4>
                                             <h4>
@@ -695,9 +696,10 @@
                                             <h4>
                                                     <span>Director</span>
                                                     <strong>
-                                                        <a ng-repeat="dir in content.casting.director" href="{{dir.full_permalink}}">
+                                                        {{content.director1.field_value}}
+<!--                                                        <a ng-repeat="dir in content.casting.director" href="{{dir.full_permalink}}">
                                                             {{dir.celeb_name | NA}}
-                                                        </a>
+                                                        </a>-->
                                                     </strong>
                                                 </h4>
                                                 <h4>
@@ -1153,9 +1155,10 @@
                                             <h4>
                                                     <span>Director</span>
                                                     <strong>
-                                                        <a ng-repeat="dir in content.casting.director" href="{{dir.full_permalink}}">
+                                                        {{content.director1.field_value}}
+<!--                                                        <a ng-repeat="dir in content.casting.director" href="{{dir.full_permalink}}">
                                                             {{dir.celeb_name | NA}}
-                                                        </a>
+                                                        </a>-->
                                                     </strong>
                                                 </h4>
                                                 <h4>
@@ -1633,7 +1636,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-md-10 col-xs-10 col-sm-10">
+                            <div class="col-md-10 col-xs-12 col-sm-12">
                                 <div class="row">
                                     <h2>{{content.title | utfdecode}}</h2>
                                     <button type="button" class="close" data-dismiss="tab-content" aria-label="Close">
@@ -1682,9 +1685,10 @@
                                             <h4>
                                                     <span>Director</span>
                                                     <strong>
-                                                        <a ng-repeat="dir in content.casting.director" href="{{dir.full_permalink}}">
+                                                        {{content.director1.field_value}}
+<!--                                                        <a ng-repeat="dir in content.casting.director" href="{{dir.full_permalink}}">
                                                             {{dir.celeb_name | NA}}
-                                                        </a>
+                                                        </a>-->
                                                     </strong>
                                                 </h4>
                                                 <h4>
