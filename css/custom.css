@@ -68,7 +68,19 @@ p {
 
 /************************************Header start here******************************/
 .videocontainer{
-  height: 700px !important;
+  height: 700px;
+}
+.videocontainer video{
+	width: 100%;
+}
+
+@media only screen and (max-width:480px){
+	.videocontainer{
+	  height: auto;
+	} 
+	.videocontainer video{
+		width: 200%;
+	}	
 }
 .moovibo-main {
   width: 100%;
@@ -337,17 +349,7 @@ p {
   content: "";
 }
 
-.slide-text {
-  left: -24% !important;
-  padding-bottom: 30px !important;
-  text-align: left !important;
-  width: 53% !important;
-  float: left !important;  
-  /*top: inherit !important;*/
-}
-
 .slide-text > .bnr-text-large {
-  font-size: 4em !important;
   font-weight: bold;
   width: 100%;
   padding-left: 12px !important;
@@ -397,6 +399,28 @@ p {
   background: rgba(14, 155, 215, 0.5);
   margin-top: 10px;
   padding: 24px 52px;
+}
+
+@media only screen and (max-width:480px){
+	.slide-text{
+		width: initial !important;
+		left: initial !important;
+		padding: 30px !important;
+		top: 30% !important;
+	}
+	.slide-text > .bnr-text-large {
+	  font-size: 35px !important;
+	  line-height: 1 !important;
+	}
+
+	.slide-text > .bnr-text-small{
+	  font-size: 20px !important;
+	}
+	.slide-text .c-btn-uppercase.btn-lg{
+		position: initial;
+		margin-left: 10px;
+		font-size: 14px;
+	}
 }
 
 a.left.carousel-control {
@@ -463,54 +487,90 @@ a.right.carousel-control span.fa-angle-right:before {
   .moovibo-main .navbar-header a.navbar-brand {
     padding: 14px 0;
   }
+  
+  .moovibo-main .navbar-header a.navbar-brand>img{
+  	max-width: initial;
+    height: 15px;
+  }
+
+  .after_login .navbar-sign_up img#userProfile{
+  	width: 30px !important;
+  	margin-right: -15px;
+  	margin-left: -8px;
+  }
+
+  .after_login .search-container{
+  	padding-top: 0 !important;
+    margin-top: -10px
+  }
+
+  .after_login .search-container a button{
+  	width: 30px;
+  }
+
+  .after_login .navbar-sign_up .dropdown.language-dropdown{
+  	margin-top: -13px;
+    margin-right: 5px;
+  }
+
+  .after_login .navbar-sign_up .dropdown.language-dropdown .dropdown-toggle.c-link{
+  	border: none;
+  }
+
   .search-container {
     font-size: 14px;
     width: 45%;
-    margin-left: 2%;
+    margin-left: 5%;
     padding-top: 7px;
   }
   .search-container a {
     padding: 3px 3px;
     width: 100%;
-}
-  .search-container a button {
-  float: left;
-  width: 16%;
-  padding-right: 0;
-  }
-  .search-container a input {
-    width: 60%;
-    font-size: 11px;
-    margin-left: 0 !important;
-}
-.moovibo-main .navbar-sign_up { 
-  padding-top: 8px;
-}
-.moovibo-main .navbar-sign_up a {
-  border-bottom: #00aeef solid 1px;
-  padding: 0 5px 5px 5px;
-  font-size: 12px;
-}
-a.left.carousel-control span.fa.fa-angle-left {
-  padding: 10px 0px 10px 0px;
-  border: #5b4e4d solid 4px;
-}
-a.right.carousel-control span.fa.fa-angle-right{
-  padding: 10px 0px 10px 0px;
-  border: #5b4e4d solid 4px;
-}
-.navbar-inverse .navbar-toggle{
-  margin-left: 12px;
-}
-.moovibo-main .navbar-sign_up a {
-  border-bottom: #00aeef solid 1px;
-  padding: 0 5px 5px 5px;
-  font-size: 12px;
-  display: none;
-}
-.navbar-sign_up .customNav{
-  display: block;
-}
+	}
+	  .search-container a button {
+	  float: left;
+	  width: 16%;
+	  padding-right: 0;
+	  }
+	  .search-container a input {
+	    width: 60%;
+	    font-size: 11px;
+	    margin-left: 0 !important;
+	}
+	.moovibo-main .navbar-sign_up { 
+	  padding-top: 8px;
+	}
+	.moovibo-main .navbar-sign_up a {
+	  border-bottom: #00aeef solid 1px;
+	  padding: 0 5px 5px 5px;
+	  font-size: 12px;
+	}
+	a.left.carousel-control span.fa.fa-angle-left {
+	  padding: 10px 0px 10px 0px;
+	  border: #5b4e4d solid 4px;
+	}
+	a.right.carousel-control span.fa.fa-angle-right{
+	  padding: 10px 0px 10px 0px;
+	  border: #5b4e4d solid 4px;
+	}
+	.navbar-inverse .navbar-toggle{
+	  margin-left: 12px;
+	}
+	.moovibo-main .navbar-sign_up a {
+	  border-bottom: #00aeef solid 1px;
+	  padding: 0 5px 5px 5px;
+	  font-size: 12px;
+	}
+	.navbar-sign_up .customNav{
+	  display: block;
+	}
+	.moovibo-main .navbar-sign_up .dropdown.language-dropdown .dropdown-toggle.c-link{
+		padding: 5px;
+	}
+	.moovibo-main .navbar-sign_up .dropdown.language-dropdown .dropdown-toggle.c-link img{
+		width: 20px;
+	}
+
 }
 
 
@@ -724,9 +784,6 @@ a.right.carousel-control span.fa.fa-angle-right{
     background: rgba(255,255,255, .5);
 }
 
-@media only screen and (min-width:320px) and (max-width:480px){
-	
-}
 /************************************Nav ends here******************************/
 
 
@@ -2717,8 +2774,8 @@ a.playbtn, a.playaudio {
 /************************************SIngh and login start here******************************/
 
 .login_your_e-mail {
-  width: 50%;
-  float: left;
+  /*width: 50%;
+  float: left;*/
   padding: 87px 30px 0px 30px;
 }
 
@@ -2840,8 +2897,8 @@ a.playbtn, a.playaudio {
 }
 
 .login_social_account {
-  width: 50%;
-  float: left;
+  /*width: 50%;
+  float: left;*/
   padding: 87px 30px 0 15px;
 }
 
@@ -2951,6 +3008,27 @@ a.playbtn, a.playaudio {
 
 .login_social_account button.btn.sign_email h3 a {
   text-decoration: none;
+}
+
+@media only screen and (max-width:480px){
+	.login_your_e-mail .form-control{
+		width: 100%;
+	}
+	.login_your_e-mail .login_button{
+		min-width: 100%;
+	}
+	.login_your_e-mail .forgot_password{
+		margin-top: 20px;
+	}
+	.login_social_account a.facebook,
+	.login_social_account a.google{
+		max-width: 95%;
+	}
+	.login_social_account .btn.sign_email{
+		max-width: 105%;
+    	margin-bottom: 20px;
+	}
+
 }
 
 .buy_movies_transition {
@@ -4408,9 +4486,6 @@ button#register_membership {
 }
 .movie_cast_details h4 strong a {
   color: #248ac3;
-}
-@media only screen and (min-width:320px) and (max-width:480px){
-	
 }
 
 /* width */
